@@ -125,7 +125,7 @@
    - type  : "grammar" 或 "reading"
    - group : 只有 grammar 需要，例如 "Tenses"
    - grade : 只有 reading 需要，填 1 到 6 的數字
-   - tags  : 搜尋用的關鍵字，愈多愈容易被找到
+   - tags  : 只有 grammar 需要，搜尋用的關鍵字（Reading 只搜尋標題，不需要）
    ============================================================ */
 const WORKSHEETS = [
   {
@@ -135,14 +135,15 @@ const WORKSHEETS = [
     tags: ["past simple", "past perfect", "tenses", "comparison"]
   },
   {
+    title: "A Team of Fish",
+    file: "wonders_g1_a_team_of_fish_exam.html",
+    type: "reading", grade: 1
+  },
+  {
     title: "Journey to Freedom",
     file: "Journey_to_Freedom_Final_Exam_Practice-v2.html",
-    type: "reading", grade: 5,            // ← 年級是暫定，請改成正確的
-    tags: ["wonders", "final exam", "vocabulary", "proverbs", "cause and effect"]
-  },
-  // ↓ 以下兩筆只是範例，示範沒有檔案時的樣子，之後可刪除
-  { title: "Nate the Snake Is Late", type: "reading", grade: 1, tags: ["wonders"] },
-  { title: "Room to Grow",           type: "reading", grade: 2, tags: ["wonders"] }
+    type: "reading", grade: 5            // ← 年級是暫定，請改成正確的
+  }
 ];
 
 /* Grammar 群組的顯示順序（沒有卷子的群組不會顯示） */
@@ -186,10 +187,12 @@ function makeCard(w) {
     const em = document.createElement("em"); em.textContent = "Coming soon";
     s.appendChild(em); li.appendChild(s);
   }
+  // 只有 Grammar 的卡片會顯示可點的關鍵字；Reading 只顯示標題
   const shown = [];
-  if (w.group) shown.push(w.group);
-  if (w.grade) shown.push("Grade " + w.grade);
-  (w.tags || []).forEach(function (t) { shown.push(t); });
+  if (w.type === "grammar") {
+    if (w.group) shown.push(w.group);
+    (w.tags || []).forEach(function (t) { shown.push(t); });
+  }
   if (shown.length) {
     const box = document.createElement("div");
     box.className = "tags";
