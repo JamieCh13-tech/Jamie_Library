@@ -72,20 +72,35 @@
     border: 2px solid var(--ink);
     border-radius: 14px;
     box-shadow: 4px 4px 0 var(--ink);
-    padding: 14px 18px 12px;
+    padding: 14px 18px 14px;
   }
-  .card a.name {
-    display: block;
-    color: var(--ink);
-    font-size: 1.12rem;
+  .card .name { display: block; font-size: 1.12rem; font-weight: 800; }
+
+  /* Quiz buttons */
+  .quizzes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  a.quiz {
+    display: inline-block;
+    min-height: 44px;
+    padding: 8px 18px;
+    line-height: 26px;
     font-weight: 800;
+    color: var(--ink);
+    background: var(--sun);
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 2px 2px 0 var(--ink);
     text-decoration: none;
+    transition: transform .12s, box-shadow .12s;
   }
-  .card a.name:hover { text-decoration: underline; text-decoration-color: var(--sun); text-decoration-thickness: 3px; }
-  .card a.name:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
-  .card .name.soon { display: block; font-size: 1.12rem; font-weight: 800; color: var(--muted); }
-  .card .name.soon em { font-weight: 400; font-size: .9rem; margin-left: 6px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  a.quiz:hover, a.quiz:focus-visible {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  a.quiz:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { a.quiz { transition: none; } }
+
+  /* Grammar keywords */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .tag {
     font: inherit;
     font-size: .85rem;
@@ -118,31 +133,42 @@
 
 <script>
 /* ============================================================
-   練習卷清單：新增練習卷時，複製一筆 { ... }, 改掉內容即可
-   - title : 顯示的標題（Reading 直接用故事名稱）
-   - file  : 檔名（要和 GitHub 上的檔名完全一樣，包含大小寫）
-             沒有 file 的會顯示成「Coming soon」，不能點
-   - type  : "grammar" 或 "reading"
-   - group : 只有 grammar 需要，例如 "Tenses"
-   - grade : 只有 reading 需要，填 1 到 6 的數字
-   - tags  : 只有 grammar 需要，搜尋用的關鍵字（Reading 只搜尋標題，不需要）
+   練習卷清單
+   一個「故事」或「文法主題」是一筆資料，底下的練習卷用 Quiz 1、Quiz 2… 排列。
+
+   新增同一個故事的新練習卷：在該筆的 quizzes 裡多加一行，編號接下一號。
+   新增一個全新的故事／主題：複製整筆 { ... }, 改掉內容。
+
+   - name    : 故事名稱（Reading）或文法主題名稱（Grammar）
+   - type    : "grammar" 或 "reading"
+   - group   : 只有 grammar 需要，例如 "Tenses"
+   - grade   : 只有 reading 需要，填 1 到 6 的數字
+   - tags    : 只有 grammar 需要，搜尋與點選用的關鍵字
+   - quizzes : { 編號: "檔名" }，檔名要和 GitHub 上的完全一樣（含大小寫）
+               編號不要重新排列：給學生做過的 Quiz 1，永遠都是 Quiz 1
    ============================================================ */
 const WORKSHEETS = [
   {
-    title: "Past Simple vs. Past Perfect",
-    file: "past_simple_vs_past_perfect.html",
+    name: "Past Simple vs. Past Perfect",
     type: "grammar", group: "Tenses",
-    tags: ["past simple", "past perfect", "tenses", "comparison"]
+    tags: ["past simple", "past perfect", "tenses", "comparison"],
+    quizzes: {
+      1: "grammar_past_simple_vs_past_perfect_1.html"
+    }
   },
   {
-    title: "A Team of Fish",
-    file: "wonders_g1_a_team_of_fish_exam.html",
-    type: "reading", grade: 1
+    name: "A Team of Fish",
+    type: "reading", grade: 1,
+    quizzes: {
+      1: "wonders_g1_a_team_of_fish_1.html"
+    }
   },
   {
-    title: "Journey to Freedom",
-    file: "Journey_to_Freedom_Final_Exam_Practice-v2.html",
-    type: "reading", grade: 5            // ← 年級是暫定，請改成正確的
+    name: "Journey to Freedom",
+    type: "reading", grade: 6,
+    quizzes: {
+      1: "wonders_g6_journey_to_freedom_1.html"
+    }
   }
 ];
 
@@ -160,7 +186,7 @@ let currentType = "all";
 
 function haystack(w) {
   return [
-    w.title, w.type, w.group || "",
+    w.name, w.type, w.group || "",
     w.grade ? "grade " + w.grade + " g" + w.grade : "",
     ...(w.tags || [])
   ].join(" ").toLowerCase();
@@ -172,22 +198,29 @@ function matches(w, words) {
   return words.every(function (x) { return h.indexOf(x) !== -1; });
 }
 
-function byTitle(a, b) { return a.title.localeCompare(b.title, "en", { sensitivity: "base" }); }
+function byName(a, b) { return a.name.localeCompare(b.name, "en", { sensitivity: "base" }); }
 
 function makeCard(w) {
   const li = document.createElement("li");
   li.className = "card";
-  if (w.file) {
+
+  const title = document.createElement("span");
+  title.className = "name";
+  title.textContent = w.name;
+  li.appendChild(title);
+
+  const row = document.createElement("div");
+  row.className = "quizzes";
+  Object.keys(w.quizzes || {}).map(Number).sort(function (a, b) { return a - b; }).forEach(function (n) {
     const a = document.createElement("a");
-    a.className = "name"; a.href = w.file; a.textContent = w.title;
-    li.appendChild(a);
-  } else {
-    const s = document.createElement("span");
-    s.className = "name soon"; s.textContent = w.title;
-    const em = document.createElement("em"); em.textContent = "Coming soon";
-    s.appendChild(em); li.appendChild(s);
-  }
-  // 只有 Grammar 的卡片會顯示可點的關鍵字；Reading 只顯示標題
+    a.className = "quiz";
+    a.href = w.quizzes[n];
+    a.textContent = "Quiz " + n;
+    row.appendChild(a);
+  });
+  li.appendChild(row);
+
+  // 只有 Grammar 的卡片會顯示可點的關鍵字；Reading 只顯示故事名稱和 Quiz 按鈕
   const shown = [];
   if (w.type === "grammar") {
     if (w.group) shown.push(w.group);
@@ -216,7 +249,7 @@ function addSection(title, subgroups) {
   filled.forEach(function (g) {
     const h3 = document.createElement("h3"); h3.textContent = g.name; $list.appendChild(h3);
     const ul = document.createElement("ul");
-    g.items.sort(byTitle).forEach(function (w) { ul.appendChild(makeCard(w)); });
+    g.items.sort(byName).forEach(function (w) { ul.appendChild(makeCard(w)); });
     $list.appendChild(ul);
   });
 }
@@ -244,7 +277,7 @@ function render() {
     p.textContent = "No worksheets found. Try a shorter word.";
     $list.appendChild(p);
   }
-  $count.textContent = hits.length + (hits.length === 1 ? " worksheet" : " worksheets");
+  $count.textContent = hits.length + (hits.length === 1 ? " result" : " results");
 }
 
 $q.addEventListener("input", render);
