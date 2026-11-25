@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jamie's Library</title>
+<style>
+  :root {
+    --bg: #EAF3F8;
+    --ink: #14304A;
+    --blue: #2B6CB0;
+    --sun: #FFC93C;
+    --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Nunito", "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    line-height: 1.5;
+  }
+  header {
+    padding: 56px 20px 32px;
+    text-align: center;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  h1 span {
+    background: linear-gradient(transparent 62%, var(--sun) 62%);
+    padding: 0 6px;
+  }
+  header p {
+    margin: 12px 0 0;
+    font-size: 1.1rem;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+  h2 {
+    font-size: 1.15rem;
+    margin: 28px 0 12px;
+  }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li + li { margin-top: 12px; }
+  a.sheet {
+    display: block;
+    padding: 18px 20px;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform .12s, box-shadow .12s;
+  }
+  a.sheet small {
+    display: block;
+    font-weight: 400;
+    font-size: .92rem;
+    opacity: .75;
+  }
+  a.sheet:hover, a.sheet:focus-visible {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+    outline: none;
+  }
+  a.sheet:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    a.sheet { transition: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Jamie's Library</span></h1>
+  <p>Pick a worksheet and start practicing!</p>
+</header>
+
+<main>
+  <h2>Grammar</h2>
+  <ul>
+    <!-- 新增練習卷：複製下面整個 <li>...</li>，改掉檔名和標題即可 -->
+    <li>
+      <a class="sheet" href="past_simple_vs_past_perfect.html">
+        Past Simple vs. Past Perfect
+        <small>Grammar · Tenses</small>
+      </a>
+    </li>
+  </ul>
+</main>
+</body>
+</html>
