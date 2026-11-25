@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 1 Wonders - A Team of Fish Review Quiz</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-light: #e0f2fe;
+      --secondary: #0d9488;
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --error: #dc2626;
+      --error-bg: #fee2e2;
+      --accent: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      padding: 24px 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.2);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 1.05rem;
+      opacity: 0.95;
+    }
+
+    .student-info {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .student-info label {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .student-info input,
+    .student-info select {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      width: 150px;
+    }
+
+    .student-info select {
+      width: 200px;
+      font-weight: bold;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: #fff;
+      opacity: 0.9;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .section-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border: 2px solid #e2e8f0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed var(--primary-light);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .section-points {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+    }
+
+    .instructions {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    /* Word Bank */
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #f8fafc;
+      border: 2px solid #bae6fd;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .wb-word {
+      background: white;
+      border: 2px solid #7dd3fc;
+      color: #0369a1;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .wb-word:hover:not(.used) {
+      background: #e0f2fe;
+      transform: translateY(-2px);
+    }
+
+    .wb-word.used {
+      text-decoration: line-through;
+      text-decoration-thickness: 3px;
+      text-decoration-color: #ef4444;
+      color: #94a3b8;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      opacity: 0.7;
+    }
+
+    /* Part I: Spelling Fill-in */
+    .question-row {
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      font-size: 1.15rem;
+      transition: background 0.2s;
+    }
+
+    .q-num {
+      font-weight: bold;
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .blank-input {
+      border: none;
+      border-bottom: 2.5px solid var(--primary);
+      background: white;
+      padding: 4px 8px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #0f172a;
+      width: 135px;
+      text-align: center;
+      border-radius: 6px 6px 0 0;
+      outline: none;
+      margin: 0 4px;
+    }
+
+    .blank-input:focus {
+      background: #e0f2fe;
+      border-bottom-color: #0369a1;
+    }
+
+    /* Part II: Circle the Best Word */
+    .choice-pill-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1.5px solid #cbd5e1;
+      margin: 0 4px;
+    }
+
+    .pill-btn {
+      border: 2px solid transparent;
+      background: transparent;
+      padding: 3px 12px;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+
+    .pill-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .pill-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Part III: Prefix Matching */
+    .prefix-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .match-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .match-prompt {
+      font-size: 1.1rem;
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .match-select {
+      padding: 8px 14px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border-radius: 10px;
+      border: 2px solid #94a3b8;
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+      min-width: 200px;
+    }
+
+    .match-select:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Part IV: Multiple Choice */
+    .mc-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .mc-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mc-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 2px solid #cbd5e1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.05rem;
+      transition: all 0.15s;
+    }
+
+    .mc-label:hover {
+      border-color: #7dd3fc;
+      background: #f0f9ff;
+    }
+
+    .mc-label input[type="radio"] {
+      transform: scale(1.25);
+      accent-color: var(--primary);
+    }
+
+    .mc-label.checked {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      font-weight: bold;
+    }
+
+    /* Feedback states */
+    .correct-box {
+      background-color: var(--success-bg) !important;
+      border-color: var(--success) !important;
+    }
+
+    .wrong-box {
+      background-color: var(--error-bg) !important;
+      border-color: var(--error) !important;
+    }
+
+    .answer-tag {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 2px 10px;
+      border-radius: 8px;
+    }
+
+    .tag-correct {
+      background: #16a34a;
+      color: white;
+    }
+
+    .tag-wrong {
+      background: #dc2626;
+      color: white;
+    }
+
+    /* Submit Footer */
+    .submit-area {
+      text-align: center;
+      margin: 30px 0 50px 0;
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .progress-text {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+
+    .btn-submit:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-submit:not(:disabled):hover {
+      background: #0369a1;
+      transform: translateY(-2px);
+    }
+
+    .btn-retry {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 16px;
+      display: none;
+    }
+
+    /* Result Banner & Animation */
+    #result-banner {
+      display: none;
+      margin-top: 20px;
+      padding: 24px;
+      border-radius: 16px;
+      text-align: center;
+      animation: popIn 0.4s ease;
+    }
+
+    .score-display {
+      font-size: 2.6rem;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .emoji-burst {
+      font-size: 3.5rem;
+      animation: bounce 1s infinite;
+      display: inline-block;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .floating-emoji {
+      position: fixed;
+      font-size: 2.2rem;
+      pointer-events: none;
+      z-index: 9999;
+      animation: fallDown 2.8s linear forwards;
+    }
+
+    @keyframes fallDown {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+<script src="reporter.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <a href="index.html" class="back-link">← Back to Library</a>
+    <h1>🐠 Grade 1 Reading: <em>A Team of Fish</em> 🐠</h1>
+    <p>Unit 4 Review Practice Quiz &bull; Total Score: 100 Points</p>
+    <div class="student-info">
+      <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
+      <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
+    </div>
+  </header>
+
+  <!-- PART I -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2 class="section-title">Part I. Spelling Word Bank</h2>
+      <span class="section-points">24 Points (2 pts each)</span>
+    </div>
+    <p class="instructions">
+      Read each sentence and type the best word from the Word Bank. Used words will be crossed out automatically!
+    </p>
+    <div class="word-bank" id="wordBankContainer"></div>
+    <div id="part1Container"></div>
+  </div>
+
+  <!-- PART II -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2 class="section-title">Part II. Circle the Best Word</h2>
+      <span class="section-points">20 Points (2 pts each)</span>
+    </div>
+    <p class="instructions">
+      Click the correct word inside the parentheses to complete each sentence.
+    </p>
+    <div id="part2Container"></div>
+  </div>
+
+  <!-- PART III -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2 class="section-title">Part III. Prefixes (re-, pre-, un-)</h2>
+      <span class="section-points">24 Points (3 pts each)</span>
+    </div>
+    <p class="instructions">
+      Choose the correct meaning or prefix word from the dropdown menu for each item.
+    </p>
+    <div class="prefix-grid" id="part3Container"></div>
+  </div>
+
+  <!-- PART IV -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2 class="section-title">Part IV. Story Comprehension &amp; Vocabulary</h2>
+      <span class="section-points">32 Points (4 pts each)</span>
+    </div>
+    <p class="instructions">
+      Read each question about <em>A Team of Fish</em> carefully and choose the best answer.
+    </p>
+    <div id="part4Container"></div>
+  </div>
+
+  <!-- SUBMIT FOOTER -->
+  <div class="submit-area">
+    <div class="progress-text" id="progressText">Completed: 0 / 38 questions</div>
+    <button class="btn-submit" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
+
+    <div id="result-banner">
+      <div class="emoji-burst" id="resultEmoji"></div>
+      <div class="score-display" id="scoreDisplay"></div>
+      <p id="resultMessage" style="font-size: 1.2rem; font-weight: bold;"></p>
+      <p id="sendStatus" style="font-weight: bold; color: #0369a1;"></p>
+    </div>
+
+    <button class="btn-retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+  </div>
+</div>
+
+<script>
+  // --- DATA ---
+  const part1Questions = [
+    { id: "p1_1", before: "Can you pass the blue pencil to", after: "?", answer: "me" },
+    { id: "p1_2", before: "My sister is happy because", after: "won the game.", answer: "she" },
+    { id: "p1_3", before: "Look! I can", after: "many colorful fish in the ocean.", answer: "see" },
+    { id: "p1_4", before: "The students help", after: "other clean the classroom.", answer: "each" },
+    { id: "p1_5", before: "A small green", after: "fell down from the tall tree.", answer: "leaf" },
+    { id: "p1_6", before: "It is late at night. It is time to go to", after: ".", answer: "sleep" },
+    { id: "p1_7", before: "The teachers are having a", after: "in the office.", answer: "meeting" },
+    { id: "p1_8", before: "Frogs like to sit on", after: "lily pads.", answer: "green" },
+    { id: "p1_9", before: "A school of fish works together as a", after: ".", answer: "team" },
+    { id: "p1_10", before: "What do big sharks like to", after: "for lunch?", answer: "eat" },
+    { id: "p1_11", before: "The kind vet", after: "the sick puppy carefully.", answer: "treated" },
+    { id: "p1_12", before: "The boys play soccer on the grassy", after: ".", answer: "field" }
+  ];
+
+  const part2Questions = [
+    { id: "p2_1", before: "Please", options: ["keep", "beak"], after: "your hands clean before eating.", answer: "keep" },
+    { id: "p2_2", before: "Whales swim in the", options: ["feed", "deep"], after: "blue sea.", answer: "deep" },
+    { id: "p2_3", before: "Every morning, I", options: ["feed", "beef"], after: "my pet cat.", answer: "feed" },
+    { id: "p2_4", before: "Ducks use their flat", options: ["beaks", "seats"], after: "to catch food in the pond.", answer: "beaks" },
+    { id: "p2_5", before: "Tom and I are partners, and", options: ["we", "me"], after: "work well together.", answer: "we" },
+    { id: "p2_6", before: "Could you show", options: ["me", "we"], after: "your new storybook?", answer: "me" },
+    { id: "p2_7", before: "The frog jumped", options: ["into", "or"], after: "the cool water.", answer: "into" },
+    { id: "p2_8", before: "Would you like milk", options: ["into", "or"], after: "juice?", answer: "or" },
+    { id: "p2_9", before: "The clear sky is bright", options: ["blue", "small"], after: "today.", answer: "blue" },
+    { id: "p2_10", before: "I wear a coat", options: ["because", "other"], after: "it is cold outside.", answer: "because" }
+  ];
+
+  const part3Options = [
+    "again",
+    "before",
+    "not / the opposite of",
+    "unsafe",
+    "preheat",
+    "rewrite",
+    "reuse",
+    "untied"
+  ];
+
+  const part3Questions = [
+    { id: "p3_1", prompt: "1. The prefix <strong>re-</strong> means ____________.", answer: "again" },
+    { id: "p3_2", prompt: "2. The prefix <strong>pre-</strong> means ____________.", answer: "before" },
+    { id: "p3_3", prompt: "3. The prefix <strong>un-</strong> means ____________.", answer: "not / the opposite of" },
+    { id: "p3_4", prompt: "4. Swimming alone in the deep ocean can be <strong>not safe</strong>. &rarr;", answer: "unsafe" },
+    { id: "p3_5", prompt: "5. Dad will <strong>heat</strong> the oven <strong>before</strong> baking cookies. &rarr;", answer: "preheat" },
+    { id: "p3_6", prompt: "6. Please <strong>write</strong> the messy sentence <strong>again</strong>. &rarr;", answer: "rewrite" },
+    { id: "p3_7", prompt: "7. We can <strong>use</strong> this clean paper bag <strong>again</strong>. &rarr;", answer: "reuse" },
+    { id: "p3_8", prompt: "8. Be careful! Your shoelaces are <strong>not tied</strong>. &rarr;", answer: "untied" }
+  ];
+
+  const part4Questions = [
+    {
+      id: "p4_1",
+      question: "1. What is the genre of <em>A Team of Fish</em>?",
+      options: ["Nonfiction", "Fantasy", "Fairy Tale", "Poem"],
+      answer: "Nonfiction"
+    },
+    {
+      id: "p4_2",
+      question: "2. What is a large bunch of fish swimming together called?",
+      options: ["A school", "A herd", "A class", "A flock"],
+      answer: "A school"
+    },
+    {
+      id: "p4_3",
+      question: "3. How do fish in a school help each other?",
+      options: [
+        "They look for food together and keep each other safe.",
+        "They fight with each other for food.",
+        "They swim away from the water.",
+        "They sleep all day on the sand."
+      ],
+      answer: "They look for food together and keep each other safe."
+    },
+    {
+      id: "p4_4",
+      question: "4. Why can swimming alone be unsafe for a small fish?",
+      options: [
+        "It is in danger of getting snapped up by big fish.",
+        "It will forget how to swim.",
+        "The water is too warm.",
+        "There is too much food."
+      ],
+      answer: "It is in danger of getting snapped up by big fish."
+    },
+    {
+      id: "p4_5",
+      question: "5. What neat trick do fish in a school use to fool big fish?",
+      options: [
+        "They swim close together to look like one huge fish.",
+        "They hide under small rocks on land.",
+        "They jump out of the ocean.",
+        "They change color to bright red."
+      ],
+      answer: "They swim close together to look like one huge fish."
+    },
+    {
+      id: "p4_6",
+      question: "6. What do fish eat according to the story?",
+      options: [
+        "Small animals or other fish",
+        "Only green tree leaves",
+        "Bread and cheese",
+        "Rocks and sand"
+      ],
+      answer: "Small animals or other fish"
+    },
+    {
+      id: "p4_7",
+      question: "7. Where can fish swim?",
+      options: [
+        "In lakes, creeks, seas, or oceans",
+        "Only in swimming pools",
+        "In grassy fields",
+        "In high trees"
+      ],
+      answer: "In lakes, creeks, seas, or oceans"
+    },
+    {
+      id: "p4_8",
+      question: "8. My friend and I work together as ________ on the project.",
+      options: ["partners", "danger", "creeks", "tricks"],
+      answer: "partners"
+    }
+  ];
+
+  // --- HELPER: SHUFFLE ---
+  function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  let isSubmitted = false;
+
+  // --- RENDER FUNCTIONS ---
+  function initQuiz() {
+    isSubmitted = false;
+    document.getElementById("result-banner").style.display = "none";
+    document.getElementById("sendStatus").textContent = "";
+    document.getElementById("retryBtn").style.display = "none";
+    document.getElementById("submitBtn").style.display = "inline-block";
+    document.getElementById("submitBtn").disabled = true;
+
+    // 1. Render Shuffled Word Bank
+    const wbWords = shuffle(part1Questions.map(q => q.answer));
+    const wbContainer = document.getElementById("wordBankContainer");
+    wbContainer.innerHTML = "";
+    wbWords.forEach(word => {
+      const span = document.createElement("span");
+      span.className = "wb-word";
+      span.textContent = word;
+      span.dataset.word = word.toLowerCase();
+      span.onclick = () => fillNextEmptyBlank(word);
+      wbContainer.appendChild(span);
+    });
+
+    // 2. Render Part I
+    const p1Container = document.getElementById("part1Container");
+    p1Container.innerHTML = "";
+    part1Questions.forEach((q, idx) => {
+      const div = document.createElement("div");
+      div.className = "question-row";
+      div.id = `box_${q.id}`;
+      div.innerHTML = `
+        <span class="q-num">${idx + 1}.</span>
+        ${q.before}
+        <input type="text" class="blank-input" id="${q.id}" autocomplete="off" oninput="onPart1Input()" />
+        ${q.after}
+        <span class="answer-tag" id="tag_${q.id}"></span>
+      `;
+      p1Container.appendChild(div);
+    });
+
+    // 3. Render Part II
+    const p2Container = document.getElementById("part2Container");
+    p2Container.innerHTML = "";
+    part2Questions.forEach((q, idx) => {
+      const shuffledOpts = shuffle(q.options);
+      const div = document.createElement("div");
+      div.className = "question-row";
+      div.id = `box_${q.id}`;
+      div.innerHTML = `
+        <span class="q-num">${idx + 1}.</span>
+        ${q.before}
+        <span class="choice-pill-group" id="group_${q.id}">
+          (
+          <button type="button" class="pill-btn" onclick="selectPill('${q.id}', '${shuffledOpts[0]}', this)">${shuffledOpts[0]}</button>
+          /
+          <button type="button" class="pill-btn" onclick="selectPill('${q.id}', '${shuffledOpts[1]}', this)">${shuffledOpts[1]}</button>
+          )
+        </span>
+        ${q.after}
+        <input type="hidden" id="${q.id}" value="" />
+        <span class="answer-tag" id="tag_${q.id}"></span>
+      `;
+      p2Container.appendChild(div);
+    });
+
+    // 4. Render Part III
+    const p3Container = document.getElementById("part3Container");
+    p3Container.innerHTML = "";
+    const shuffledP3Opts = shuffle(part3Options);
+    part3Questions.forEach(q => {
+      const div = document.createElement("div");
+      div.className = "match-row";
+      div.id = `box_${q.id}`;
+      let optsHtml = `<option value="">-- Select Answer --</option>`;
+      shuffledP3Opts.forEach(opt => {
+        optsHtml += `<option value="${opt}">${opt}</option>`;
+      });
+      div.innerHTML = `
+        <div class="match-prompt">${q.prompt}</div>
+        <div>
+          <select class="match-select" id="${q.id}" onchange="updateProgress()">
+            ${optsHtml}
+          </select>
+          <span class="answer-tag" id="tag_${q.id}"></span>
+        </div>
+      `;
+      p3Container.appendChild(div);
+    });
+
+    // 5. Render Part IV
+    const p4Container = document.getElementById("part4Container");
+    p4Container.innerHTML = "";
+    part4Questions.forEach(q => {
+      const shuffledOpts = shuffle(q.options);
+      const div = document.createElement("div");
+      div.className = "question-row";
+      div.id = `box_${q.id}`;
+      let mcHtml = `<div style="font-weight: bold; margin-bottom: 6px;">${q.question} <span class="answer-tag" id="tag_${q.id}"></span></div><div class="mc-options">`;
+      shuffledOpts.forEach((opt, oIdx) => {
+        const letter = String.fromCharCode(65 + oIdx);
+        mcHtml += `
+          <label class="mc-label" id="lbl_${q.id}_${oIdx}">
+            <input type="radio" name="${q.id}" value="${opt}" onchange="selectMC('${q.id}', ${oIdx})" />
+            <span><strong>(${letter})</strong> ${opt}</span>
+          </label>
+        `;
+      });
+      mcHtml += `</div>`;
+      div.innerHTML = mcHtml;
+      p4Container.appendChild(div);
+    });
+
+    updateProgress();
+  }
+
+  // Click word bank to fill first empty blank
+  function fillNextEmptyBlank(word) {
+    if (isSubmitted) return;
+    for (const q of part1Questions) {
+      const inp = document.getElementById(q.id);
+      if (inp.value.trim() === "") {
+        inp.value = word;
+        onPart1Input();
+        return;
+      }
+    }
+  }
+
+  // Update Word Bank strike-through & progress
+  function onPart1Input() {
+    const typedWords = part1Questions.map(q =>
+      document.getElementById(q.id).value.trim().toLowerCase()
+    );
+
+    const wbSpans = document.querySelectorAll(".wb-word");
+    const availableCounts = {};
+    typedWords.forEach(w => {
+      if (w) availableCounts[w] = (availableCounts[w] || 0) + 1;
+    });
+
+    wbSpans.forEach(span => {
+      const w = span.dataset.word;
+      if (availableCounts[w] && availableCounts[w] > 0) {
+        span.classList.add("used");
+        availableCounts[w]--;
+      } else {
+        span.classList.remove("used");
+      }
+    });
+
+    updateProgress();
+  }
+
+  function selectPill(qId, val, btnEl) {
+    if (isSubmitted) return;
+    document.getElementById(qId).value = val;
+    const group = document.getElementById(`group_${qId}`);
+    group.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("selected"));
+    btnEl.classList.add("selected");
+    updateProgress();
+  }
+
+  function selectMC(qId, chosenIdx) {
+    if (isSubmitted) return;
+    for (let i = 0; i < 4; i++) {
+      const lbl = document.getElementById(`lbl_${qId}_${i}`);
+      if (lbl) lbl.classList.remove("checked");
+    }
+    const activeLbl = document.getElementById(`lbl_${qId}_${chosenIdx}`);
+    if (activeLbl) activeLbl.classList.add("checked");
+    updateProgress();
+  }
+
+  function updateProgress() {
+    let answered = 0;
+    const total = part1Questions.length + part2Questions.length + part3Questions.length + part4Questions.length;
+
+    part1Questions.forEach(q => {
+      if (document.getElementById(q.id).value.trim() !== "") answered++;
+    });
+    part2Questions.forEach(q => {
+      if (document.getElementById(q.id).value !== "") answered++;
+    });
+    part3Questions.forEach(q => {
+      if (document.getElementById(q.id).value !== "") answered++;
+    });
+    part4Questions.forEach(q => {
+      if (document.querySelector(`input[name="${q.id}"]:checked`)) answered++;
+    });
+
+    document.getElementById("progressText").textContent = `Completed: ${answered} / ${total} questions`;
+    document.getElementById("submitBtn").disabled = answered < total;
+  }
+
+  function gradeQuiz() {
+    if (isSubmitted) return;
+    if (typeof Library !== "undefined" && !Library.requireName()) return;
+    isSubmitted = true;
+    let score = 0;
+    const report = [];
+    const plain = (h) => (typeof Library !== "undefined" ? Library.text(h) : h);
+
+    // Grade Part I (2 pts each = 24)
+    part1Questions.forEach(q => {
+      const inp = document.getElementById(q.id);
+      inp.disabled = true;
+      const userAns = inp.value.trim().toLowerCase();
+      report.push({
+        part: "Part I. Spelling Word Bank",
+        q: `${q.before} ____ ${q.after}`,
+        yours: inp.value.trim() || "(blank)",
+        correct: q.answer,
+        ok: userAns === q.answer.toLowerCase()
+      });
+      const box = document.getElementById(`box_${q.id}`);
+      const tag = document.getElementById(`tag_${q.id}`);
+      if (userAns === q.answer.toLowerCase()) {
+        score += 2;
+        box.classList.add("correct-box");
+        tag.className = "answer-tag tag-correct";
+        tag.textContent = "✓ Correct";
+      } else {
+        box.classList.add("wrong-box");
+        tag.className = "answer-tag tag-wrong";
+        tag.textContent = `✗ Answer: ${q.answer}`;
+      }
+    });
+
+    // Grade Part II (2 pts each = 20)
+    part2Questions.forEach(q => {
+      const userAns = document.getElementById(q.id).value;
+      report.push({
+        part: "Part II. Circle the Best Word",
+        q: `${q.before} [ ${q.options.join(" / ")} ] ${q.after}`,
+        yours: userAns || "(no answer)",
+        correct: q.answer,
+        ok: userAns === q.answer
+      });
+      const box = document.getElementById(`box_${q.id}`);
+      const tag = document.getElementById(`tag_${q.id}`);
+      document.getElementById(`group_${q.id}`).querySelectorAll("button").forEach(b => b.disabled = true);
+      if (userAns === q.answer) {
+        score += 2;
+        box.classList.add("correct-box");
+        tag.className = "answer-tag tag-correct";
+        tag.textContent = "✓ Correct";
+      } else {
+        box.classList.add("wrong-box");
+        tag.className = "answer-tag tag-wrong";
+        tag.textContent = `✗ Answer: ${q.answer}`;
+      }
+    });
+
+    // Grade Part III (3 pts each = 24)
+    part3Questions.forEach(q => {
+      const sel = document.getElementById(q.id);
+      sel.disabled = true;
+      report.push({
+        part: "Part III. Prefixes (re-, pre-, un-)",
+        q: plain(q.prompt).replace(/^\d+\.\s*/, ""),
+        yours: sel.value || "(no answer)",
+        correct: q.answer,
+        ok: sel.value === q.answer
+      });
+      const box = document.getElementById(`box_${q.id}`);
+      const tag = document.getElementById(`tag_${q.id}`);
+      if (sel.value === q.answer) {
+        score += 3;
+        box.classList.add("correct-box");
+        tag.className = "answer-tag tag-correct";
+        tag.textContent = "✓ Correct";
+      } else {
+        box.classList.add("wrong-box");
+        tag.className = "answer-tag tag-wrong";
+        tag.textContent = `✗ Answer: ${q.answer}`;
+      }
+    });
+
+    // Grade Part IV (4 pts each = 32)
+    part4Questions.forEach(q => {
+      const checked = document.querySelector(`input[name="${q.id}"]:checked`);
+      document.querySelectorAll(`input[name="${q.id}"]`).forEach(r => r.disabled = true);
+      report.push({
+        part: "Part IV. Story Comprehension & Vocabulary",
+        q: plain(q.question).replace(/^\d+\.\s*/, ""),
+        yours: checked ? checked.value : "(no answer)",
+        correct: q.answer,
+        ok: !!checked && checked.value === q.answer
+      });
+      const box = document.getElementById(`box_${q.id}`);
+      const tag = document.getElementById(`tag_${q.id}`);
+      if (checked && checked.value === q.answer) {
+        score += 4;
+        box.classList.add("correct-box");
+        tag.className = "answer-tag tag-correct";
+        tag.textContent = "✓ Correct";
+      } else {
+        box.classList.add("wrong-box");
+        tag.className = "answer-tag tag-wrong";
+        tag.textContent = `✗ Answer: ${q.answer}`;
+      }
+    });
+
+    // Show Result
+    const banner = document.getElementById("result-banner");
+    const emojiEl = document.getElementById("resultEmoji");
+    const scoreEl = document.getElementById("scoreDisplay");
+    const msgEl = document.getElementById("resultMessage");
+
+    banner.style.display = "block";
+    scoreEl.textContent = `Score: ${score} / 100`;
+
+    if (score >= 90) {
+      banner.style.background = "#fef9c3";
+      banner.style.border = "3px solid #eab308";
+      scoreEl.style.color = "#ca8a04";
+      emojiEl.textContent = "💰💵🤑";
+      msgEl.textContent = "Awesome job! You are a Reading Superstar!";
+      spawnEmojis(["💰", "💵", "🪙", "⭐"]);
+    } else {
+      banner.style.background = "#fee2e2";
+      banner.style.border = "3px solid #ef4444";
+      scoreEl.style.color = "#dc2626";
+      emojiEl.textContent = "😢💧";
+      msgEl.textContent = "Good try! Check the red boxes above and try again to reach 90+!";
+      spawnEmojis(["😢", "💧"]);
+    }
+
+    if (typeof Library !== "undefined") {
+      Library.send({ title: "A Team of Fish", category: "Reading / Wonders / Grade 1", score: score, total: 100, items: report });
+    }
+
+    document.getElementById("submitBtn").style.display = "none";
+    document.getElementById("retryBtn").style.display = "inline-block";
+    banner.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function spawnEmojis(emojiList) {
+    for (let i = 0; i < 24; i++) {
+      setTimeout(() => {
+        const el = document.createElement("div");
+        el.className = "floating-emoji";
+        el.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+        el.style.left = Math.random() * 95 + "vw";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }, i * 90);
+    }
+  }
+
+  function resetQuiz() {
+    initQuiz();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Start on load
+  initQuiz();
+</script>
+
+</body>
+</html>
