@@ -386,13 +386,47 @@
       opacity: 0;
     }
   }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 0.6rem;
+    color: #fff;
+    opacity: 0.9;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .name-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-top: 5px solid var(--accent);
+  }
+  .name-card label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; }
+  .name-card input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+  }
+  .name-card input:focus { border-color: var(--primary); }
+  .name-error { margin: 0.6rem 0 0; color: var(--danger); font-weight: bold; }
 </style>
+<script src="reporter.js"></script>
 </head>
 <body>
 
 <div id="emojiLayer"></div>
 
 <header>
+  <a class="back-link" href="index.html">← Back to Library</a>
   <h1>📚 Journey to Freedom — Final Exam Interactive Practice</h1>
   <p>5 Sections • 46 Questions • Total: 100 Points (Auto-Shuffled Every Round)</p>
 </header>
@@ -406,11 +440,18 @@
 </div>
 
 <div class="container">
+  <div class="name-card">
+    <label for="studentName">Your name (a nickname is OK)</label>
+    <input id="studentName" type="text" maxlength="30" autocomplete="off" placeholder="Type your name here">
+    <p id="nameError" class="name-error" hidden>Please type your name first, then press Submit again.</p>
+  </div>
+
   <div id="resultBanner">
     <div id="resultEmoji" style="font-size: 3.5rem;"></div>
     <h2 id="resultTitle" style="margin: 0.3rem 0;"></h2>
     <div class="score-display" id="finalScoreText"></div>
     <p id="resultSubtext" style="font-size: 1.1rem; color: #555;"></p>
+    <p id="sendStatus" style="font-weight: bold; color: #2b5876;"></p>
   </div>
 
   <!-- Section 1 -->
@@ -924,6 +965,7 @@ function prepareMCQuestions(rawList) {
 function initExam() {
   isSubmitted = false;
   document.getElementById("resultBanner").style.display = "none";
+  document.getElementById("sendStatus").textContent = "";
   document.getElementById("emojiLayer").innerHTML = "";
   document.getElementById("topScoreTag").textContent = "Total: 100 pts";
 
@@ -1076,10 +1118,12 @@ function updateProgress() {
 }
 
 function gradeExam() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
   isSubmitted = true;
   document.getElementById("submitBtn").disabled = true;
   let totalScore = 0;
   const letters = ["A", "B", "C", "D"];
+  const report = [];
 
   // Grade Sec 1 (2 pts each = 20)
   currentSec1.forEach((item, i) => {
@@ -1087,6 +1131,13 @@ function gradeExam() {
     const fbEl = document.getElementById(`s1-fb-${i}`);
     const userAns = inputEl.value.trim().toLowerCase();
     inputEl.disabled = true;
+    report.push({
+      part: "Part I. Vocabulary Cloze",
+      q: (item.before + "____" + item.after).replace(/\s+/g, " ").trim(),
+      yours: inputEl.value.trim() || "(blank)",
+      correct: item.word,
+      ok: userAns === item.word.toLowerCase()
+    });
 
     if (userAns === item.word.toLowerCase()) {
       totalScore += 2;
@@ -1104,6 +1155,13 @@ function gradeExam() {
     const fbEl = document.getElementById(`s2-fb-${i}`);
     const userAns = selEl.value;
     selEl.disabled = true;
+    report.push({
+      part: "Part II. True or False",
+      q: item.q,
+      yours: userAns || "(no answer)",
+      correct: item.ans,
+      ok: userAns === item.ans
+    });
 
     if (userAns === item.ans) {
       totalScore += 2;
@@ -1127,6 +1185,14 @@ function gradeExam() {
 
       const correctIdx = item.shuffledOptions.findIndex(o => o.isCorrect);
       const correctText = `(${letters[correctIdx]}) ${item.shuffledOptions[correctIdx].text}`;
+      const partNames = { s3: "Part III. Multiple Choice", s4: "Part IV. Proverbs & Adages", s5: "Part V. Cause and Effect" };
+      report.push({
+        part: partNames[prefix] || prefix,
+        q: Library_text(item.type ? item.prompt : (item.q || item.proverb)),
+        yours: chosenIdx >= 0 ? Library_text(`(${letters[chosenIdx]}) ${item.shuffledOptions[chosenIdx].text}`) : "(no answer)",
+        correct: Library_text(correctText),
+        ok: chosenIdx === correctIdx
+      });
       const fbEl = document.getElementById(`${prefix}-fb-${i}`);
       const exHtml = hasExample ? `<div class="example-box">💡 ${item.example}</div>` : "";
 
@@ -1170,7 +1236,18 @@ function gradeExam() {
     triggerEmojiRain(["😭", "😢", "💧", "🥺", "💔", "📖"]);
   }
 
+  if (typeof Library !== "undefined") {
+    Library.send({ title: "Journey to Freedom", category: "Reading / Wonders", score: totalScore, total: 100, items: report });
+  }
+
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Strip HTML tags so questions are readable in the result sheet
+function Library_text(html) {
+  const d = document.createElement("div");
+  d.innerHTML = html;
+  return (d.textContent || "").replace(/\s+/g, " ").trim();
 }
 
 function triggerEmojiRain(emojiList) {

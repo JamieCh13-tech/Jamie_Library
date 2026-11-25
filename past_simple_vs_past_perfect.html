@@ -238,6 +238,7 @@
       animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
   </style>
+  <script src="reporter.js"></script>
 </head>
 <body class="pb-20">
 
@@ -266,6 +267,17 @@
 
   <!-- Main Centered Content Container -->
   <main class="exam-container">
+
+    <!-- Back to Library -->
+    <a href="index.html" class="inline-block mb-4 text-base font-bold text-indigo-700 hover:underline">&larr; Back to Library</a>
+
+    <!-- Student name -->
+    <section id="name-card" class="w-full bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 mb-6">
+      <label for="studentName" class="block text-base font-bold text-slate-800 mb-2">Your name (a nickname is OK)</label>
+      <input id="studentName" type="text" maxlength="30" autocomplete="off" placeholder="Type your name here"
+             class="w-full sm:w-80 border-2 border-slate-300 rounded-lg px-3 py-2 text-lg font-semibold focus:outline-none focus:border-indigo-500" />
+      <p id="nameError" hidden class="mt-2 text-rose-600 font-bold text-base">Please type your name first, then press Submit again.</p>
+    </section>
 
     <!-- Exam Overview Banner -->
     <section id="intro-banner" class="w-full bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 mb-8">
@@ -301,7 +313,8 @@
           <span id="final-score" class="text-5xl sm:text-6xl font-extrabold tracking-tight">0</span>
           <span class="text-2xl sm:text-3xl font-bold text-slate-500">/ 100 pts</span>
         </div>
-        <p id="result-message" class="exam-subtitle font-semibold mb-6 max-w-2xl mx-auto"></p>
+        <p id="result-message" class="exam-subtitle font-semibold mb-3 max-w-2xl mx-auto"></p>
+        <p id="sendStatus" class="text-base font-bold text-slate-600 mb-6"></p>
 
         <!-- Section Breakdown -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-4xl mx-auto mb-6 text-left">
@@ -797,6 +810,8 @@
       userSelections = {};
 
       document.getElementById("result-card").classList.add("hidden");
+      const sendStatusEl = document.getElementById("sendStatus");
+      if (sendStatusEl) sendStatusEl.textContent = "";
       document.querySelectorAll(".falling-emoji").forEach(el => el.remove());
 
       renderedParts = EXAM_DATA.map(part => ({
@@ -1141,9 +1156,11 @@
     function handleSubmit(event) {
       event.preventDefault();
       if (isSubmitted) return;
+      if (typeof Library !== "undefined" && !Library.requireName()) return;
 
       isSubmitted = true;
       let totalScore = 0;
+      const report = [];
       const partScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
       renderedParts.forEach(part => {
@@ -1242,6 +1259,32 @@
             });
           }
 
+          // Record this question for the teacher's result sheet
+          {
+            let qText = "";
+            let yours = "";
+            if (q.kind === "verb_forms") {
+              qText = q.parts.map(p => (p === null ? "____" : p)).join(" — ");
+            } else if (q.kind === "cloze") {
+              qText = q.segments.join("____").replace(/\s+/g, " ").trim();
+            } else if (q.kind === "two_choice") {
+              qText = `${q.before} [ ${q.options.join(" / ")} ] ${q.after}`;
+            } else if (q.kind === "true_false") {
+              qText = `${q.sentence} ${q.statement}`;
+            } else if (q.kind === "multiple_choice") {
+              qText = `${q.question} [ ${q.options.join(" | ")} ]`;
+            }
+            if (q.kind === "verb_forms" || q.kind === "cloze") {
+              yours = q.blanks.map((b, idx) => {
+                const el = document.getElementById(`${q.id}_b${idx}`);
+                return (el && el.value.trim()) || "(blank)";
+              }).join(" / ");
+            } else {
+              yours = userSelections[q.id] || "(no answer)";
+            }
+            report.push({ part: part.title, q: qText, yours: yours, correct: correctDisplayText, ok: isQuestionCorrect });
+          }
+
           // Update Card Styling & Explanation Feedback
           const cardEl = document.getElementById(`card_${q.id}`);
           const fbEl = document.getElementById(`fb_${q.id}`);
@@ -1304,6 +1347,10 @@
       submitBtn.textContent = "Exam Graded (See Score Above)";
       document.getElementById("submit-hint").textContent = "Review your explanations below or click 'Try Again' to practice a shuffled version.";
       document.getElementById("submit-hint").className = "exam-subtitle font-bold text-slate-600 mb-4";
+
+      if (typeof Library !== "undefined") {
+        Library.send({ title: "Past Simple vs. Past Perfect", category: "Grammar / Tenses", score: totalScore, total: 100, items: report });
+      }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
       triggerEmojiRain(isHighScore);
