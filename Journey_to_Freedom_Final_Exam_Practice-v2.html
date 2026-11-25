@@ -406,7 +406,8 @@
     border-top: 5px solid var(--accent);
   }
   .name-card label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; }
-  .name-card input {
+  .name-card input,
+  .name-card select {
     width: 100%;
     max-width: 320px;
     padding: 0.5rem 0.8rem;
@@ -416,7 +417,8 @@
     border-radius: 8px;
     outline: none;
   }
-  .name-card input:focus { border-color: var(--primary); }
+  .name-card input:focus,
+  .name-card select:focus { border-color: var(--primary); }
   .name-error { margin: 0.6rem 0 0; color: var(--danger); font-weight: bold; }
 </style>
 <script src="reporter.js"></script>
@@ -441,9 +443,9 @@
 
 <div class="container">
   <div class="name-card">
-    <label for="studentName">Your name (a nickname is OK)</label>
+    <label for="studentName">Your name</label>
     <input id="studentName" type="text" maxlength="30" autocomplete="off" placeholder="Type your name here">
-    <p id="nameError" class="name-error" hidden>Please type your name first, then press Submit again.</p>
+    <p id="nameError" class="name-error" hidden>Please select your name first, then press Submit again.</p>
   </div>
 
   <div id="resultBanner">

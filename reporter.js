@@ -7,6 +7,20 @@
 // ↓↓↓ 部署完 Apps Script 後，把網址貼在雙引號中間（網址結尾是 /exec）
 const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxeoD7UVhiSPOsFYnEEEnkuJzr-__pRPhB0r47yaMOptydFLK8DRrq2M7XvGJ8FaYk_jQ/exec";
 
+/* ==========================================================
+   學生名單：新增或刪除學生，只要改這裡
+   - 每個名字用雙引號包住，後面要有逗號
+   - 刪除學生就整行刪掉；舊的成績紀錄不會受影響
+   ========================================================== */
+const STUDENTS = [
+  "Amber Lin",
+  "Casper Lin",
+  "Eileen Chen",
+  "Eric Liao",
+  "Janet Shih",
+  "Maya Lin",
+];
+
 const Library = {
   nameInput: function () {
     return document.getElementById("studentName");
@@ -67,10 +81,37 @@ const Library = {
   }
 };
 
-// 開始輸入姓名後，隱藏「請輸入姓名」的提醒
-document.addEventListener("input", function (e) {
-  if (e.target && e.target.id === "studentName") {
-    const err = document.getElementById("nameError");
-    if (err) err.hidden = true;
-  }
+// 把練習卷上的姓名輸入框換成學生名單的下拉選單
+function buildNameSelect() {
+  const el = document.getElementById("studentName");
+  if (!el || el.tagName !== "INPUT" || !STUDENTS.length) return; // 名單是空的就維持手動輸入
+  const sel = document.createElement("select");
+  sel.id = "studentName";
+  sel.className = el.className;
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = "-- Select your name --";
+  sel.appendChild(first);
+  STUDENTS.slice().sort(function (a, b) { return a.localeCompare(b, "en"); }).forEach(function (n) {
+    const o = document.createElement("option");
+    o.value = n;
+    o.textContent = n;
+    sel.appendChild(o);
+  });
+  el.parentNode.replaceChild(sel, el);
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", buildNameSelect);
+} else {
+  buildNameSelect();
+}
+
+// 選好（或開始輸入）姓名後，隱藏「請選擇姓名」的提醒
+["input", "change"].forEach(function (evt) {
+  document.addEventListener(evt, function (e) {
+    if (e.target && e.target.id === "studentName") {
+      const err = document.getElementById("nameError");
+      if (err) err.hidden = true;
+    }
+  });
 });
