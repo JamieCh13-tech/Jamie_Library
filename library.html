@@ -32,6 +32,20 @@
   .node b { padding: 6px 26px 2px; font-weight: 400; font-size: 34px; line-height: 1.1; background: #fff; border: 4px solid var(--ink); border-radius: 14px; box-shadow: 0 5px 0 var(--ink); }
   .node:hover i { transform: translateY(-4px); }
 
+  /* ---------- signpost entrances ---------- */
+  .signb { position: absolute; display: block; width: 260px; height: 82px; filter: drop-shadow(0 7px 0 rgba(27,42,87,.9)); transition: transform .15s; }
+  .signb svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .signb.g { transform-origin: 96% 50%; animation: swayg 4s ease-in-out infinite; }
+  .signb.r { transform-origin: 4% 50%; animation: swayr 4s ease-in-out infinite; animation-delay: -2s; }
+  @keyframes swayg { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+  @keyframes swayr { 0%,100% { transform: rotate(1.5deg); } 50% { transform: rotate(-1.5deg); } }
+  .signb:hover { animation-play-state: paused; }
+  .signb.g:hover { transform: translateX(-8px) rotate(-3deg); }
+  .signb.r:hover { transform: translateX(8px) rotate(3deg); }
+  .signb:active { filter: drop-shadow(0 2px 0 rgba(27,42,87,.9)); }
+  .signb.g:active { transform: translate(-8px,5px); }
+  .signb.r:active { transform: translate(8px,5px); }
+
   /* ---------- Shelf pages ---------- */
   #shelf { position: relative; min-height: 100vh; overflow: hidden; background-color: #FFD27A; background-image: radial-gradient(rgba(201,138,60,.28) 2px, transparent 2.5px), radial-gradient(rgba(201,138,60,.2) 1.5px, transparent 2px); background-size: 46px 46px, 70px 70px; background-position: 0 0, 23px 31px; }
   .roll2 { transform-box: fill-box; transform-origin: center; animation: spin 5s linear infinite; }
@@ -199,10 +213,10 @@
         </g></g>
         
       </svg>
-      <svg style="position:absolute;left:0;top:0" width="480" height="760" viewBox="0 0 480 760" aria-hidden="true"><path class="march" d="M200 395C270 385 240 470 292 490" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 20"/></svg>
       <h1>Wagor</h1>
-      <a class="node" href="#grammar" style="left:28px;top:215px"><i style="background:#35D0BA"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19l-5 1z"/><path d="M14 6l4 4"/></svg></i><b>Grammar</b></a>
-      <a class="node" href="#reading" style="left:262px;top:440px;animation-delay:-1.5s"><i style="background:#8EA2FF"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h7a3 3 0 013 3v12a2 2 0 00-2-2H3z"/><path d="M21 5h-7a3 3 0 00-3 3v12a2 2 0 012-2h8z"/></svg></i><b>Reading</b></a>
+      <svg class="post" style="position:absolute;left:222px;top:196px" width="36" height="420" viewBox="0 0 36 420" aria-hidden="true"><rect x="6" y="18" width="24" height="400" rx="4" fill="#8B5A2B" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 18 L18 2 L36 18Z" fill="#6B4220" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M14 60v60M22 180v80M14 300v50" stroke="#6B4220" stroke-width="3" stroke-linecap="round"/></svg>
+      <a class="signb g" href="#grammar" aria-label="Grammar" style="left:6px;top:236px"><svg viewBox="0 0 260 82" aria-hidden="true"><path d="M34 4 H256 V78 H34 L4 41Z" fill="#E2A65A" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M70 18h40M150 68h60M190 16h30" stroke="#B9772E" stroke-width="3" stroke-linecap="round" opacity=".8"/><circle cx="244" cy="18" r="4" fill="#1B2A57"/><circle cx="244" cy="64" r="4" fill="#1B2A57"/><g transform="translate(38 13) scale(0.56)"><rect x="12" y="20" width="76" height="54" rx="4" fill="#8B5A2B" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><rect x="19" y="27" width="62" height="40" fill="#2F6B4F"/><text x="50" y="55" text-anchor="middle" font-family="Lilita One" font-size="17" fill="#fff">Aa + s</text><path d="M30 74 L24 90 M70 74 L76 90" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><rect x="56" y="70" width="14" height="5" rx="2" fill="#fff" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></g><text x="162" y="52" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="32" fill="#1B2A57">Grammar</text></svg></a>
+      <a class="signb r" href="#reading" aria-label="Reading" style="left:214px;top:372px"><svg viewBox="0 0 260 82" aria-hidden="true"><path d="M4 4 H226 L256 41 L226 78 H4Z" fill="#D9A24A" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M40 68h50M120 16h50M60 16h24" stroke="#B9772E" stroke-width="3" stroke-linecap="round" opacity=".8"/><circle cx="16" cy="18" r="4" fill="#1B2A57"/><circle cx="16" cy="64" r="4" fill="#1B2A57"/><g transform="translate(166 13) scale(0.56)"><rect x="18" y="66" width="64" height="16" rx="3" fill="#E63946" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><rect x="24" y="48" width="56" height="16" rx="3" fill="#FFD23F" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><rect x="14" y="30" width="60" height="16" rx="3" fill="#35D0BA" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 70h4M30 52h4M22 34h4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M60 30 Q66 12 80 14 Q70 22 72 30Z" fill="#6BCB77" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></g><text x="96" y="52" text-anchor="middle" font-family="Lilita One, sans-serif" font-size="32" fill="#1B2A57">Reading</text></svg></a>
     </div>
   </div>
   <div class="ground"></div>
