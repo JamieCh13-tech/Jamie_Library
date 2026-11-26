@@ -27,7 +27,11 @@
   .node:hover i { transform: translateY(-4px); }
 
   /* ---------- Shelf pages ---------- */
-  #shelf { position: relative; min-height: 100vh; background: #FFD27A; overflow: hidden; }
+  #shelf { position: relative; min-height: 100vh; overflow: hidden; background-color: #FFD27A; background-image: radial-gradient(rgba(201,138,60,.28) 2px, transparent 2.5px), radial-gradient(rgba(201,138,60,.2) 1.5px, transparent 2px); background-size: 46px 46px, 70px 70px; background-position: 0 0, 23px 31px; }
+  .roll2 { transform-box: fill-box; transform-origin: center; animation: spin 5s linear infinite; }
+  .sunrays { transform-box: fill-box; transform-origin: center; animation: spin 30s linear infinite; }
+  #shelf .decor { position: fixed; left: 0; bottom: 0; width: 100%; height: 150px; pointer-events: none; }
+  #shelf .dunes { position: fixed; left: 0; bottom: 0; width: 100%; height: 150px; pointer-events: none; }
   #shelf::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 240px; background: #5CCBFF; }
   #shelf .top { position: absolute; left: 50%; top: 0; width: 480px; height: 240px; overflow: visible; transform: translateX(-50%); }
   .wrap { position: relative; max-width: 980px; margin: 0 auto; padding: 30px 0 60px; }
@@ -38,26 +42,41 @@
   @media (min-width: 600px) { .srch { margin-left: auto; margin-right: auto; } }
   .srch input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 800 17px "Nunito", sans-serif; color: var(--ink); }
   .srch input:focus-visible { outline: 0; box-shadow: none; }
-  .tag { display: inline-block; margin: 52px 0 0 26px; padding: 5px 20px 1px; font-size: 24px; line-height: 1.2; background: var(--sun); border: 4px solid var(--ink); border-radius: 14px; box-shadow: 0 4px 0 var(--ink); }
-  .shelf { display: flex; gap: 14px; margin-top: 16px; padding: 0 20px 4px 26px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .tag { position: relative; display: inline-block; margin: 52px 0 0 42px; padding: 5px 20px 1px; font-size: 24px; line-height: 1.2; background: #FFF4D0; border: 4px solid var(--ink); border-radius: 6px; box-shadow: 0 4px 0 var(--ink); }
+  .tag::before, .tag::after { content: ""; position: absolute; top: -7px; bottom: -7px; width: 12px; background: #C98A3C; border: 4px solid var(--ink); border-radius: 8px; }
+  .tag::before { left: -16px; }
+  .tag::after { right: -16px; }
+  .shelf { display: flex; gap: 14px; margin-top: 30px; padding: 0 20px 4px 26px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
   .shelf::-webkit-scrollbar { display: none; }
   @media (min-width: 820px) { .shelf { flex-wrap: wrap; row-gap: 12px; overflow: visible; } }
   .cell { position: relative; flex: none; margin-bottom: 18px; scroll-snap-align: start; }
-  .cell::after { content: ""; position: absolute; left: -7px; right: -7px; bottom: -18px; height: 18px; background: #A0602F; border-bottom: 4px solid var(--ink); }
+  .cell::after { content: ""; position: absolute; left: -7px; right: -7px; bottom: -18px; height: 18px; background-color: #E2A65A; background-image: linear-gradient(90deg, rgba(27,42,87,.28) 3px, transparent 3px); background-size: 44px 100%; border-bottom: 4px solid var(--ink); }
   .bk { display: flex; align-items: center; justify-content: center; width: min(190px, calc((100vw - 70px) / 2)); aspect-ratio: 1; padding: 12px; font: inherit; color: var(--ink); cursor: pointer; border: 4px solid var(--ink); border-radius: 10px 16px 16px 10px; box-shadow: inset -10px 0 0 rgba(0,0,0,.16); transition: transform .15s; }
   @media (min-width: 820px) { .bk { width: 190px; } }
   .bk:hover { transform: translateY(-5px); }
-  .bk span { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 8px; overflow: hidden; text-align: center; font-size: 25px; line-height: 1.1; overflow-wrap: anywhere; border: 3px solid rgba(27,42,87,.45); border-radius: 6px; }
+  .bk { position: relative; }
+  .bk::before { content: ""; position: absolute; top: 15px; left: 50%; width: 28px; height: 20px; margin-left: -14px; background: #FFE14D; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .bk span { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 22px 8px 8px; overflow: hidden; text-align: center; font-size: 25px; line-height: 1.1; overflow-wrap: anywhere; border: 3px solid rgba(255,225,120,.95); border-radius: 6px; }
+  /* treasure-chest books */
+  .cell .bk { aspect-ratio: 190 / 172; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; display: block; overflow: visible; }
+  .cell .bk::before { content: none; }
+  .bk svg.chest { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .bk .lid { transition: transform .18s; transform-box: fill-box; transform-origin: 50% 100%; }
+  .bk:hover .lid { transform: translateY(-9px) rotate(-4deg); }
+  .bk .tw1, .bk .tw2 { transform-box: fill-box; transform-origin: center; animation: twk 1.8s ease-in-out infinite; }
+  .bk .tw2 { animation-delay: .9s; }
+  @keyframes twk { 0%,100% { transform: scale(.4) rotate(0); } 50% { transform: scale(1.15) rotate(25deg); } }
+  .cell .bk span { position: absolute; left: 15%; right: 15%; top: 56%; bottom: 5%; width: auto; height: auto; padding: 1px 3px; font-size: 17px; line-height: 1; background: #FFF4D0; border: 3px solid var(--ink); border-radius: 8px; }
   .none { margin: 50px 26px 0; font: 800 20px "Nunito", sans-serif; text-align: center; }
 
   /* ---------- Quiz picker ---------- */
   #modal { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(27,42,87,.6); }
-  .pop { position: relative; width: 100%; max-width: 420px; padding: 34px 24px 30px; text-align: center; background: #fff; border: 4px solid var(--ink); border-radius: 30px; box-shadow: 0 10px 0 var(--ink); }
+  .pop { position: relative; width: 100%; max-width: 420px; padding: 34px 24px 30px; text-align: center; background: #FFF4D0; border: 4px solid var(--ink); border-radius: 30px; box-shadow: 0 10px 0 var(--ink); }
   .pop h2 { margin: 0; font-weight: 400; font-size: 34px; line-height: 1.1; }
   .pop p { margin: 8px 0 22px; font: 800 17px "Nunito", sans-serif; color: #3B4673; }
-  .x { position: absolute; right: 12px; top: 12px; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0; cursor: pointer; border-radius: 50%; background: #EEE9FF; border: 3px solid var(--ink); }
+  .x { position: absolute; right: 12px; top: 12px; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0; cursor: pointer; border-radius: 50%; background: #fff; border: 3px solid var(--ink); }
   .qb { display: flex; flex-wrap: wrap; gap: 14px; }
-  .qb a { flex: 1 1 120px; display: flex; align-items: center; justify-content: center; min-height: 66px; padding-top: 4px; font-size: 28px; background: #C4B5FD; border: 4px solid var(--ink); border-radius: 20px; box-shadow: 0 7px 0 var(--ink); }
+  .qb a { flex: 1 1 120px; display: flex; align-items: center; justify-content: center; min-height: 66px; padding-top: 4px; font-size: 28px; background: #35D0BA; border: 4px solid var(--ink); border-radius: 20px; box-shadow: 0 7px 0 var(--ink); }
   .qb a:active { transform: translateY(4px); box-shadow: 0 3px 0 var(--ink); }
   /* ---------- Game motion ---------- */
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -193,11 +212,19 @@
       </g>
       <rect y="215" width="480" height="30" fill="#FFD27A"/>
       <ellipse cx="120" cy="222" rx="200" ry="26" fill="#FFD27A"/><ellipse cx="380" cy="222" rx="220" ry="26" fill="#FFD27A"/>
+      <g transform="translate(184 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><g transform="translate(208 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><g transform="translate(232 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><path d="M30 222Q22 190 34 160" fill="none" stroke="#8B5A2B" stroke-width="8" stroke-linecap="round"/><g transform="translate(34 160)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g><path d="M452 228Q444 196 456 166" fill="none" stroke="#8B5A2B" stroke-width="8" stroke-linecap="round"/><g transform="translate(456 166)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g>
     </g></defs>
-    <circle cx="385" cy="60" r="30" fill="#FFE14D"/><circle cx="376" cy="56" r="3" fill="#8A4B00"/><circle cx="394" cy="56" r="3" fill="#8A4B00"/><path d="M376 68q9 8 18 0" fill="none" stroke="#8A4B00" stroke-width="3" stroke-linecap="round"/>
+    <g transform="translate(40 -8)"><g class="sunrays"><g stroke="#FFB400" stroke-width="6" stroke-linecap="round"><path d="M385 12v10M385 98v10M337 60h10M423 60h10M351 26l7 7M419 26l-7 7M419 94l-7-7M351 94l7-7"/></g><g stroke="#FFD23F" stroke-width="5" stroke-linecap="round"><path d="M385 4v3M385 113v3M329 60h3M438 60h3M364 17l2 3M406 17l-2 3M406 103l-2-3M364 103l2-3"/></g></g><circle cx="385" cy="60" r="30" fill="#FFE14D" stroke="#FFB400" stroke-width="3"/><circle cx="372" cy="68" r="5" fill="#FF9AA8" opacity=".6"/><circle cx="398" cy="68" r="5" fill="#FF9AA8" opacity=".6"/><circle cx="376" cy="56" r="3" fill="#8A4B00"/><circle cx="394" cy="56" r="3" fill="#8A4B00"/><path d="M376 68q9 8 18 0" fill="none" stroke="#8A4B00" stroke-width="3" stroke-linecap="round"/></g>
     <use href="#sc2" x="-1440"/><use href="#sc2" x="-960"/><use href="#sc2" x="-480"/><use href="#sc2"/><use href="#sc2" x="480"/><use href="#sc2" x="960"/><use href="#sc2" x="1440"/>
+    <g transform="translate(120 105) scale(1.3)"><g class="fly" style="animation-duration:16s"><path class="wing" d="M0 0q7-9 14 0q7-9 14 0" fill="none" stroke="#1B2A57" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g></g>
     <g class="drift"><g transform="translate(180 40) scale(.8)" fill="#fff"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
   </svg>
+  <svg class="dunes" viewBox="0 0 480 150" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70Q120 20 240 70T480 60V150H0Z" fill="#F7B955"/><path d="M0 100Q140 60 280 105T480 95V150H0Z" fill="#F29F3A"/></svg>
+  <svg class="decor" width="100%" height="150" aria-hidden="true"><svg x="50%" y="0" width="480" height="150" overflow="visible"><g transform="translate(-240 0)"><defs><g id="dc">
+  <g transform="translate(70 140)"><rect x="-26" y="-46" width="12" height="28" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="-26" y="-28" width="22" height="12" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="14" y="-38" width="12" height="24" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="4" y="-24" width="22" height="12" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="-11" y="-62" width="22" height="62" rx="11" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M0 -54v44M-5 -48v32M5 -48v32" stroke="#2A9A52" stroke-width="2" stroke-linecap="round"/><circle cx="0" cy="-64" r="6" fill="#FF7BA9" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/></g>
+  <g transform="translate(230 140)"><ellipse cx="0" cy="-2" rx="40" ry="10" fill="#5CCBFF" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M-20 -3q10-3 20 0M2 0q10-3 18 -1" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M-30 -6q-4-20 2-38" fill="none" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/><g transform="translate(-28 -44)" fill="#2FB35A"><path d="M0 0q-18-14-34-2q16-2 34 2z"/><path d="M0 0q18-14 34-2q-16-2-34 2z"/><path d="M0 0q-6-20 0-30q6 10 0 30z"/></g><path d="M26 -4v-16M32 -4v-22M38 -4v-14" stroke="#2FB35A" stroke-width="3" stroke-linecap="round"/></g>
+  <g transform="translate(380 118) scale(.62)" fill="#B9772E" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/><circle cx="54" cy="-52" r="2.5" fill="#1B2A57" stroke="none"/></g>
+</g></defs><use href="#dc" x="-1440"/><use href="#dc" x="-960"/><use href="#dc" x="-480"/><use href="#dc" x="0"/><use href="#dc" x="480"/><use href="#dc" x="960"/><use href="#dc" x="1440"/></g></svg></svg>
   <div class="wrap">
     <div class="bar">
       <a class="back" href="#" aria-label="Back to home"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
@@ -212,6 +239,7 @@
 <div id="modal" hidden>
   <div class="pop" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <button class="x" id="mClose" type="button" aria-label="Close"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+    <svg width="64" height="54" viewBox="0 0 64 54" aria-hidden="true" style="display:block;margin:-6px auto 10px"><path d="M32 6L58 50H32Z" fill="#D98F3A"/><path d="M6 50L32 6V50Z" fill="#F2B35C"/><path d="M6 50L32 6L58 50Z" fill="none" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round"/></svg>
     <h2 id="mTitle"></h2>
     <p>Choose a quiz</p>
     <div class="qb" id="mQuizzes"></div>
@@ -267,7 +295,7 @@ const GRAMMAR_GROUPS = [
 ];
 
 /* 書的封面顏色：依書名固定，看起來隨機，但同一本書永遠同一個顏色 */
-const PALETTE = ["#5EEAD4", "#FFD23F", "#FF8FB8", "#C4B5FD", "#FFA94D", "#8CE99A", "#74C0FC", "#FF8787"];
+const PALETTE = ["#35D0BA", "#F4845F", "#8EA2FF", "#FF7BA9", "#6BCB77", "#B794F6", "#FFB84D", "#4DB6E8"];
 
 /* ---------- 以下不用改 ---------- */
 const $ = function (id) { return document.getElementById(id); };
@@ -284,6 +312,18 @@ function hay(w) {
   return [w.name, w.group || "", w.grade ? "grade " + w.grade : ""].concat(w.tags || []).join(" ").toLowerCase();
 }
 
+const CHEST = '<svg class="chest" viewBox="0 0 190 172" aria-hidden="true">'
+  + '<defs><pattern id="gr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".9" fill="#000" opacity=".12"/><circle cx="4.5" cy="4.5" r=".9" fill="#fff" opacity=".16"/></pattern></defs>'
+  + '<g class="tw1"><path d="M22 10l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#FFE14D" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/></g>'
+  + '<g class="tw2"><path d="M170 6l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/></g>'
+  + '<rect x="12" y="78" width="166" height="86" rx="10" style="fill:var(--c)" stroke="#1B2A57" stroke-width="5" stroke-linejoin="round"/>'
+  + '<rect x="12" y="78" width="166" height="86" rx="10" fill="#000" opacity=".1" clip-path="inset(0 0 0 56%)"/>'
+  + '<g class="lid"><path d="M30 34q0-24 20-26h90q20 2 20 26l-8 36H38z" style="fill:var(--c)" stroke="#1B2A57" stroke-width="5" stroke-linejoin="round" transform="translate(0 -10)"/></g>'
+  + '<path d="M22 82q8-20 30-22t30 6q20-22 46-8t26 24z" fill="#FFE14D" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round"/>'
+  + '<circle cx="62" cy="66" r="9" fill="#FFF4D0" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><circle cx="108" cy="58" r="9" fill="#FFF4D0" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M136 70l7-12 7 12-7 8z" fill="#FF7BA9" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M36 74l5-9 5 9-5 6z" fill="#6BCB77" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/>'
+  + '<rect x="12" y="78" width="166" height="14" fill="#FFE14D" stroke="#1B2A57" stroke-width="3.5" stroke-linejoin="round"/>'
+  + '</svg>';
+
 function makeBook(w) {
   const nums = Object.keys(w.quizzes || {}).map(Number).sort(function (a, b) { return a - b; });
   const cell = document.createElement("div");
@@ -298,7 +338,8 @@ function makeBook(w) {
     el.addEventListener("click", function () { openModal(w, nums); });
   }
   el.className = "bk";
-  el.style.background = colorOf(w.name);
+  el.style.setProperty("--c", colorOf(w.name));
+  el.innerHTML = CHEST;
   const s = document.createElement("span");
   s.textContent = w.name;
   el.appendChild(s);
