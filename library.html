@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wagor - Jamie's Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@800&display=swap">
+<style>
+  :root { --ink: #1B2A57; --sun: #FFE14D; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: #5CCBFF; color: var(--ink); font-family: "Lilita One", "Baloo 2", "Arial Rounded MT Bold", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 4px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 7px var(--ink); }
+
+  /* ---------- back to the Jamie's Library cover ---------- */
+  .tohome { position: absolute; left: 16px; top: 14px; z-index: 5; display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 4px 10px; font-size: 20px; line-height: 1; background: var(--sun); border: 4px solid var(--ink); border-radius: 16px; box-shadow: 0 5px 0 var(--ink); transition: transform .12s, box-shadow .12s; }
+  .tohome:hover { transform: translateY(-2px); }
+  .tohome:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+  @media (max-width: 480px) { .tohome { padding: 7px 9px; border-radius: 50%; } .tohome span { display: none; } }
+
+  /* ---------- Home ---------- */
+  #home { position: relative; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: #5CCBFF; }
+  #stagewrap { position: relative; flex: none; width: 100%; }
+  .ground { flex: 1; background: #F7A93E; }
+  #stage { position: absolute; left: 50%; top: 0; width: 480px; height: 760px; transform-origin: top center; }
+  #stage h1 { position: absolute; left: 50%; top: 34px; margin: 0; padding: 10px 28px 4px; white-space: nowrap; font-weight: 400; font-size: 46px; line-height: 1.05; background: var(--sun); border: 4px solid var(--ink); border-radius: 18px; box-shadow: 0 7px 0 var(--ink); transform: translateX(-50%) rotate(-2deg); }
+  .node { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .node i { display: flex; align-items: center; justify-content: center; width: 190px; height: 190px; border-radius: 50%; border: 6px solid var(--ink); box-shadow: 0 10px 0 var(--ink); transition: transform .15s; }
+  .node b { padding: 6px 26px 2px; font-weight: 400; font-size: 34px; line-height: 1.1; background: #fff; border: 4px solid var(--ink); border-radius: 14px; box-shadow: 0 5px 0 var(--ink); }
+  .node:hover i { transform: translateY(-4px); }
+
+  /* ---------- Shelf pages ---------- */
+  #shelf { position: relative; min-height: 100vh; overflow: hidden; background-color: #FFD27A; background-image: radial-gradient(rgba(201,138,60,.28) 2px, transparent 2.5px), radial-gradient(rgba(201,138,60,.2) 1.5px, transparent 2px); background-size: 46px 46px, 70px 70px; background-position: 0 0, 23px 31px; }
+  .roll2 { transform-box: fill-box; transform-origin: center; animation: spin 5s linear infinite; }
+  .sunrays { transform-box: fill-box; transform-origin: center; animation: spin 30s linear infinite; }
+  #shelf .decor { position: fixed; left: 0; bottom: 0; width: 100%; height: 150px; pointer-events: none; }
+  #shelf .dunes { position: fixed; left: 0; bottom: 0; width: 100%; height: 150px; pointer-events: none; }
+  #shelf::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 240px; background: #5CCBFF; }
+  #shelf .top { position: absolute; left: 50%; top: 0; width: 480px; height: 240px; overflow: visible; transform: translateX(-50%); }
+  .wrap { position: relative; max-width: 980px; margin: 0 auto; padding: 30px 0 60px; }
+  .bar { position: relative; display: flex; align-items: center; justify-content: center; min-height: 64px; }
+  .back { position: absolute; left: 20px; top: 0; display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; border-radius: 50%; background: var(--sun); border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); }
+  #title { margin: 0 0 0 40px; padding: 8px 34px 2px; font-weight: 400; font-size: 42px; line-height: 1.1; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 0 6px 0 var(--ink); transform: rotate(-2deg); }
+  .srch { display: flex; align-items: center; gap: 12px; max-width: 520px; height: 54px; margin: 26px 20px 0; padding: 0 20px; background: #fff; border: 4px solid var(--ink); border-radius: 18px; }
+  @media (min-width: 600px) { .srch { margin-left: auto; margin-right: auto; } }
+  .srch input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 800 17px "Nunito", sans-serif; color: var(--ink); }
+  .srch input:focus-visible { outline: 0; box-shadow: none; }
+  .tag { position: relative; display: inline-block; margin: 52px 0 0 42px; padding: 5px 20px 1px; font-size: 24px; line-height: 1.2; background: #FFF4D0; border: 4px solid var(--ink); border-radius: 6px; box-shadow: 0 4px 0 var(--ink); }
+  .tag::before, .tag::after { content: ""; position: absolute; top: -7px; bottom: -7px; width: 12px; background: #C98A3C; border: 4px solid var(--ink); border-radius: 8px; }
+  .tag::before { left: -16px; }
+  .tag::after { right: -16px; }
+  .shelf { display: flex; gap: 14px; margin-top: 10px; padding: 26px 20px 4px 26px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .shelf::-webkit-scrollbar { display: none; }
+  @media (min-width: 820px) { .shelf { flex-wrap: wrap; row-gap: 12px; overflow: visible; } }
+  .cell { position: relative; flex: none; margin-bottom: 18px; scroll-snap-align: start; }
+  .cell::after { content: ""; position: absolute; left: -7px; right: -7px; bottom: -18px; height: 18px; background-color: #E2A65A; background-image: linear-gradient(90deg, rgba(27,42,87,.28) 3px, transparent 3px); background-size: 44px 100%; border-bottom: 4px solid var(--ink); }
+  .bk { display: flex; align-items: center; justify-content: center; width: min(190px, calc((100vw - 70px) / 2)); aspect-ratio: 1; padding: 12px; font: inherit; color: var(--ink); cursor: pointer; border: 4px solid var(--ink); border-radius: 10px 16px 16px 10px; box-shadow: inset -10px 0 0 rgba(0,0,0,.16); transition: transform .15s; }
+  @media (min-width: 820px) { .bk { width: 190px; } }
+  .bk:hover { transform: translateY(-5px); }
+  .bk { position: relative; }
+  .bk::before { content: ""; position: absolute; top: 15px; left: 50%; width: 28px; height: 20px; margin-left: -14px; background: #FFE14D; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .bk span { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 22px 8px 8px; overflow: hidden; text-align: center; font-size: 25px; line-height: 1.1; overflow-wrap: anywhere; border: 3px solid rgba(255,225,120,.95); border-radius: 6px; }
+  /* treasure-chest books */
+  .cell .bk { aspect-ratio: 190 / 172; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; display: block; overflow: visible; }
+  .cell .bk::before { content: none; }
+  .bk svg.chest { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .bk .lid { transition: transform .18s; transform-box: fill-box; transform-origin: 50% 100%; }
+  .bk:hover .lid { transform: translateY(-9px) rotate(-4deg); }
+  .bk .tw1, .bk .tw2 { transform-box: fill-box; transform-origin: center; animation: twk 1.8s ease-in-out infinite; }
+  .bk .tw2 { animation-delay: .9s; }
+  @keyframes twk { 0%,100% { transform: scale(.4) rotate(0); } 50% { transform: scale(1.15) rotate(25deg); } }
+  .cell .bk span { position: absolute; left: 15%; right: 15%; top: 56%; bottom: 5%; width: auto; height: auto; padding: 1px 3px; font-size: 17px; line-height: 1; background: #FFF4D0; border: 3px solid var(--ink); border-radius: 8px; }
+  .none { margin: 50px 26px 0; font: 800 20px "Nunito", sans-serif; text-align: center; }
+
+  /* ---------- Quiz picker ---------- */
+  #modal { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(27,42,87,.6); }
+  .pop { position: relative; width: 100%; max-width: 420px; padding: 34px 24px 30px; text-align: center; background: #FFF4D0; border: 4px solid var(--ink); border-radius: 30px; box-shadow: 0 10px 0 var(--ink); }
+  .pop h2 { margin: 0; font-weight: 400; font-size: 34px; line-height: 1.1; }
+  .pop p { margin: 8px 0 22px; font: 800 17px "Nunito", sans-serif; color: #3B4673; }
+  .x { position: absolute; right: 12px; top: 12px; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0; cursor: pointer; border-radius: 50%; background: #fff; border: 3px solid var(--ink); }
+  .qb { display: flex; flex-wrap: wrap; gap: 14px; }
+  .qb a { flex: 1 1 120px; display: flex; align-items: center; justify-content: center; min-height: 66px; padding-top: 4px; font-size: 28px; background: #35D0BA; border: 4px solid var(--ink); border-radius: 20px; box-shadow: 0 7px 0 var(--ink); }
+  .qb a:active { transform: translateY(4px); box-shadow: 0 3px 0 var(--ink); }
+  /* ---------- Game motion ---------- */
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes wig { 0%,100% { transform: translateX(-50%) rotate(-2deg); } 50% { transform: translateX(-50%) rotate(2deg) scale(1.03); } }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes drift { 0%,100% { transform: translateX(-18px); } 50% { transform: translateX(18px); } }
+  @keyframes march { to { stroke-dashoffset: -22; } }
+  @keyframes twinkle { 0%,100% { transform: scale(.4); opacity: .5; } 50% { transform: scale(1.1); opacity: 1; } }
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+  @keyframes pop { from { transform: scale(.5) translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes drop { from { transform: translateY(-30px) rotate(-2deg); opacity: 0; } to { transform: rotate(-2deg); opacity: 1; } }
+  @keyframes wob { 25% { transform: translateY(-5px) rotate(-3deg); } 75% { transform: translateY(-5px) rotate(3deg); } }
+  #stage h1 { animation: wig 4s ease-in-out infinite; }
+  .node { animation: float 3s ease-in-out infinite; }
+  .node:active i { transform: translateY(7px); box-shadow: 0 3px 0 var(--ink); }
+  .march { animation: march 1.1s linear infinite; }
+  .bob { animation: bob 3.2s ease-in-out infinite; }
+  .bob2 { animation: bob 2.4s ease-in-out infinite; }
+  .drift { animation: drift 9s ease-in-out infinite; }
+  .tw { transform-box: fill-box; transform-origin: center; animation: twinkle 1.8s ease-in-out infinite; }
+  .eye { transform-box: fill-box; transform-origin: center; animation: blink 4s infinite; }
+  .fresh .cell { animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; }
+  #title { animation: drop .5s cubic-bezier(.34,1.56,.64,1) both; }
+  .bk:hover { animation: wob .4s; }
+  .pop { animation: pop .35s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes flit { 0%,100% { transform: translate(0,0); } 25% { transform: translate(14px,-10px); } 50% { transform: translate(28px,2px); } 75% { transform: translate(12px,12px); } }
+  @keyframes flapk { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(.35); } }
+  .fl { animation: flit 6s ease-in-out infinite; }
+  .flap { transform-box: fill-box; transform-origin: center; animation: flapk .35s ease-in-out infinite; }
+  @keyframes rollx { from { transform: translateX(0); } to { transform: translateX(400px); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .roll { animation: rollx 9s linear infinite; }
+  .spin { transform-box: fill-box; transform-origin: center; animation: spin 1.6s linear infinite; }
+  @keyframes flyx { 0% { transform: translate(-90px, 6px); opacity: 0; } 10% { opacity: 1; } 50% { transform: translate(10px, -8px); } 90% { opacity: 1; } 100% { transform: translate(110px, 4px); opacity: 0; } }
+  @keyframes flapb { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-.9); } }
+  @keyframes lookf { 0%, 10%, 80%, 100% { transform: translateX(0); } 20%, 35% { transform: translateX(-3px); } 50%, 65% { transform: translateX(3px); } }
+  @keyframes lookp { 0%, 10%, 80%, 100% { transform: translateX(0); } 20%, 35% { transform: translateX(-2.5px); } 50%, 65% { transform: translateX(2.5px); } }
+  .fly { animation: flyx 14s linear infinite; }
+  .wing { transform-box: fill-box; transform-origin: center bottom; animation: flapb .55s ease-in-out infinite; }
+  .look { animation: lookf 6s ease-in-out infinite; }
+  .pup { animation: lookp 6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- ================= Home ================= -->
+<section id="home">
+      <a class="tohome" href="index.html" aria-label="Back to Jamie's Library"><svg width="30" height="26" viewBox="0 0 30 26" aria-hidden="true"><path d="M2 10L15 2L28 10Z" fill="#E63946" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/><rect x="4" y="10" width="22" height="13" fill="#FFF4D0" stroke="#1B2A57" stroke-width="2.5"/><path d="M9 12v9M15 12v9M21 12v9" stroke="#1B2A57" stroke-width="2.5"/><rect x="2" y="22" width="26" height="3" rx="1" fill="#1B2A57"/></svg><span>Library</span></a>
+  <div id="stagewrap">
+    <div id="stage">
+      <svg style="position:absolute;left:0;top:0;overflow:visible" width="480" height="760" viewBox="0 0 480 760" aria-hidden="true">
+        <defs><g id="sc">
+          <g fill="#fff"><g transform="translate(70 150) scale(1.1)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(262 160) scale(0.9)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(430 300) scale(0.8)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(40 330) scale(0.7)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+          <g stroke-linejoin="round" stroke-width="6">
+            <path d="M190 520L300 336L410 520Z" fill="#F2B35C" stroke="#F2B35C"/><path d="M300 336L410 520L300 520Z" fill="#D98F3A" stroke="#D98F3A"/>
+            <path d="M60 520L120 430L180 520Z" fill="#F2B35C" stroke="#F2B35C"/><path d="M120 430L180 520L120 520Z" fill="#D98F3A" stroke="#D98F3A"/>
+            <path d="M410 520L448 462L486 520Z" fill="#F2B35C" stroke="#F2B35C"/><path d="M448 462L486 520L448 520Z" fill="#D98F3A" stroke="#D98F3A"/>
+          </g>
+          <path d="M264 410h30M242 450h52M96 480h22" stroke="#FFD98A" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+          
+          <rect x="-20" y="516" width="520" height="260" fill="#FFE29E"/>
+          <ellipse cx="90" cy="730" rx="300" ry="190" fill="#FFC862"/>
+          <ellipse cx="420" cy="740" rx="300" ry="170" fill="#FFD98A"/>
+          <path d="M40 647Q32 615 44 585" fill="none" stroke="#8B5A2B" stroke-width="9" stroke-linecap="round"/><g transform="translate(44 585)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g><path d="M468 662Q460 630 472 600" fill="none" stroke="#8B5A2B" stroke-width="9" stroke-linecap="round"/><g transform="translate(472 600)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g>
+          <g stroke="#3DBE6A" stroke-width="14" stroke-linecap="round" fill="none"><path d="M240 706V652"/><path d="M240 690q-16 0-16-16"/><path d="M240 680q16 0 16-14"/></g>
+          <circle cx="240" cy="648" r="6" fill="#FF5FA2"/><circle cx="236" cy="672" r="1.8" fill="#1B2A57"/><circle cx="244" cy="672" r="1.8" fill="#1B2A57"/>
+          <path d="M-20 720Q240 660 500 720L500 760L-20 760Z" fill="#F7A93E"/>
+          <path d="M70 738q18-7 36 0M300 744q18-7 36 0M410 730q14-6 28 0" fill="none" stroke="#FFD98A" stroke-width="3.5" stroke-linecap="round"/>
+        </g></defs>
+        <g stroke="#FFE14D" stroke-width="6" stroke-linecap="round"><path d="M424 66v14M424 176v14M362 128h14M472 128h14M380 84l10 10M468 84l-10 10M468 172l-10-10M380 172l10-10"/></g>
+        <circle cx="424" cy="128" r="36" fill="#FFE14D"/><g class="look"><circle cx="414" cy="128" r="6" fill="#fff" stroke="#8A4B00" stroke-width="2"/><circle cx="434" cy="128" r="6" fill="#fff" stroke="#8A4B00" stroke-width="2"/><circle class="pup" cx="414" cy="128" r="3" fill="#1B2A57"/><circle class="pup" cx="434" cy="128" r="3" fill="#1B2A57"/><path d="M412 140q12 11 24 0" fill="none" stroke="#8A4B00" stroke-width="3.6" stroke-linecap="round"/><circle cx="406" cy="139" r="4.5" fill="#FF9F7A" opacity=".6"/><circle cx="442" cy="139" r="4.5" fill="#FF9F7A" opacity=".6"/></g><g fill="#fff" transform="translate(430 214) scale(.9)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g>
+        <g transform="translate(190 165) scale(1.4)"><g class="fly" style="animation-duration:14s;animation-delay:-0s"><path class="wing" d="M0 0q7-9 14 0q7-9 14 0" fill="none" stroke="#1B2A57" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g></g><g transform="translate(215 198) scale(1.1)"><g class="fly" style="animation-duration:18s;animation-delay:-9s"><path class="wing" d="M0 0q7-9 14 0q7-9 14 0" fill="none" stroke="#1B2A57" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+                <use href="#sc" x="-1440"/><use href="#sc" x="-960"/><use href="#sc" x="-480"/><use href="#sc"/><use href="#sc" x="480"/><use href="#sc" x="960"/><use href="#sc" x="1440"/>
+        <g transform="translate(250 246)"><g class="fl"><g class="bob2">
+          <path d="M-34 12q-8 4 -14 0M-42 6q-8 2 -12 -2" fill="none" stroke="#FFE14D" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+          <path d="M-30 4Q0 -8 32 0L28 9Q0 3 -26 14Z" fill="#E63946" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M-22 7Q0 0 22 4" fill="none" stroke="#FFE14D" stroke-width="3" stroke-linecap="round"/>
+          <path d="M-30 4l-4 -1M-27 9l-4 1M32 0l4 0M28 9l4 2" stroke="#1B2A57" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="2" cy="-8" r="6.5" fill="#E8A878" stroke="#1B2A57" stroke-width="2.5"/><path d="M-4 -12Q2 -19 8 -12Z" fill="#35D0BA" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/>
+        </g></g></g>
+        <g class="roll"><g transform="translate(30 736)"><g class="spin"><circle r="11" fill="#C58A3C" stroke="#1B2A57" stroke-width="2.5"/><path d="M-9 -3q9 -9 18 0M-9 4q9 -5 18 0M-3 -9q-6 9 0 18M4 -9q5 9 0 18" fill="none" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round"/></g></g></g>
+        
+        <g class="bob"><g transform="translate(44 160) scale(.8)"><line x1="-14" y1="24" x2="-8" y2="50" stroke="#1B2A57" stroke-width="2"/><line x1="14" y1="24" x2="8" y2="50" stroke="#1B2A57" stroke-width="2"/><circle r="28" fill="#FF5FA2"/><path d="M0 -28q-14 28 0 56M0 -28q14 28 0 56" fill="none" stroke="#FFE14D" stroke-width="5"/><rect x="-9" y="50" width="18" height="12" rx="2" fill="#8B5A2B"/></g></g>
+        <g class="drift"><g transform="translate(338 278) scale(.8)" fill="#fff"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+        <g transform="translate(204 658)">
+          <g class="bob2" style="animation-delay:-1s">
+            <path d="M-12 -30L-20 -20" stroke="#E8A878" stroke-width="5" stroke-linecap="round"/>
+            <path d="M-20 -20Q-34 -26 -38 -52" fill="none" stroke="#8B5A2B" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M-12 -32L-15 -2L15 -2L12 -32Q0 -38 -12 -32Z" fill="#FFF6E0" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M-13 -22h26" stroke="#2EC4B6" stroke-width="5"/>
+            <rect x="-9" y="-3" width="7" height="5" rx="2" fill="#8B5A2B" stroke="#1B2A57" stroke-width="2"/><rect x="2" y="-3" width="7" height="5" rx="2" fill="#8B5A2B" stroke="#1B2A57" stroke-width="2"/>
+            <circle cx="0" cy="-43" r="9" fill="#E8A878" stroke="#1B2A57" stroke-width="3"/>
+            <path d="M-6 -39q6 8 12 0q-6 3 -12 0z" fill="#3A2614" stroke="#3A2614" stroke-width="2" stroke-linejoin="round"/>
+            <circle class="eye" cx="-3.5" cy="-45" r="1.6" fill="#1B2A57"/><circle class="eye" cx="3.5" cy="-45" r="1.6" fill="#1B2A57"/>
+            <path d="M-11 -48Q-12 -58 0 -58Q12 -58 11 -48Q0 -53 -11 -48Z" fill="#E63946" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="0" cy="-53" r="2.4" fill="#FFE14D" stroke="#1B2A57" stroke-width="1.2"/>
+            <path d="M12 -30L18 -18" stroke="#E8A878" stroke-width="5" stroke-linecap="round"/>
+          </g>
+        </g>
+        <g transform="translate(108 612) scale(1)"><g class="bob2">
+          <path d="M-34 0q-12 6 -8 20" fill="none" stroke="#1B2A57" stroke-width="3" stroke-linecap="round"/><circle cx="-42" cy="22" r="4" fill="#8B5A2B" stroke="#1B2A57" stroke-width="2"/>
+          <g fill="#D9A24A" stroke="#1B2A57" stroke-width="3"><rect x="-27" y="16" width="9" height="30" rx="4"/><rect x="-13" y="18" width="9" height="28" rx="4"/><rect x="9" y="18" width="9" height="28" rx="4"/><rect x="23" y="16" width="9" height="30" rx="4"/></g>
+          <ellipse cx="-6" cy="-14" rx="16" ry="16" fill="#F2C46D" stroke="#1B2A57" stroke-width="4"/>
+          <ellipse cx="0" cy="6" rx="38" ry="22" fill="#F2C46D" stroke="#1B2A57" stroke-width="4"/>
+          <ellipse cx="-6" cy="-3" rx="13" ry="7" fill="#F2C46D"/>
+          <path d="M-12 2h22l-3 18h-16z" fill="#FF5FA2" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M-10 9h18" stroke="#FFE14D" stroke-width="4"/>
+          <path d="M26 -2C38 -10 36 -28 42 -40" fill="none" stroke="#1B2A57" stroke-width="19" stroke-linecap="round"/><path d="M26 -2C38 -10 36 -28 42 -40" fill="none" stroke="#F2C46D" stroke-width="12" stroke-linecap="round"/>
+          <ellipse cx="40" cy="-62" rx="4" ry="7" transform="rotate(-20 40 -62)" fill="#F2C46D" stroke="#1B2A57" stroke-width="2.5"/>
+          <ellipse cx="50" cy="-50" rx="16" ry="12" fill="#F2C46D" stroke="#1B2A57" stroke-width="3.5"/>
+          <ellipse cx="60" cy="-46" rx="9" ry="7.5" fill="#FFE0A3" stroke="#1B2A57" stroke-width="3"/>
+          <circle cx="62" cy="-48" r="1.6" fill="#1B2A57"/><circle class="eye" cx="48" cy="-54" r="3.4" fill="#1B2A57"/>
+          <path d="M57 -41q4 3 8 0" fill="none" stroke="#1B2A57" stroke-width="2" stroke-linecap="round"/>
+        </g></g>
+        
+      </svg>
+      <svg style="position:absolute;left:0;top:0" width="480" height="760" viewBox="0 0 480 760" aria-hidden="true"><path class="march" d="M200 395C270 385 240 470 292 490" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 20"/></svg>
+      <h1>Wagor</h1>
+      <a class="node" href="#grammar" style="left:28px;top:215px"><i style="background:#35D0BA"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19l-5 1z"/><path d="M14 6l4 4"/></svg></i><b>Grammar</b></a>
+      <a class="node" href="#reading" style="left:262px;top:440px;animation-delay:-1.5s"><i style="background:#8EA2FF"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h7a3 3 0 013 3v12a2 2 0 00-2-2H3z"/><path d="M21 5h-7a3 3 0 00-3 3v12a2 2 0 012-2h8z"/></svg></i><b>Reading</b></a>
+    </div>
+  </div>
+  <div class="ground"></div>
+</section>
+
+<!-- ================= Reading / Grammar shelves ================= -->
+<section id="shelf" hidden>
+  <svg class="top" width="480" height="240" viewBox="0 0 480 240" aria-hidden="true">
+    <defs><g id="sc2">
+      <g fill="#fff"><g transform="translate(60 60) scale(0.9)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(300 110) scale(0.8)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+      <g stroke-linejoin="round" stroke-width="5">
+        <path d="M250 225L300 140L350 225Z" fill="#F2B35C" stroke="#F2B35C"/><path d="M300 140L350 225L300 225Z" fill="#D98F3A" stroke="#D98F3A"/>
+        <path d="M90 225L128 160L166 225Z" fill="#F2B35C" stroke="#F2B35C"/><path d="M128 160L166 225L128 225Z" fill="#D98F3A" stroke="#D98F3A"/>
+      </g>
+      <rect y="215" width="480" height="30" fill="#FFD27A"/>
+      <ellipse cx="120" cy="222" rx="200" ry="26" fill="#FFD27A"/><ellipse cx="380" cy="222" rx="220" ry="26" fill="#FFD27A"/>
+      <g transform="translate(184 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><g transform="translate(208 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><g transform="translate(232 209) scale(.3)" fill="#B9772E"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/></g><path d="M30 222Q22 190 34 160" fill="none" stroke="#8B5A2B" stroke-width="8" stroke-linecap="round"/><g transform="translate(34 160)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g><path d="M452 228Q444 196 456 166" fill="none" stroke="#8B5A2B" stroke-width="8" stroke-linecap="round"/><g transform="translate(456 166)" fill="#2FB35A"><path d="M0 0q-24-22-46-4q24-2 46 4z"/><path d="M0 0q24-22 46-4q-24-2-46 4z"/><path d="M0 0q-32 2-40 24q24-12 40-24z"/><path d="M0 0q32 2 40 24q-24-12-40-24z"/><path d="M0 0q-8-26 0-40q8 14 0 40z"/><circle cx="-4" cy="7" r="4.5" fill="#8B5A2B"/><circle cx="5" cy="8" r="4.5" fill="#8B5A2B"/></g>
+    </g></defs>
+    <g transform="translate(40 -8)"><g class="sunrays"><g stroke="#FFB400" stroke-width="6" stroke-linecap="round"><path d="M385 12v10M385 98v10M337 60h10M423 60h10M351 26l7 7M419 26l-7 7M419 94l-7-7M351 94l7-7"/></g><g stroke="#FFD23F" stroke-width="5" stroke-linecap="round"><path d="M385 4v3M385 113v3M329 60h3M438 60h3M364 17l2 3M406 17l-2 3M406 103l-2-3M364 103l2-3"/></g></g><circle cx="385" cy="60" r="30" fill="#FFE14D" stroke="#FFB400" stroke-width="3"/><circle cx="372" cy="68" r="5" fill="#FF9AA8" opacity=".6"/><circle cx="398" cy="68" r="5" fill="#FF9AA8" opacity=".6"/><circle cx="376" cy="56" r="3" fill="#8A4B00"/><circle cx="394" cy="56" r="3" fill="#8A4B00"/><path d="M376 68q9 8 18 0" fill="none" stroke="#8A4B00" stroke-width="3" stroke-linecap="round"/></g>
+    <use href="#sc2" x="-1440"/><use href="#sc2" x="-960"/><use href="#sc2" x="-480"/><use href="#sc2"/><use href="#sc2" x="480"/><use href="#sc2" x="960"/><use href="#sc2" x="1440"/>
+    <g transform="translate(120 105) scale(1.3)"><g class="fly" style="animation-duration:16s"><path class="wing" d="M0 0q7-9 14 0q7-9 14 0" fill="none" stroke="#1B2A57" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+    <g class="drift"><g transform="translate(180 40) scale(.8)" fill="#fff"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+  </svg>
+  <svg class="dunes" viewBox="0 0 480 150" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70Q120 20 240 70T480 60V150H0Z" fill="#F7B955"/><path d="M0 100Q140 60 280 105T480 95V150H0Z" fill="#F29F3A"/></svg>
+  <svg class="decor" width="100%" height="150" aria-hidden="true"><svg x="50%" y="0" width="480" height="150" overflow="visible"><g transform="translate(-240 0)"><defs><g id="dc">
+  <g transform="translate(70 140)"><rect x="-26" y="-46" width="12" height="28" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="-26" y="-28" width="22" height="12" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="14" y="-38" width="12" height="24" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="4" y="-24" width="22" height="12" rx="6" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><rect x="-11" y="-62" width="22" height="62" rx="11" fill="#3DBE6B" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M0 -54v44M-5 -48v32M5 -48v32" stroke="#2A9A52" stroke-width="2" stroke-linecap="round"/><circle cx="0" cy="-64" r="6" fill="#FF7BA9" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/></g>
+  <g transform="translate(230 140)"><ellipse cx="0" cy="-2" rx="40" ry="10" fill="#5CCBFF" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M-20 -3q10-3 20 0M2 0q10-3 18 -1" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M-30 -6q-4-20 2-38" fill="none" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/><g transform="translate(-28 -44)" fill="#2FB35A"><path d="M0 0q-18-14-34-2q16-2 34 2z"/><path d="M0 0q18-14 34-2q-16-2-34 2z"/><path d="M0 0q-6-20 0-30q6 10 0 30z"/></g><path d="M26 -4v-16M32 -4v-22M38 -4v-14" stroke="#2FB35A" stroke-width="3" stroke-linecap="round"/></g>
+  <g transform="translate(380 118) scale(.62)" fill="#B9772E" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"><ellipse cy="6" rx="38" ry="22"/><ellipse cx="-6" cy="-14" rx="16" ry="16"/><path d="M26 -2C38 -10 36 -28 42 -40" stroke="#B9772E" stroke-width="14" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="-50" rx="16" ry="12"/><rect x="-27" y="16" width="9" height="30"/><rect x="-13" y="18" width="9" height="28"/><rect x="9" y="18" width="9" height="28"/><rect x="23" y="16" width="9" height="30"/><circle cx="54" cy="-52" r="2.5" fill="#1B2A57" stroke="none"/></g>
+</g></defs><use href="#dc" x="-1440"/><use href="#dc" x="-960"/><use href="#dc" x="-480"/><use href="#dc" x="0"/><use href="#dc" x="480"/><use href="#dc" x="960"/><use href="#dc" x="1440"/></g></svg></svg>
+  <div class="wrap">
+    <div class="bar">
+      <a class="back" href="#" aria-label="Back to home"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <h1 id="title">Reading</h1>
+    </div>
+    <label class="srch"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg><input id="q" type="search" placeholder="Search" aria-label="Search" autocomplete="off"></label>
+    <div id="list"></div>
+  </div>
+</section>
+
+<!-- ================= Quiz picker ================= -->
+<div id="modal" hidden>
+  <div class="pop" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="x" id="mClose" type="button" aria-label="Close"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+    <svg width="64" height="54" viewBox="0 0 64 54" aria-hidden="true" style="display:block;margin:-6px auto 10px"><path d="M32 6L58 50H32Z" fill="#D98F3A"/><path d="M6 50L32 6V50Z" fill="#F2B35C"/><path d="M6 50L32 6L58 50Z" fill="none" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round"/></svg>
+    <h2 id="mTitle"></h2>
+    <p>Choose a quiz</p>
+    <div class="qb" id="mQuizzes"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   練習卷清單
+   一個「故事」或「文法主題」是一筆資料，底下的練習卷用 Quiz 1、Quiz 2… 排列。
+
+   新增同一個故事的新練習卷：在該筆的 quizzes 裡多加一行，編號接下一號。
+   新增一個全新的故事／主題：複製整筆 { ... }, 改掉內容。
+
+   - name    : 故事名稱（Reading）或文法主題名稱（Grammar），也是書的封面文字
+   - type    : "grammar" 或 "reading"
+   - group   : 只有 grammar 需要，例如 "Tenses"
+   - grade   : 只有 reading 需要，填 1 到 6 的數字
+   - tags    : 只有 grammar 需要，搜尋用的關鍵字
+   - quizzes : { 編號: "檔名" }，檔名要和 GitHub 上的完全一樣（含大小寫）
+               編號不要重新排列：給學生做過的 Quiz 1，永遠都是 Quiz 1
+               只有一份 Quiz 的書，點下去直接開；有多份的會先跳出選單
+   ============================================================ */
+const WORKSHEETS = [
+  {
+    name: "Phrasal Verbs",
+    type: "grammar", group: "Phrasal Verbs",
+    tags: ["phrasal verbs", "verb tense", "grade 6"],
+    quizzes: {
+      1: "grammar_phrasal_verbs_1.html"
+    }
+  },
+  {
+    name: "Noun Basics",
+    type: "grammar", group: "Nouns & Articles",
+    tags: ["nouns", "common noun", "proper noun", "possessive noun"],
+    quizzes: {
+      1: "grammar_noun_basics_1.html"
+    }
+  },
+  {
+    name: "Plural Nouns",
+    type: "grammar", group: "Nouns & Articles",
+    tags: ["plural", "singular", "irregular plural", "nouns"],
+    quizzes: {
+      1: "grammar_plural_nouns_1.html"
+    }
+  },
+  {
+    name: "Past Simple vs. Past Perfect",
+    type: "grammar", group: "Tenses",
+    tags: ["past simple", "past perfect", "tenses", "comparison"],
+    quizzes: {
+      1: "grammar_past_simple_vs_past_perfect_1.html"
+    }
+  },
+  {
+    name: "A Team of Fish",
+    type: "reading", grade: 1,
+    quizzes: {
+      1: "wonders_g1_a_team_of_fish_1.html"
+    }
+  },
+  {
+    name: "Journey to Freedom",
+    type: "reading", grade: 6,
+    quizzes: {
+      1: "wonders_g6_journey_to_freedom_1.html"
+    }
+  }
+];
+
+/* Grammar 主題書架的顯示順序（沒有卷子的主題不會顯示） */
+const GRAMMAR_GROUPS = [
+  "Tenses", "Nouns & Articles", "Pronouns", "Prepositions",
+  "Modals", "Phrasal Verbs", "Sentences & Questions", "Other"
+];
+
+/* 書的封面顏色：依書名固定，看起來隨機，但同一本書永遠同一個顏色 */
+const PALETTE = ["#35D0BA", "#F4845F", "#8EA2FF", "#FF7BA9", "#6BCB77", "#B794F6", "#FFB84D", "#4DB6E8"];
+
+/* ---------- 以下不用改 ---------- */
+const $ = function (id) { return document.getElementById(id); };
+let current = "reading";
+let lastFocus = null;
+
+function colorOf(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return PALETTE[h % PALETTE.length];
+}
+
+function hay(w) {
+  return [w.name, w.group || "", w.grade ? "grade " + w.grade : ""].concat(w.tags || []).join(" ").toLowerCase();
+}
+
+const CHEST = '<svg class="chest" viewBox="0 0 190 172" aria-hidden="true">'
+  + '<defs><pattern id="gr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".9" fill="#000" opacity=".12"/><circle cx="4.5" cy="4.5" r=".9" fill="#fff" opacity=".16"/></pattern></defs>'
+  + '<g class="tw1"><path d="M22 10l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#FFE14D" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/></g>'
+  + '<g class="tw2"><path d="M170 6l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff" stroke="#1B2A57" stroke-width="2.5" stroke-linejoin="round"/></g>'
+  + '<rect x="12" y="78" width="166" height="86" rx="10" style="fill:var(--c)" stroke="#1B2A57" stroke-width="5" stroke-linejoin="round"/>'
+  + '<rect x="12" y="78" width="166" height="86" rx="10" fill="#000" opacity=".1" clip-path="inset(0 0 0 56%)"/>'
+  + '<g class="lid"><path d="M30 34q0-24 20-26h90q20 2 20 26l-8 36H38z" style="fill:var(--c)" stroke="#1B2A57" stroke-width="5" stroke-linejoin="round" transform="translate(0 -10)"/></g>'
+  + '<path d="M22 82q8-20 30-22t30 6q20-22 46-8t26 24z" fill="#FFE14D" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round"/>'
+  + '<circle cx="62" cy="66" r="9" fill="#FFF4D0" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><circle cx="108" cy="58" r="9" fill="#FFF4D0" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M136 70l7-12 7 12-7 8z" fill="#FF7BA9" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/><path d="M36 74l5-9 5 9-5 6z" fill="#6BCB77" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/>'
+  + '<rect x="12" y="78" width="166" height="14" fill="#FFE14D" stroke="#1B2A57" stroke-width="3.5" stroke-linejoin="round"/>'
+  + '</svg>';
+
+function makeBook(w) {
+  const nums = Object.keys(w.quizzes || {}).map(Number).sort(function (a, b) { return a - b; });
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  let el;
+  if (nums.length === 1) {
+    el = document.createElement("a");
+    el.href = w.quizzes[nums[0]];
+  } else {
+    el = document.createElement("button");
+    el.type = "button";
+    el.addEventListener("click", function () { openModal(w, nums); });
+  }
+  el.className = "bk";
+  el.style.setProperty("--c", colorOf(w.name));
+  el.innerHTML = CHEST;
+  const s = document.createElement("span");
+  s.textContent = w.name;
+  el.appendChild(s);
+  cell.appendChild(el);
+  return cell;
+}
+
+function renderShelf() {
+  const words = $("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const hits = WORKSHEETS.filter(function (w) {
+    return w.type === current && words.every(function (x) { return hay(w).indexOf(x) !== -1; });
+  });
+  let groups;
+  if (current === "reading") {
+    groups = [1, 2, 3, 4, 5, 6].map(function (g) {
+      return { label: "Grade " + g, items: hits.filter(function (w) { return w.grade === g; }) };
+    });
+  } else {
+    const names = GRAMMAR_GROUPS.slice();
+    hits.forEach(function (w) { const g = w.group || "Other"; if (names.indexOf(g) === -1) names.push(g); });
+    groups = names.map(function (n) {
+      return { label: n, items: hits.filter(function (w) { return (w.group || "Other") === n; }) };
+    });
+  }
+  const list = $("list");
+  list.innerHTML = "";
+  groups.filter(function (g) { return g.items.length; }).forEach(function (g) {
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = g.label;
+    list.appendChild(tag);
+    const shelf = document.createElement("div");
+    shelf.className = "shelf";
+    g.items.sort(function (a, b) { return a.name.localeCompare(b.name, "en", { sensitivity: "base" }); })
+      .forEach(function (w, i) { const c = makeBook(w); c.style.animationDelay = (i * 70) + "ms"; shelf.appendChild(c); });
+    list.appendChild(shelf);
+  });
+  if (!hits.length) {
+    const p = document.createElement("p");
+    p.className = "none";
+    p.textContent = words.length ? "Nothing found. Try a shorter word." : "No quizzes here yet.";
+    list.appendChild(p);
+  }
+}
+
+function openModal(w, nums) {
+  lastFocus = document.activeElement;
+  $("mTitle").textContent = w.name;
+  const box = $("mQuizzes");
+  box.innerHTML = "";
+  nums.forEach(function (n) {
+    const a = document.createElement("a");
+    a.href = w.quizzes[n];
+    a.textContent = "Quiz " + n;
+    box.appendChild(a);
+  });
+  $("modal").hidden = false;
+  box.firstChild.focus();
+}
+
+function closeModal() {
+  if ($("modal").hidden) return;
+  $("modal").hidden = true;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+function route() {
+  const r = location.hash.replace("#", "");
+  closeModal();
+  if (r === "reading" || r === "grammar") {
+    current = r;
+    $("home").hidden = true;
+    $("shelf").hidden = false;
+    $("title").textContent = r === "reading" ? "Reading" : "Grammar";
+    $("title").style.background = r === "reading" ? "#8EA2FF" : "#35D0BA";
+    $("q").placeholder = r === "reading" ? "Search a story" : "Search a topic";
+    $("q").value = "";
+    $("list").className = "fresh";
+    document.title = (r === "reading" ? "Reading" : "Grammar") + " - Wagor";
+    renderShelf();
+  } else {
+    $("shelf").hidden = true;
+    $("home").hidden = false;
+    document.title = "Wagor - Jamie's Library";
+    fit();
+  }
+  window.scrollTo(0, 0);
+}
+
+/* 首頁的場景依螢幕大小縮放 */
+function fit() {
+  const s = Math.max(0.72, Math.min(window.innerWidth / 480, window.innerHeight / 780, 1.6));
+  $("stage").style.transform = "translateX(-50%) scale(" + s + ")";
+  $("stagewrap").style.height = Math.round(760 * s) + "px";
+}
+
+$("q").addEventListener("input", function () { $("list").className = ""; renderShelf(); });
+$("mClose").addEventListener("click", closeModal);
+$("modal").addEventListener("click", function (e) { if (e.target === $("modal")) closeModal(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+window.addEventListener("hashchange", route);
+window.addEventListener("resize", fit);
+route();
+</script>
+</body>
+</html>
