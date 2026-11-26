@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noun Basics - Quiz 1</title>
+<style>
+:root{--primary:#0284c7;--primary-light:#e0f2fe;--bg:#f0f9ff;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#cbd5e1;--ok:#16a34a;--ok-bg:#dcfce7;--bad:#dc2626;--bad-bg:#fee2e2;--sel:#fde68a}
+*{box-sizing:border-box;font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',Tahoma,Verdana,sans-serif}
+body{margin:0;padding:20px;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:900px;margin:0 auto}
+header{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;padding:24px 30px;border-radius:18px;box-shadow:0 8px 20px rgba(2,132,199,.2);margin-bottom:24px;text-align:center}
+header h1{margin:0 0 8px;font-size:1.9rem}
+header p{margin:0;font-size:1.05rem}
+.back-link{display:inline-block;margin-bottom:10px;color:#fff;font-weight:bold;text-decoration:none;opacity:.95}
+.back-link:hover{text-decoration:underline}
+.student-info{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.student-info label{font-weight:bold}
+.student-info input,.student-info select{padding:8px 12px;border-radius:10px;border:2px solid #bae6fd;font-size:1.05rem;min-width:220px}
+.section-card{background:var(--card);border-radius:16px;padding:22px 24px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.section-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-bottom:3px dashed var(--primary-light);padding-bottom:10px;margin-bottom:12px}
+.section-title{margin:0;font-size:1.35rem;color:#075985}
+.section-points{background:var(--primary-light);color:#075985;font-weight:bold;padding:4px 12px;border-radius:999px;font-size:.95rem}
+.instructions{margin:0 0 14px;color:var(--muted);font-size:1.05rem}
+.q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 10px;border-radius:12px;background:#f8fafc;margin-bottom:10px;font-size:1.25rem;border:2px solid transparent}
+.q.ok{background:var(--ok-bg);border-color:var(--ok)}
+.q.bad{background:var(--bad-bg);border-color:var(--bad)}
+.num{font-weight:bold;color:var(--primary);min-width:28px}
+.emoji{font-size:2rem;line-height:1}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{padding:8px 18px;border:3px solid var(--border);background:#fff;border-radius:12px;font-size:1.2rem;cursor:pointer}
+.opt:hover{border-color:var(--primary)}
+.opt.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+.q.locked .opt,.q.locked .tok,.q.locked .tile,.q.locked .slot{pointer-events:none}
+.sent{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.tok{padding:2px 8px;border-radius:10px;border:3px solid transparent;cursor:pointer}
+.tok:hover{background:#e0f2fe}
+.tok.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+select.m{padding:8px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.15rem;background:#fff}
+input.t{padding:6px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.25rem;width:210px}
+.bank{display:flex;flex-wrap:wrap;gap:10px;padding:12px;background:#fffbeb;border:3px dashed #fbbf24;border-radius:14px;margin-bottom:14px}
+.tile{padding:6px 16px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-size:1.2rem;cursor:pointer;font-weight:bold}
+.tile.used{opacity:.3;text-decoration:line-through;pointer-events:none}
+.slot{display:inline-block;min-width:130px;padding:2px 10px;border-bottom:4px solid var(--primary);text-align:center;font-weight:bold;color:#075985;cursor:pointer;min-height:2rem}
+.slot.filled{background:var(--sel);border-radius:8px}
+.fb{flex-basis:100%;font-size:1rem;color:var(--bad);font-weight:bold;margin-left:40px}
+.submit-area{text-align:center;margin:10px 0 40px}
+.progress-text{font-weight:bold;color:var(--muted);margin-bottom:10px}
+button.go,button.retry{padding:14px 40px;font-size:1.3rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
+button.go{background:var(--primary)} button.go:disabled{background:#cbd5e1;cursor:not-allowed}
+button.retry{background:#0d9488;display:none;margin-top:14px}
+#result-banner{display:none;margin:20px auto 0;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
+.score-display{font-size:3rem;font-weight:bold}
+.parts-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;font-size:.95rem}
+.parts-sum span{background:#fff;border-radius:999px;padding:3px 12px;border:2px solid #e2e8f0}
+@media (max-width:600px){body{padding:10px}.section-card{padding:16px 12px}.q{font-size:1.1rem}input.t{width:150px}}
+</style>
+<script src="reporter.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <a href="index.html" class="back-link">← Back to Library</a>
+  <h1>🏫 Grade 1 Grammar: Noun Basics 🏫</h1>
+  <p>Nouns, Common &amp; Proper Nouns, Possessive Nouns &bull; Total Score: 100 Points</p>
+  <div class="student-info">
+    <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
+    <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
+  </div>
+</header>
+<div id="parts"></div>
+<div class="submit-area">
+  <div class="progress-text" id="progressText"></div>
+  <button class="go" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
+  <div id="result-banner">
+    <div style="font-size:3rem" id="resultEmoji"></div>
+    <div class="score-display" id="scoreDisplay"></div>
+    <div class="parts-sum" id="partsSum"></div>
+    <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
+    <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
+  </div>
+  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+</div>
+</div>
+<script>
+const SHEET = {"sheetTitle": "Noun Basics - Quiz 1", "category": "Grammar / Nouns", "parts": [{"title": "Person, Place, or Thing?", "type": "match", "pts": 3, "inst": "Look at each word. Choose <b>person</b>, <b>place</b>, or <b>thing</b> from the menu.", "options": ["person", "place", "thing"], "qs": [{"id": "a1_1", "emoji": "👧", "prompt": "girl", "answer": "person"}, {"id": "a1_2", "emoji": "🏫", "prompt": "school", "answer": "place"}, {"id": "a1_3", "emoji": "🚌", "prompt": "bus", "answer": "thing"}, {"id": "a1_4", "emoji": "🦁", "prompt": "zoo", "answer": "place"}, {"id": "a1_5", "emoji": "👩‍🏫", "prompt": "teacher", "answer": "person"}]}, {"title": "Tap the Noun", "type": "tap", "pts": 3, "inst": "A noun names a person, place, or thing. <b>Tap the noun</b> in each sentence.", "qs": [{"id": "a2_1", "text": "The van is big.", "answer": "van"}, {"id": "a2_2", "text": "A man helps us cross.", "answer": "man"}, {"id": "a2_3", "text": "We are at school.", "answer": "school"}, {"id": "a2_4", "text": "The hen sits and sits.", "answer": "hen"}, {"id": "a2_5", "text": "This bread is good.", "answer": "bread"}]}, {"title": "Common or Proper?", "type": "choice", "pts": 3, "inst": "A <b>proper noun</b> names an exact person, place, or thing and begins with a capital letter. Choose <b>common</b> or <b>proper</b>.", "qs": [{"id": "a3_1", "pre": "girl", "opts": ["common", "proper"], "answer": "common"}, {"id": "a3_2", "pre": "Kim", "opts": ["common", "proper"], "answer": "proper"}, {"id": "a3_3", "pre": "swing", "opts": ["common", "proper"], "answer": "common"}, {"id": "a3_4", "pre": "Pine Park", "opts": ["common", "proper"], "answer": "proper"}, {"id": "a3_5", "pre": "Miss Miller", "opts": ["common", "proper"], "answer": "proper"}]}, {"title": "Write It Correctly", "type": "type", "pts": 4, "inst": "Each proper noun needs <b>capital letters</b>. Type the proper noun correctly.", "qs": [{"id": "a4_1", "pre": "nick is up.  →", "answer": "Nick"}, {"id": "a4_2", "pre": "I go to camp playland.  →", "answer": "Camp Playland"}, {"id": "a4_3", "pre": "We have fun at frog pond.  →", "answer": "Frog Pond"}, {"id": "a4_4", "pre": "I will ask greg to help me.  →", "answer": "Greg"}, {"id": "a4_5", "pre": "My pet cat is called seth.  →", "answer": "Seth"}], "cs": true}, {"title": "Possessive or Plural?", "type": "choice", "pts": 3, "inst": "A <b>possessive noun</b> ends with <b>'s</b> and tells who has something. Choose the correct word.", "qs": [{"id": "a5_1", "pre": "The", "opts": ["dog's", "dogs"], "post": "hut is in the back.", "answer": "dog's"}, {"id": "a5_2", "pre": "My", "opts": ["mom's", "moms"], "post": "hat is red.", "answer": "mom's"}, {"id": "a5_3", "pre": "Two", "opts": ["cat's", "cats"], "post": "run fast.", "answer": "cats"}, {"id": "a5_4", "pre": "An", "opts": ["ant's", "ants"], "post": "hill is big.", "answer": "ant's"}, {"id": "a5_5", "pre": "The", "opts": ["pig's", "pigs"], "post": "pen is a mess.", "answer": "pig's"}]}, {"title": "Add 's", "type": "bank", "pts": 4, "inst": "Click a word from the box to fill each blank. Click a filled blank to take the word back.", "tiles": ["dog's", "pet's", "fox's", "bug's", "cub's"], "qs": [{"id": "a6_1", "pre": "The", "post": "bed is soft.", "answer": "dog's"}, {"id": "a6_2", "pre": "My", "post": "tank is big.", "answer": "pet's"}, {"id": "a6_3", "pre": "A", "post": "home is not a hut.", "answer": "fox's"}, {"id": "a6_4", "pre": "This", "post": "web is sticky.", "answer": "bug's"}, {"id": "a6_5", "pre": "The", "post": "den is full.", "answer": "cub's"}]}]};
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII"];
+let ans = {}, graded = false;
+const $ = (s, r) => (r || document).querySelector(s);
+const norm = (s) => String(s).trim().replace(/\s+/g, " ");
+const allQs = [];
+SHEET.parts.forEach((p, pi) => p.qs.forEach(q => { q.pi = pi; q.pts = p.pts; allQs.push(q); }));
+
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+function render() {
+  ans = {}; graded = false;
+  const root = $("#parts"); root.innerHTML = "";
+  let n = 0;
+  SHEET.parts.forEach((p, pi) => {
+    const card = el("div", "section-card");
+    card.innerHTML = '<div class="section-header"><h2 class="section-title">Part ' + ROMAN[pi] + '. ' + p.title + '</h2><span class="section-points">' + (p.pts * p.qs.length) + ' Points (' + p.pts + ' pts each)</span></div><p class="instructions">' + p.inst + '</p>';
+    let bank = null;
+    if (p.type === "bank") {
+      bank = el("div", "bank");
+      p.tiles.forEach((t, ti) => {
+        const b = el("button", "tile", t); b.type = "button"; b.dataset.pi = pi; b.dataset.ti = ti;
+        b.onclick = () => pickTile(pi, ti);
+        bank.appendChild(b);
+      });
+      card.appendChild(bank);
+    }
+    p.qs.forEach(q => {
+      n++; q.n = n;
+      const row = el("div", "q"); row.id = "row_" + q.id;
+      row.appendChild(el("span", "num", n + "."));
+      if (q.emoji) row.appendChild(el("span", "emoji", q.emoji));
+      if (p.type === "match") {
+        row.appendChild(el("b", "", q.prompt));
+        const s = el("select", "m"); s.innerHTML = '<option value="">-- choose --</option>' + p.options.map(o => '<option>' + o + '</option>').join("");
+        s.onchange = () => { ans[q.id] = s.value; update(); };
+        row.appendChild(s);
+      } else if (p.type === "choice") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const w = el("div", "opts");
+        q.opts.forEach(o => { const b = el("button", "opt", o); b.type = "button"; b.onclick = () => { ans[q.id] = o; w.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); update(); }; w.appendChild(b); });
+        row.appendChild(w);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "tap") {
+        const w = el("div", "sent");
+        q.text.split(" ").forEach(tok => {
+          const word = tok.replace(/[.,!?]/g, "");
+          const t = el("span", "tok", tok); t.dataset.w = word;
+          t.onclick = () => { ans[q.id] = word; w.querySelectorAll(".tok").forEach(x => x.classList.toggle("sel", x === t)); update(); };
+          w.appendChild(t);
+        });
+        row.appendChild(w);
+      } else if (p.type === "type") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+        i.oninput = () => { ans[q.id] = i.value; update(); };
+        row.appendChild(i);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "bank") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const sl = el("span", "slot", ""); sl.id = "slot_" + q.id; sl.onclick = () => clearSlot(pi, q.id);
+        row.appendChild(sl);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      }
+      card.appendChild(row);
+    });
+    root.appendChild(card);
+  });
+  $("#result-banner").style.display = "none"; $("#retryBtn").style.display = "none"; $("#sendStatus").textContent = "";
+  update();
+}
+
+function pickTile(pi, ti) {
+  if (graded) return;
+  const p = SHEET.parts[pi];
+  const empty = p.qs.find(q => !ans[q.id]);
+  if (!empty) return;
+  ans[empty.id] = p.tiles[ti]; empty._tile = ti;
+  refreshBank(pi); update();
+}
+function clearSlot(pi, id) {
+  if (graded) return;
+  delete ans[id]; refreshBank(pi); update();
+}
+function refreshBank(pi) {
+  const p = SHEET.parts[pi];
+  const usedTiles = {};
+  p.qs.forEach(q => { const s = $("#slot_" + q.id); s.textContent = ans[q.id] || ""; s.classList.toggle("filled", !!ans[q.id]); });
+  const used = p.qs.map(q => ans[q.id]).filter(Boolean);
+  document.querySelectorAll('.tile[data-pi="' + pi + '"]').forEach(b => {
+    const k = used.indexOf(b.textContent);
+    b.classList.toggle("used", k > -1 && used.filter(u => u === b.textContent).length >= p.tiles.filter(t => t === b.textContent).length);
+  });
+}
+
+function update() {
+  const done = allQs.filter(q => norm(ans[q.id] || "") !== "").length;
+  $("#progressText").textContent = "Completed: " + done + " / " + allQs.length + " questions";
+  $("#submitBtn").disabled = graded || done < allQs.length;
+}
+
+function isRight(q, a) {
+  const p = SHEET.parts[q.pi];
+  const x = norm(a || ""), y = norm(q.answer);
+  return (p.type === "type" && !p.cs) ? x.toLowerCase() === y.toLowerCase() : x === y;
+}
+function plain(q) {
+  const p = SHEET.parts[q.pi];
+  if (p.type === "match") return (q.emoji ? "" : "") + q.prompt + " → ?";
+  if (p.type === "tap") return q.text;
+  return ((q.pre || "") + " ____ " + (q.post || "")).trim();
+}
+
+function gradeQuiz() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
+  graded = true;
+  let score = 0; const items = []; const per = SHEET.parts.map(() => 0);
+  allQs.forEach(q => {
+    const p = SHEET.parts[q.pi];
+    const ok = isRight(q, ans[q.id]);
+    if (ok) { score += q.pts; per[q.pi] += q.pts; }
+    const row = $("#row_" + q.id); row.classList.add(ok ? "ok" : "bad", "locked");
+    row.querySelectorAll("input,select").forEach(i => i.disabled = true);
+    if (!ok) row.appendChild(el("div", "fb", "✔ Correct answer: " + q.answer));
+    items.push({ part: "Part " + ROMAN[q.pi] + ". " + p.title, q: plain(q), yours: ans[q.id] || "", correct: q.answer, ok: ok });
+  });
+  $("#scoreDisplay").textContent = score + " / 100";
+  $("#partsSum").innerHTML = SHEET.parts.map((p, i) => "<span>Part " + ROMAN[i] + ": " + per[i] + "/" + (p.pts * p.qs.length) + "</span>").join("");
+  const emoji = score >= 90 ? "🏆" : score >= 70 ? "🎉" : score >= 50 ? "💪" : "🌱";
+  $("#resultEmoji").textContent = emoji;
+  $("#resultMessage").textContent = score >= 90 ? "Excellent work!" : score >= 70 ? "Great job!" : score >= 50 ? "Good try! Keep practicing." : "Don't give up! Try again.";
+  $("#result-banner").style.display = "block"; $("#retryBtn").style.display = "inline-block";
+  $("#submitBtn").disabled = true;
+  $("#result-banner").scrollIntoView({ behavior: "smooth", block: "center" });
+  if (typeof Library !== "undefined") Library.send({ title: SHEET.sheetTitle, category: SHEET.category, score: score, total: 100, items: items });
+}
+function resetQuiz() { render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+render();
+</script>
+</body>
+</html>
