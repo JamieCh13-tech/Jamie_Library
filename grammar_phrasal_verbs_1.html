@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phrasal Verbs - Quiz 1</title>
+<style>
+:root{--primary:#0284c7;--primary-light:#e0f2fe;--bg:#f0f9ff;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#cbd5e1;--ok:#16a34a;--ok-bg:#dcfce7;--bad:#dc2626;--bad-bg:#fee2e2;--sel:#fde68a}
+*{box-sizing:border-box;font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',Tahoma,Verdana,sans-serif}
+body{margin:0;padding:20px;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:900px;margin:0 auto}
+header{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;padding:24px 30px;border-radius:18px;box-shadow:0 8px 20px rgba(2,132,199,.2);margin-bottom:24px;text-align:center}
+header h1{margin:0 0 8px;font-size:1.9rem}
+header p{margin:0;font-size:1.05rem}
+.back-link{display:inline-block;margin-bottom:10px;color:#fff;font-weight:bold;text-decoration:none;opacity:.95}
+.back-link:hover{text-decoration:underline}
+.student-info{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.student-info label{font-weight:bold}
+.student-info input,.student-info select{padding:8px 12px;border-radius:10px;border:2px solid #bae6fd;font-size:1.05rem;min-width:220px}
+.section-card{background:var(--card);border-radius:16px;padding:22px 24px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.section-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-bottom:3px dashed var(--primary-light);padding-bottom:10px;margin-bottom:12px}
+.section-title{margin:0;font-size:1.35rem;color:#075985}
+.section-points{background:var(--primary-light);color:#075985;font-weight:bold;padding:4px 12px;border-radius:999px;font-size:.95rem}
+.instructions{margin:0 0 14px;color:var(--muted);font-size:1.05rem}
+.q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 10px;border-radius:12px;background:#f8fafc;margin-bottom:10px;font-size:1.25rem;border:2px solid transparent}
+.q.ok{background:var(--ok-bg);border-color:var(--ok)}
+.q.bad{background:var(--bad-bg);border-color:var(--bad)}
+.num{font-weight:bold;color:var(--primary);min-width:28px}
+.emoji{font-size:2rem;line-height:1}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{padding:8px 18px;border:3px solid var(--border);background:#fff;border-radius:12px;font-size:1.2rem;cursor:pointer}
+.opt:hover{border-color:var(--primary)}
+.opt.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+.q.locked .opt,.q.locked .tok,.q.locked .tile,.q.locked .slot{pointer-events:none}
+.sent{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.tok{padding:2px 8px;border-radius:10px;border:3px solid transparent;cursor:pointer}
+.tok:hover{background:#e0f2fe}
+.tok.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+select.m{padding:8px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.15rem;background:#fff}
+input.t{padding:6px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.25rem;width:210px}
+.bank{display:flex;flex-wrap:wrap;gap:10px;padding:12px;background:#fffbeb;border:3px dashed #fbbf24;border-radius:14px;margin-bottom:14px}
+.tile{padding:6px 16px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-size:1.2rem;cursor:pointer;font-weight:bold}
+.tile.used{opacity:.3;text-decoration:line-through;pointer-events:none}
+.slot{display:inline-block;min-width:130px;padding:2px 10px;border-bottom:4px solid var(--primary);text-align:center;font-weight:bold;color:#075985;cursor:pointer;min-height:2rem}
+.slot.filled{background:var(--sel);border-radius:8px}
+.fb{flex-basis:100%;font-size:1.05rem;color:var(--bad);font-weight:bold;margin-left:40px}
+.submit-area{text-align:center;margin:10px 0 40px}
+.progress-text{font-weight:bold;color:var(--muted);margin-bottom:10px}
+button.go,button.retry{padding:12px 34px;font-size:1.2rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
+button.go{background:var(--primary)} button.go:disabled{background:#cbd5e1;cursor:not-allowed}
+button.retry{background:#0d9488;margin-top:10px}
+#result-banner{display:none;margin:0 auto 18px;text-align:center;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
+.score-display{font-size:3rem;font-weight:bold}
+.parts-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;font-size:.95rem}
+.parts-sum span{background:#fff;border-radius:999px;padding:3px 12px;border:2px solid #e2e8f0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;background:#fff;border:3px solid var(--primary);border-radius:14px;padding:8px 16px;margin-bottom:18px;box-shadow:0 4px 12px rgba(2,132,199,.18);font-weight:bold}
+.topbar .bar{flex:1 1 160px;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0d9488);transition:width .25s}
+#topScore{font-size:1.25rem;color:#075985}
+.why{flex-basis:100%;margin:2px 0 0 40px;padding:8px 12px;background:#fff;border-left:5px solid #f59e0b;border-radius:8px;font-size:1rem;color:#334155}
+.faller{position:fixed;top:-60px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.faller{display:none}}
+@media (max-width:600px){body{padding:10px}.section-card{padding:16px 12px}.q{font-size:1.1rem}input.t{width:150px}}
+.sec-head{margin:26px 0 12px;padding:14px 20px;background:linear-gradient(135deg,#0d9488,#0f766e);color:#fff;border-radius:16px}
+.sec-head h2{margin:0;font-size:1.5rem}.sec-head p{margin:2px 0 0;opacity:.95}
+.bank.ref{pointer-events:none}.chip{padding:5px 14px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-weight:bold;font-size:1.1rem}
+select.m{max-width:100%;font-size:1rem}.email{font-size:1.2rem;line-height:2.4;padding:14px 16px;background:#f8fafc;border-radius:12px}
+.cn{font-weight:bold;color:var(--primary);margin:0 4px 0 2px}input.cl{width:170px;margin:0 4px}
+input.okin{background:var(--ok-bg);border-color:var(--ok)}input.badin{background:var(--bad-bg);border-color:var(--bad)}
+.cl-fb .why{margin:8px 0 0}
+</style>
+<script src="reporter.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <a href="index.html" class="back-link">← Back to Library</a>
+  <h1>Phrasal Verbs</h1>
+  <p>Grade 6 Grammar Review &bull; 16 Phrasal Verbs &bull; Total Score: 100 Points</p>
+  <div class="student-info">
+    <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
+    <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
+  </div>
+</header>
+<div id="result-banner">
+  <div style="font-size:3rem" id="resultEmoji"></div>
+  <div class="score-display" id="scoreDisplay"></div>
+  <div class="parts-sum" id="partsSum"></div>
+  <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
+  <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
+  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+</div>
+<div class="topbar" id="topbar"><span id="topLabel">Progress</span><div class="bar"><i id="topFill"></i></div><span id="topScore"></span></div>
+<div id="parts"></div>
+<div class="submit-area">
+  <div class="progress-text" id="progressText"></div>
+  <button class="go" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
+</div>
+</div>
+<script>
+const SHEET = {"sheetTitle": "Phrasal Verbs - Quiz 1", "category": "Grammar / Phrasal Verbs", "sections": [{"title": "Section 1 · Phrasal Verbs 1–8", "sub": "look at, get on with, spend on, take off, run out of, switch off, come up with, set off", "max": 24}, {"title": "Section 2 · Phrasal Verbs 9–16", "sub": "hang around, sort out, turn into, break up, run into, look after, turn down, look forward to", "max": 24}, {"title": "Section 3 · Mixed Review", "sub": "All 16 phrasal verbs. Watch the verb tense!", "max": 52}], "parts": [{"section": 1, "label": "A", "title": "Match", "type": "match", "pts": 1, "inst": "Match each phrasal verb to its meaning. Choose from the menu.", "qs": [{"id": "s1a1", "prompt": "look at", "answer": "To turn your eyes toward something so that you can see it", "why": "look at means: to turn your eyes toward something so that you can see it"}, {"id": "s1a2", "prompt": "get on with", "answer": "To have a friendly relationship with someone", "why": "get on with means: to have a friendly relationship with someone"}, {"id": "s1a3", "prompt": "spend on", "answer": "To pay money for something", "why": "spend on means: to pay money for something"}, {"id": "s1a4", "prompt": "take off", "answer": "To leave the ground and begin to fly", "why": "take off means: to leave the ground and begin to fly"}, {"id": "s1a5", "prompt": "run out of", "answer": "To use all of something so that none is left", "why": "run out of means: to use all of something so that none is left"}, {"id": "s1a6", "prompt": "switch off", "answer": "To make a light or a machine stop by pressing a button", "why": "switch off means: to make a light or a machine stop by pressing a button"}, {"id": "s1a7", "prompt": "come up with", "answer": "To think of an idea or a plan", "why": "come up with means: to think of an idea or a plan"}, {"id": "s1a8", "prompt": "set off", "answer": "To begin a journey", "why": "set off means: to begin a journey"}]}, {"section": 1, "label": "B", "title": "Complete the Sentence", "type": "type", "pts": 2, "inst": "Use the phrasal verbs in the box. Use each one once. Make sure you use the <b>correct verb tense</b>. Type the answer.", "ref": ["look at", "get on with", "spend on", "take off", "run out of", "switch off", "come up with", "set off"], "qs": [{"id": "s1b1", "pre": "Our flight", "post": "at nine o'clock yesterday morning.", "answer": "took off", "key": ["off"], "why": "Yesterday is past time, so use the past simple: took off."}, {"id": "s1b2", "pre": "We", "post": "paper last week, so Dad bought more.", "answer": "ran out of", "key": ["out", "of"], "why": "Last week is past time, so use the past simple: ran out of."}, {"id": "s1b3", "pre": "Mia always", "post": "the screen carefully before she answers.", "answer": "looks at", "key": ["at"], "why": "Always shows a habit, and Mia is one person, so add -s: looks at."}, {"id": "s1b4", "pre": "How much money did you", "post": "snacks last week?", "answer": "spend on", "key": ["spend", "on"], "why": "After did, use the base form: spend on."}, {"id": "s1b5", "pre": "My sister", "post": "the lights as soon as she left the room.", "answer": "switched off", "key": ["off"], "why": "Left is past, so use the past simple: switched off."}, {"id": "s1b6", "pre": "Ken has just", "post": "a brilliant idea for the science fair.", "answer": "come up with", "key": ["up", "with"], "why": "Has just needs the past participle. The past participle of come is come: come up with."}, {"id": "s1b7", "pre": "Amy has always", "post": "her neighbors.", "answer": "got on with", "key": ["on", "with"], "why": "Has always needs the past participle: got on with (or gotten on with).", "acc": ["got on with", "gotten on with"]}, {"id": "s1b8", "pre": "Our class", "post": "for the museum at 7 a.m. tomorrow.", "answer": "will set off", "key": ["set", "off"], "why": "Tomorrow is future, so use will set off, is going to set off, or is setting off.", "acc": ["will set off", "is going to set off", "is setting off", "are going to set off", "are setting off"]}]}, {"section": 2, "label": "A", "title": "Match", "type": "match", "pts": 1, "inst": "Match each phrasal verb to its meaning. Choose from the menu.", "qs": [{"id": "s2a1", "prompt": "hang around", "answer": "To spend time in a place without doing anything special", "why": "hang around means: to spend time in a place without doing anything special"}, {"id": "s2a2", "prompt": "sort out", "answer": "To solve a problem or put things in order", "why": "sort out means: to solve a problem or put things in order"}, {"id": "s2a3", "prompt": "turn into", "answer": "To change and become something different", "why": "turn into means: to change and become something different"}, {"id": "s2a4", "prompt": "break up", "answer": "To end a relationship", "why": "break up means: to end a relationship"}, {"id": "s2a5", "prompt": "run into", "answer": "To meet someone by chance", "why": "run into means: to meet someone by chance"}, {"id": "s2a6", "prompt": "look after", "answer": "To take care of someone or something", "why": "look after means: to take care of someone or something"}, {"id": "s2a7", "prompt": "turn down", "answer": "To say no to an offer or an invitation", "why": "turn down means: to say no to an offer or an invitation"}, {"id": "s2a8", "prompt": "look forward to", "answer": "To feel happy and excited about something that will happen", "why": "look forward to means: to feel happy and excited about something that will happen"}]}, {"section": 2, "label": "B", "title": "Complete the Sentence", "type": "type", "pts": 2, "inst": "Use the phrasal verbs in the box. Use each one once. Make sure you use the <b>correct verb tense</b>. Type the answer.", "ref": ["hang around", "sort out", "turn into", "break up", "run into", "look after", "turn down", "look forward to"], "qs": [{"id": "s2b1", "pre": "Liam", "post": "the mall after school yesterday, but he did not buy anything.", "answer": "hung around", "key": ["around"], "why": "Yesterday is past time. The past simple of hang around is hung around."}, {"id": "s2b2", "pre": "Right now, the boy", "post": "his baby sister.", "answer": "is looking after", "key": ["looking", "after"], "why": "Right now means this moment, so use the present continuous: is looking after."}, {"id": "s2b3", "pre": "Sam", "post": "my invitation last week because he was busy.", "answer": "turned down", "key": ["down"], "why": "Last week is past time, so use the past simple: turned down."}, {"id": "s2b4", "pre": "We", "post": "our old friend Jack at the station yesterday.", "answer": "ran into", "key": ["into"], "why": "Yesterday is past time. The past simple of run into is ran into."}, {"id": "s2b5", "pre": "Ice", "post": "water when it gets warm.", "answer": "turns into", "key": ["into"], "why": "This is a fact that is always true, and ice is one thing, so add -s: turns into."}, {"id": "s2b6", "pre": "Anna and Ben", "post": "last year, but they are still friends.", "answer": "broke up", "key": ["up"], "why": "Last year is past time. The past simple of break up is broke up."}, {"id": "s2b7", "pre": "Mom has", "post": "the problem with the bill, so we can go home.", "answer": "sorted out", "key": ["out"], "why": "Has needs the past participle: sorted out."}, {"id": "s2b8", "pre": "Sue has been", "post": "her birthday party for weeks.", "answer": "looking forward to", "key": ["forward", "to"], "why": "Has been needs the -ing form: looking forward to."}]}, {"section": 3, "label": "A", "title": "Choose the Correct Form", "type": "choice", "pts": 2, "inst": "Choose the correct form of the phrasal verb.", "qs": [{"id": "s3a1", "pre": "Mom", "post": "clothes last month, so now she is saving money.", "opts": ["spends on", "spent on", "has spent on", "is spending on"], "answer": "spent on", "why": "Last month is past time, so use the past simple: spent on."}, {"id": "s3a2", "pre": "The plane", "post": "ten minutes ago.", "opts": ["takes off", "took off", "has taken off", "taking off"], "answer": "took off", "why": "Ago shows a finished past time, so use the past simple: took off."}, {"id": "s3a3", "pre": "Right now, the snow", "post": "water in the sun.", "opts": ["turns into", "turned into", "is turning into", "turn into"], "answer": "is turning into", "why": "Right now means this moment, so use the present continuous: is turning into."}, {"id": "s3a4", "pre": "Dad", "post": "the printer problem for two hours, and it still does not work.", "opts": ["sorted out", "has sorted out", "has been sorting out", "sorts out"], "answer": "has been sorting out", "why": "For two hours and still does not work show an action that has gone on until now: has been sorting out."}, {"id": "s3a5", "pre": "Please", "post": "the lights when you leave the room.", "opts": ["switch off", "switched off", "switching off", "switches off"], "answer": "switch off", "why": "After Please, use the base form: switch off."}, {"id": "s3a6", "pre": "My friends", "post": "at the park every Saturday.", "opts": ["hang around", "hung around", "hangs around", "are hanging around"], "answer": "hang around", "why": "Every Saturday shows a habit, and friends is plural: hang around."}]}, {"section": 3, "label": "B", "title": "Fix the Mistake", "type": "type", "pts": 4, "inst": "The underlined phrasal verb is in the wrong form. Type the <b>correct form</b>.", "qs": [{"id": "s3b1", "pre": "Yesterday, we <u>run out of</u> paper.   →", "post": "", "answer": "ran out of", "key": ["out", "of"], "why": "Yesterday is past time, so use the past simple: ran out of."}, {"id": "s3b2", "pre": "They <u>break up</u> last year.   →", "post": "", "answer": "broke up", "key": ["up"], "why": "Last year is past time, so use the past simple: broke up."}, {"id": "s3b3", "pre": "When I was little, I <u>get on with</u> my brother very well.   →", "post": "", "answer": "got on with", "key": ["on", "with"], "why": "When I was little is past time, so use the past simple: got on with.", "acc": ["got on with"]}, {"id": "s3b4", "pre": "Last week, the nurse <u>look after</u> the patients.   →", "post": "", "answer": "looked after", "key": ["after"], "why": "Last week is past time, so use the past simple: looked after."}]}, {"section": 3, "label": "C", "title": "Complete the Email", "type": "cloze", "pts": 4, "inst": "Choose phrasal verbs from the box. Make sure you use the <b>correct verb tense</b>. Type your answers in the blanks.", "ref": ["come up with", "look at", "set off", "turn down", "run into", "look forward to", "take off", "break up"], "html": "Hi Lucy,<br>Our class trip is next Friday! We {c1} for the zoo at 7 a.m., so do not be late. Our teacher has just {c2} a plan for lunch. Last week, I {c3} Ben at the library. He asked me to join his group, but I {c4} his invitation because I wanted to sit with you. Please {c5} the map before Friday so you know the way. I am really {c6} seeing you!<br>Your friend, Amy", "qs": [{"id": "c1", "answer": "will set off", "acc": ["will set off", "are going to set off", "are setting off"], "key": ["set", "off"], "ctx": "We ____ for the zoo at 7 a.m.", "why": "Next Friday is future, so use will set off, are going to set off, or are setting off."}, {"id": "c2", "answer": "come up with", "key": ["up", "with"], "ctx": "Our teacher has just ____ a plan for lunch.", "why": "Has just needs the past participle. The past participle of come is come: come up with."}, {"id": "c3", "answer": "ran into", "key": ["into"], "ctx": "Last week, I ____ Ben at the library.", "why": "Last week is past time. The past simple of run into is ran into."}, {"id": "c4", "answer": "turned down", "key": ["down"], "ctx": "... but I ____ his invitation because I wanted to sit with you.", "why": "The story is in the past, so use the past simple: turned down."}, {"id": "c5", "answer": "look at", "key": ["at"], "ctx": "Please ____ the map before Friday.", "why": "After Please, use the base form: look at."}, {"id": "c6", "answer": "looking forward to", "key": ["forward", "to"], "ctx": "I am really ____ seeing you!", "why": "Am really needs the -ing form: looking forward to."}]}]};
+let ans = {}, graded = false;
+const $ = (s, r) => (r || document).querySelector(s);
+const norm = (s) => String(s).trim().replace(/\s+/g, " ").replace(/[.,!?]+$/, "");
+const allQs = [];
+SHEET.parts.forEach((p, pi) => p.qs.forEach(q => { q.pi = pi; q.pts = p.pts; allQs.push(q); }));
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function shuf(a) { const x = a.slice(); for (let k = x.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [x[k], x[j]] = [x[j], x[k]]; } return x; }
+const partName = (p) => "Section " + p.section + " · " + p.label + ". " + p.title;
+
+function render() {
+  ans = {}; graded = false;
+  const root = $("#parts"); root.innerHTML = "";
+  let n = 0, lastSec = 0;
+  SHEET.parts.forEach((p, pi) => {
+    if (p.section !== lastSec) {
+      lastSec = p.section; const S = SHEET.sections[p.section - 1];
+      root.appendChild(el("div", "sec-head", '<h2>' + S.title + '</h2><p>' + S.sub + '</p>'));
+    }
+    const card = el("div", "section-card");
+    card.innerHTML = '<div class="section-header"><h2 class="section-title">' + p.label + '. ' + p.title + '</h2><span class="section-points">' + (p.pts * p.qs.length) + ' Points (' + p.pts + ' pt' + (p.pts > 1 ? 's' : '') + ' each)</span></div><p class="instructions">' + p.inst + '</p>';
+    if (p.ref) card.appendChild(el("div", "bank ref", p.ref.map(r => '<span class="chip">' + r + '</span>').join("")));
+    const setNum = (q) => { n++; q.n = n; return n; };
+    if (p.type === "cloze") {
+      const box = el("div", "email");
+      let html = p.html;
+      p.qs.forEach(q => { setNum(q); html = html.replace("{" + q.id + "}", '<span class="cn">(' + q.id.replace(/\D/g, "") + ')</span><input class="t cl" id="in_' + q.id + '" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">'); });
+      box.innerHTML = html; card.appendChild(box);
+      box.querySelectorAll("input").forEach(i => { i.oninput = () => { ans[i.id.slice(3)] = i.value; update(); }; });
+      card.appendChild(el("div", "cl-fb")).id = "fb_" + p.qs[0].id;
+    } else {
+      let opts = null;
+      if (p.type === "match") opts = shuf(p.qs.map(q => q.answer));
+      p.qs.forEach(q => {
+        setNum(q);
+        const row = el("div", "q"); row.id = "row_" + q.id;
+        row.appendChild(el("span", "num", n + "."));
+        if (p.type === "match") {
+          row.appendChild(el("b", "", q.prompt));
+          const s = el("select", "m"); s.innerHTML = '<option value="">-- choose the meaning --</option>' + opts.map(o => '<option>' + o + '</option>').join("");
+          s.onchange = () => { ans[q.id] = s.value; update(); }; row.appendChild(s);
+        } else if (p.type === "choice") {
+          if (q.pre) row.appendChild(el("span", "", q.pre));
+          const w = el("div", "opts");
+          shuf(q.opts).forEach(o => { const b = el("button", "opt", o); b.type = "button"; b.onclick = () => { ans[q.id] = o; w.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); update(); }; w.appendChild(b); });
+          row.appendChild(w);
+          if (q.post) row.appendChild(el("span", "", q.post));
+        } else if (p.type === "type") {
+          if (q.pre) row.appendChild(el("span", "", q.pre));
+          const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+          i.oninput = () => { ans[q.id] = i.value; update(); }; row.appendChild(i);
+          if (q.post) row.appendChild(el("span", "", q.post));
+        }
+        card.appendChild(row);
+      });
+    }
+    root.appendChild(card);
+  });
+  $("#result-banner").style.display = "none"; $("#sendStatus").textContent = ""; $("#topScore").textContent = ""; $("#topLabel").textContent = "Progress";
+  update();
+}
+
+function update() {
+  const done = allQs.filter(q => norm(ans[q.id] || "") !== "").length;
+  $("#progressText").textContent = "Completed: " + done + " / " + allQs.length + " questions";
+  if (!graded) { $("#topFill").style.width = Math.round(done / allQs.length * 100) + "%"; $("#topLabel").textContent = "Progress: " + done + " / " + allQs.length; }
+  $("#submitBtn").disabled = graded || done < allQs.length;
+}
+
+function accepted(q) { return (q.acc || [q.answer]).map(x => norm(x).toLowerCase()); }
+function isRight(q, a) {
+  const p = SHEET.parts[q.pi], x = norm(a || "");
+  if (p.type === "type" || p.type === "cloze") return accepted(q).indexOf(x.toLowerCase()) > -1;
+  return x === norm(q.answer);
+}
+// right phrase but wrong form = tense error; otherwise wrong phrase
+function errType(q, a) {
+  const p = SHEET.parts[q.pi];
+  if (p.type !== "type" && p.type !== "cloze") return "";
+  const words = norm(a || "").toLowerCase().split(" ");
+  return (q.key || []).every(k => words.indexOf(k) > -1) ? "tense error" : "wrong phrase";
+}
+function plain(q) {
+  const p = SHEET.parts[q.pi];
+  if (p.type === "match") return q.prompt + " → meaning?";
+  if (p.type === "cloze") return q.ctx;
+  return Library.text((q.pre || "") + " ____ " + (q.post || "")).trim();
+}
+
+function gradeQuiz() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
+  graded = true;
+  let score = 0; const items = [], perSec = SHEET.sections.map(() => 0), fb = {};
+  allQs.forEach(q => {
+    const p = SHEET.parts[q.pi], ok = isRight(q, ans[q.id]);
+    const tag = ok ? "" : errType(q, ans[q.id]);
+    if (ok) { score += q.pts; perSec[p.section - 1] += q.pts; }
+    const msg = "✔ Correct answer: " + q.answer + (tag ? "  (" + tag + ")" : "");
+    if (p.type === "cloze") {
+      const inp = $("#in_" + q.id); inp.disabled = true; inp.classList.add(ok ? "okin" : "badin");
+      if (!ok) (fb[p.label + q.pi] = fb[p.label + q.pi] || []).push('<div class="why"><b>(' + q.id.replace(/\D/g, "") + ')</b> ' + msg + '<br><b>Why?</b> ' + q.why + '</div>');
+    } else {
+      const row = $("#row_" + q.id); row.classList.add(ok ? "ok" : "bad", "locked");
+      row.querySelectorAll("input,select").forEach(i => i.disabled = true);
+      if (!ok) { row.appendChild(el("div", "fb", msg)); if (q.why) row.appendChild(el("div", "why", "<b>Why?</b> " + q.why)); }
+    }
+    items.push({ part: partName(p) + (tag ? " [" + tag + "]" : ""), q: plain(q), yours: ans[q.id] || "", correct: q.answer, ok: ok });
+  });
+  SHEET.parts.forEach((p, pi) => { if (p.type === "cloze") { const box = $("#fb_" + p.qs[0].id); box.innerHTML = (fb[p.label + pi] || []).join(""); } });
+  $("#scoreDisplay").textContent = score + " / 100";
+  $("#partsSum").innerHTML = SHEET.sections.map((s, i) => "<span>Section " + (i + 1) + ": " + perSec[i] + "/" + s.max + "</span>").join("");
+  $("#resultEmoji").textContent = score >= 90 ? "🏆" : score >= 70 ? "🎉" : score >= 50 ? "💪" : "🌱";
+  $("#resultMessage").textContent = score >= 90 ? "Excellent work!" : score >= 70 ? "Great job!" : score >= 50 ? "Good try! Keep practicing." : "Don't give up! Try again.";
+  $("#result-banner").style.display = "block"; $("#submitBtn").disabled = true;
+  $("#topLabel").textContent = "Your score"; $("#topFill").style.width = score + "%"; $("#topScore").textContent = score + " / 100";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  rain(score >= 90 ? ["🎉", "⭐", "🏆", "🌟"] : ["😭"]);
+  if (typeof Library !== "undefined") Library.send({ title: SHEET.sheetTitle, category: SHEET.category, score: score, total: 100, items: items });
+}
+function rain(list) {
+  for (let i = 0; i < 45; i++) {
+    const s = document.createElement("span"); s.className = "faller";
+    s.textContent = list[Math.floor(Math.random() * list.length)];
+    s.style.left = Math.random() * 100 + "vw"; s.style.fontSize = (22 + Math.random() * 26) + "px";
+    s.style.animationDuration = (2.6 + Math.random() * 2.6) + "s"; s.style.animationDelay = (Math.random() * 1.8) + "s";
+    document.body.appendChild(s); setTimeout(() => s.remove(), 8000);
+  }
+}
+function resetQuiz() { render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+render();
+</script>
+</body>
+</html>
