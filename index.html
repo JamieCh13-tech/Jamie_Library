@@ -4,132 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jamie's Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@800&display=swap">
 <style>
-  :root {
-    --bg: #EAF3F8;
-    --ink: #14304A;
-    --blue: #2B6CB0;
-    --sun: #FFC93C;
-    --card: #FFFFFF;
-    --muted: #5B7189;
-  }
+  :root { --ink: #1B2A57; --sun: #FFE14D; }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Nunito", "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
-    line-height: 1.5;
-  }
-  header { padding: 44px 20px 20px; text-align: center; }
-  h1 {
-    margin: 0;
-    font-size: clamp(2.2rem, 7vw, 3.4rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-  h1 span {
-    background: linear-gradient(transparent 62%, var(--sun) 62%);
-    padding: 0 6px;
-  }
-  main { max-width: 680px; margin: 0 auto; padding: 0 20px 72px; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: #5CCBFF; color: var(--ink); font-family: "Lilita One", "Baloo 2", "Arial Rounded MT Bold", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 4px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 7px var(--ink); }
 
-  /* Search + filter */
-  .search {
-    width: 100%;
-    padding: 16px 18px;
-    font: inherit;
-    font-size: 1.15rem;
-    color: var(--ink);
-    background: var(--card);
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .search:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-  .tabs { display: flex; gap: 8px; margin: 18px 0 6px; flex-wrap: wrap; }
-  .tab {
-    font: inherit;
-    font-weight: 700;
-    padding: 8px 18px;
-    color: var(--ink);
-    background: transparent;
-    border: 2px solid var(--ink);
-    border-radius: 999px;
-    cursor: pointer;
-  }
-  .tab[aria-pressed="true"] { background: var(--ink); color: #fff; }
-  .tab:focus-visible, .tag:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
-  .count { margin: 10px 2px 0; color: var(--muted); font-size: .95rem; min-height: 1.4em; }
+  /* ---------- Home ---------- */
+  #home { position: relative; min-height: 100vh; overflow: hidden; }
+  .bgscene { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #stagewrap { position: relative; width: 100%; }
+  #stage { position: absolute; left: 50%; top: 0; width: 480px; height: 760px; transform-origin: top center; }
+  #stage h1 { position: absolute; left: 50%; top: 34px; margin: 0; padding: 10px 28px 4px; white-space: nowrap; font-weight: 400; font-size: 46px; line-height: 1.05; background: var(--sun); border: 4px solid var(--ink); border-radius: 18px; box-shadow: 0 7px 0 var(--ink); transform: translateX(-50%) rotate(-2deg); }
+  .node { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .node i { display: flex; align-items: center; justify-content: center; width: 190px; height: 190px; border-radius: 50%; border: 6px solid var(--ink); box-shadow: 0 10px 0 var(--ink); transition: transform .15s; }
+  .node b { padding: 6px 26px 2px; font-weight: 400; font-size: 34px; line-height: 1.1; background: #fff; border: 4px solid var(--ink); border-radius: 14px; box-shadow: 0 5px 0 var(--ink); }
+  .node:hover i { transform: translateY(-4px); }
 
-  /* Lists */
-  h2 { font-size: 1.6rem; margin: 36px 0 4px; }
-  h3 { font-size: 1.05rem; margin: 18px 0 10px; color: var(--muted); }
-  ul { list-style: none; margin: 0; padding: 0; }
-  li + li { margin-top: 12px; }
-  .card {
-    background: var(--card);
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    box-shadow: 4px 4px 0 var(--ink);
-    padding: 14px 18px 14px;
-  }
-  .card .name { display: block; font-size: 1.12rem; font-weight: 800; }
+  /* ---------- Shelf pages ---------- */
+  #shelf { position: relative; min-height: 100vh; background: #62D56F; overflow: hidden; }
+  #shelf .top { position: absolute; left: 0; top: 0; width: 100%; height: 240px; }
+  .wrap { position: relative; max-width: 980px; margin: 0 auto; padding: 30px 0 60px; }
+  .bar { position: relative; display: flex; align-items: center; justify-content: center; min-height: 64px; }
+  .back { position: absolute; left: 20px; top: 0; display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; border-radius: 50%; background: var(--sun); border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); }
+  #title { margin: 0 0 0 40px; padding: 8px 34px 2px; font-weight: 400; font-size: 42px; line-height: 1.1; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 0 6px 0 var(--ink); transform: rotate(-2deg); }
+  .srch { display: flex; align-items: center; gap: 12px; max-width: 520px; height: 54px; margin: 26px 20px 0; padding: 0 20px; background: #fff; border: 4px solid var(--ink); border-radius: 18px; }
+  @media (min-width: 600px) { .srch { margin-left: auto; margin-right: auto; } }
+  .srch input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 800 17px "Nunito", sans-serif; color: var(--ink); }
+  .srch input:focus-visible { outline: 0; box-shadow: none; }
+  .tag { display: inline-block; margin: 52px 0 0 26px; padding: 5px 20px 1px; font-size: 24px; line-height: 1.2; background: var(--sun); border: 4px solid var(--ink); border-radius: 14px; box-shadow: 0 4px 0 var(--ink); }
+  .shelf { display: flex; gap: 14px; margin-top: 16px; padding: 0 20px 4px 26px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .shelf::-webkit-scrollbar { display: none; }
+  @media (min-width: 820px) { .shelf { flex-wrap: wrap; row-gap: 12px; overflow: visible; } }
+  .cell { position: relative; flex: none; margin-bottom: 18px; scroll-snap-align: start; }
+  .cell::after { content: ""; position: absolute; left: -7px; right: -7px; bottom: -18px; height: 18px; background: #A0602F; border-bottom: 4px solid var(--ink); }
+  .bk { display: flex; align-items: center; justify-content: center; width: min(190px, calc((100vw - 70px) / 2)); aspect-ratio: 1; padding: 12px; font: inherit; color: var(--ink); cursor: pointer; border: 4px solid var(--ink); border-radius: 10px 16px 16px 10px; box-shadow: inset -10px 0 0 rgba(0,0,0,.16); transition: transform .15s; }
+  @media (min-width: 820px) { .bk { width: 190px; } }
+  .bk:hover { transform: translateY(-5px); }
+  .bk span { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 8px; overflow: hidden; text-align: center; font-size: 25px; line-height: 1.1; overflow-wrap: anywhere; border: 3px solid rgba(27,42,87,.45); border-radius: 6px; }
+  .none { margin: 50px 26px 0; font: 800 20px "Nunito", sans-serif; text-align: center; }
 
-  /* Quiz buttons */
-  .quizzes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  a.quiz {
-    display: inline-block;
-    min-height: 44px;
-    padding: 8px 18px;
-    line-height: 26px;
-    font-weight: 800;
-    color: var(--ink);
-    background: var(--sun);
-    border: 2px solid var(--ink);
-    border-radius: 999px;
-    box-shadow: 2px 2px 0 var(--ink);
-    text-decoration: none;
-    transition: transform .12s, box-shadow .12s;
-  }
-  a.quiz:hover, a.quiz:focus-visible {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-  a.quiz:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-  @media (prefers-reduced-motion: reduce) { a.quiz { transition: none; } }
-
-  /* Grammar keywords */
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .tag {
-    font: inherit;
-    font-size: .85rem;
-    padding: 2px 10px;
-    color: var(--blue);
-    background: #EAF3F8;
-    border: 1px solid #B9D3E6;
-    border-radius: 999px;
-    cursor: pointer;
-  }
-  .tag:hover { background: #D8E9F5; }
-  .empty { margin: 40px 0; text-align: center; font-size: 1.1rem; }
+  /* ---------- Quiz picker ---------- */
+  #modal { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(27,42,87,.6); }
+  .pop { position: relative; width: 100%; max-width: 420px; padding: 34px 24px 30px; text-align: center; background: #fff; border: 4px solid var(--ink); border-radius: 30px; box-shadow: 0 10px 0 var(--ink); }
+  .pop h2 { margin: 0; font-weight: 400; font-size: 34px; line-height: 1.1; }
+  .pop p { margin: 8px 0 22px; font: 800 17px "Nunito", sans-serif; color: #3B4673; }
+  .x { position: absolute; right: 12px; top: 12px; display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0; cursor: pointer; border-radius: 50%; background: #EEE9FF; border: 3px solid var(--ink); }
+  .qb { display: flex; flex-wrap: wrap; gap: 14px; }
+  .qb a { flex: 1 1 120px; display: flex; align-items: center; justify-content: center; min-height: 66px; padding-top: 4px; font-size: 28px; background: #C4B5FD; border: 4px solid var(--ink); border-radius: 20px; box-shadow: 0 7px 0 var(--ink); }
+  .qb a:active { transform: translateY(4px); box-shadow: 0 3px 0 var(--ink); }
+  @media (prefers-reduced-motion: reduce) { .node i, .bk { transition: none; } }
 </style>
 </head>
 <body>
-<header>
-  <h1><span>Jamie's Library</span></h1>
-</header>
 
-<main>
-  <input id="q" class="search" type="search" placeholder="Search: past perfect, Nate, grade 3…" aria-label="Search worksheets" autocomplete="off">
-  <div class="tabs" role="group" aria-label="Filter by type">
-    <button class="tab" data-type="all" aria-pressed="true">All</button>
-    <button class="tab" data-type="grammar" aria-pressed="false">Grammar</button>
-    <button class="tab" data-type="reading" aria-pressed="false">Reading</button>
+<!-- ================= Home ================= -->
+<section id="home">
+  <svg class="bgscene" viewBox="0 0 480 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="480" height="760" fill="#5CCBFF"/>
+    <g stroke="#FFE14D" stroke-width="6" stroke-linecap="round"><path d="M400 30v-14M400 130v14M350 80h-14M450 80h14M365 45l-10-10M435 115l10 10M435 45l10-10M365 115l-10 10"/></g>
+    <circle cx="400" cy="80" r="40" fill="#FFE14D"/>
+    <g fill="#fff"><g transform="translate(70 150) scale(1.1)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(300 200) scale(.9)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(430 300) scale(.8)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(40 330) scale(.7)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+    <path d="M190 120q7-9 14 0q7-9 14 0M230 150q7-9 14 0q7-9 14 0" fill="none" stroke="#1B2A57" stroke-width="3" stroke-linecap="round"/>
+    <g transform="translate(110 215)"><line x1="-14" y1="24" x2="-8" y2="50" stroke="#1B2A57" stroke-width="2"/><line x1="14" y1="24" x2="8" y2="50" stroke="#1B2A57" stroke-width="2"/><circle r="28" fill="#FF5FA2"/><path d="M0 -28q-14 28 0 56M0 -28q14 28 0 56" fill="none" stroke="#FFE14D" stroke-width="5"/><rect x="-9" y="50" width="18" height="12" rx="2" fill="#8B5A2B"/></g>
+    <path d="M-20 520L70 380L150 500L210 410L300 520Z" fill="#9A8CFF"/>
+    <path d="M200 520L300 360L390 480L440 410L520 520Z" fill="#7C6CF0"/>
+    <path d="M70 380L52 410L70 402L86 412ZM300 360L282 392L300 384L318 394Z" fill="#fff"/>
+    <ellipse cx="90" cy="730" rx="300" ry="190" fill="#62D56F"/>
+    <ellipse cx="420" cy="740" rx="300" ry="170" fill="#33B863"/>
+    <g fill="#8B5A2B"><rect x="40" y="600" width="7" height="20"/><rect x="82" y="640" width="8" height="24"/><rect x="426" y="610" width="8" height="22"/><rect x="385" y="650" width="6" height="18"/><rect x="246" y="690" width="7" height="20"/></g>
+    <g fill="#1F8A4C"><circle cx="44" cy="594" r="18"/><circle cx="86" cy="632" r="22"/><circle cx="430" cy="604" r="20"/><circle cx="388" cy="644" r="16"/><circle cx="250" cy="683" r="18"/></g>
+    <path d="M-20 720Q240 660 500 720L500 760L-20 760Z" fill="#1F9A4C"/>
+    <g><circle cx="120" cy="715" r="5" fill="#FF5FA2"/><circle cx="160" cy="730" r="5" fill="#fff"/><circle cx="330" cy="722" r="5" fill="#FFB020"/><circle cx="380" cy="735" r="5" fill="#FF5FA2"/><circle cx="60" cy="735" r="5" fill="#fff"/></g>
+  </svg>
+  <div id="stagewrap">
+    <div id="stage">
+      <svg style="position:absolute;left:0;top:0" width="480" height="760" viewBox="0 0 480 760" aria-hidden="true"><path d="M200 395C270 385 240 470 292 490" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 20"/></svg>
+      <h1>Jamie's Library</h1>
+      <a class="node" href="#grammar" style="left:28px;top:215px"><i style="background:#FF8A3D"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19l-5 1z"/><path d="M14 6l4 4"/></svg></i><b>Grammar</b></a>
+      <a class="node" href="#reading" style="left:262px;top:440px"><i style="background:#FF5FA2"><svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h7a3 3 0 013 3v12a2 2 0 00-2-2H3z"/><path d="M21 5h-7a3 3 0 00-3 3v12a2 2 0 012-2h8z"/></svg></i><b>Reading</b></a>
+    </div>
   </div>
-  <div id="count" class="count" aria-live="polite"></div>
-  <div id="list"></div>
-</main>
+</section>
+
+<!-- ================= Reading / Grammar shelves ================= -->
+<section id="shelf" hidden>
+  <svg class="top" viewBox="0 0 480 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <rect width="480" height="240" fill="#5CCBFF"/>
+    <circle cx="430" cy="60" r="30" fill="#FFE14D"/>
+    <g fill="#fff"><g transform="translate(60 60) scale(.9)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g><g transform="translate(300 110) scale(.8)"><ellipse rx="34" ry="15"/><circle cx="-12" cy="-10" r="14"/><circle cx="10" cy="-14" r="17"/></g></g>
+    <ellipse cx="90" cy="230" rx="280" ry="90" fill="#7C6CF0"/>
+    <ellipse cx="400" cy="240" rx="260" ry="80" fill="#9A8CFF"/>
+    <rect y="215" width="480" height="25" fill="#62D56F"/>
+    <ellipse cx="120" cy="220" rx="200" ry="26" fill="#62D56F"/><ellipse cx="380" cy="222" rx="220" ry="26" fill="#62D56F"/>
+  </svg>
+  <div class="wrap">
+    <div class="bar">
+      <a class="back" href="#" aria-label="Back to home"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <h1 id="title">Reading</h1>
+    </div>
+    <label class="srch"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg><input id="q" type="search" placeholder="Search" aria-label="Search" autocomplete="off"></label>
+    <div id="list"></div>
+  </div>
+</section>
+
+<!-- ================= Quiz picker ================= -->
+<div id="modal" hidden>
+  <div class="pop" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="x" id="mClose" type="button" aria-label="Close"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+    <h2 id="mTitle"></h2>
+    <p>Choose a quiz</p>
+    <div class="qb" id="mQuizzes"></div>
+  </div>
+</div>
 
 <script>
 /* ============================================================
@@ -139,13 +131,14 @@
    新增同一個故事的新練習卷：在該筆的 quizzes 裡多加一行，編號接下一號。
    新增一個全新的故事／主題：複製整筆 { ... }, 改掉內容。
 
-   - name    : 故事名稱（Reading）或文法主題名稱（Grammar）
+   - name    : 故事名稱（Reading）或文法主題名稱（Grammar），也是書的封面文字
    - type    : "grammar" 或 "reading"
    - group   : 只有 grammar 需要，例如 "Tenses"
    - grade   : 只有 reading 需要，填 1 到 6 的數字
-   - tags    : 只有 grammar 需要，搜尋與點選用的關鍵字
+   - tags    : 只有 grammar 需要，搜尋用的關鍵字
    - quizzes : { 編號: "檔名" }，檔名要和 GitHub 上的完全一樣（含大小寫）
                編號不要重新排列：給學生做過的 Quiz 1，永遠都是 Quiz 1
+               只有一份 Quiz 的書，點下去直接開；有多份的會先跳出選單
    ============================================================ */
 const WORKSHEETS = [
   {
@@ -172,125 +165,147 @@ const WORKSHEETS = [
   }
 ];
 
-/* Grammar 群組的顯示順序（沒有卷子的群組不會顯示） */
+/* Grammar 主題書架的顯示順序（沒有卷子的主題不會顯示） */
 const GRAMMAR_GROUPS = [
   "Tenses", "Nouns & Articles", "Pronouns", "Prepositions",
   "Modals", "Sentences & Questions", "Other"
 ];
 
+/* 書的封面顏色：依書名固定，看起來隨機，但同一本書永遠同一個顏色 */
+const PALETTE = ["#5EEAD4", "#FFD23F", "#FF8FB8", "#C4B5FD", "#FFA94D", "#8CE99A", "#74C0FC", "#FF8787"];
+
 /* ---------- 以下不用改 ---------- */
-const $q = document.getElementById("q");
-const $list = document.getElementById("list");
-const $count = document.getElementById("count");
-let currentType = "all";
+const $ = function (id) { return document.getElementById(id); };
+let current = "reading";
+let lastFocus = null;
 
-function haystack(w) {
-  return [
-    w.name, w.type, w.group || "",
-    w.grade ? "grade " + w.grade + " g" + w.grade : "",
-    ...(w.tags || [])
-  ].join(" ").toLowerCase();
+function colorOf(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return PALETTE[h % PALETTE.length];
 }
 
-function matches(w, words) {
-  if (currentType !== "all" && w.type !== currentType) return false;
-  const h = haystack(w);
-  return words.every(function (x) { return h.indexOf(x) !== -1; });
+function hay(w) {
+  return [w.name, w.group || "", w.grade ? "grade " + w.grade : ""].concat(w.tags || []).join(" ").toLowerCase();
 }
 
-function byName(a, b) { return a.name.localeCompare(b.name, "en", { sensitivity: "base" }); }
-
-function makeCard(w) {
-  const li = document.createElement("li");
-  li.className = "card";
-
-  const title = document.createElement("span");
-  title.className = "name";
-  title.textContent = w.name;
-  li.appendChild(title);
-
-  const row = document.createElement("div");
-  row.className = "quizzes";
-  Object.keys(w.quizzes || {}).map(Number).sort(function (a, b) { return a - b; }).forEach(function (n) {
-    const a = document.createElement("a");
-    a.className = "quiz";
-    a.href = w.quizzes[n];
-    a.textContent = "Quiz " + n;
-    row.appendChild(a);
-  });
-  li.appendChild(row);
-
-  // 只有 Grammar 的卡片會顯示可點的關鍵字；Reading 只顯示故事名稱和 Quiz 按鈕
-  const shown = [];
-  if (w.type === "grammar") {
-    if (w.group) shown.push(w.group);
-    (w.tags || []).forEach(function (t) { shown.push(t); });
+function makeBook(w) {
+  const nums = Object.keys(w.quizzes || {}).map(Number).sort(function (a, b) { return a - b; });
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  let el;
+  if (nums.length === 1) {
+    el = document.createElement("a");
+    el.href = w.quizzes[nums[0]];
+  } else {
+    el = document.createElement("button");
+    el.type = "button";
+    el.addEventListener("click", function () { openModal(w, nums); });
   }
-  if (shown.length) {
-    const box = document.createElement("div");
-    box.className = "tags";
-    shown.forEach(function (t) {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "tag"; b.textContent = t;
-      b.addEventListener("click", function () {
-        $q.value = t; render(); window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      box.appendChild(b);
+  el.className = "bk";
+  el.style.background = colorOf(w.name);
+  const s = document.createElement("span");
+  s.textContent = w.name;
+  el.appendChild(s);
+  cell.appendChild(el);
+  return cell;
+}
+
+function renderShelf() {
+  const words = $("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const hits = WORKSHEETS.filter(function (w) {
+    return w.type === current && words.every(function (x) { return hay(w).indexOf(x) !== -1; });
+  });
+  let groups;
+  if (current === "reading") {
+    groups = [1, 2, 3, 4, 5, 6].map(function (g) {
+      return { label: "Grade " + g, items: hits.filter(function (w) { return w.grade === g; }) };
     });
-    li.appendChild(box);
+  } else {
+    const names = GRAMMAR_GROUPS.slice();
+    hits.forEach(function (w) { const g = w.group || "Other"; if (names.indexOf(g) === -1) names.push(g); });
+    groups = names.map(function (n) {
+      return { label: n, items: hits.filter(function (w) { return (w.group || "Other") === n; }) };
+    });
   }
-  return li;
-}
-
-function addSection(title, subgroups) {
-  const filled = subgroups.filter(function (g) { return g.items.length; });
-  if (!filled.length) return;
-  const h2 = document.createElement("h2"); h2.textContent = title; $list.appendChild(h2);
-  filled.forEach(function (g) {
-    const h3 = document.createElement("h3"); h3.textContent = g.name; $list.appendChild(h3);
-    const ul = document.createElement("ul");
-    g.items.sort(byName).forEach(function (w) { ul.appendChild(makeCard(w)); });
-    $list.appendChild(ul);
+  const list = $("list");
+  list.innerHTML = "";
+  groups.filter(function (g) { return g.items.length; }).forEach(function (g) {
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = g.label;
+    list.appendChild(tag);
+    const shelf = document.createElement("div");
+    shelf.className = "shelf";
+    g.items.sort(function (a, b) { return a.name.localeCompare(b.name, "en", { sensitivity: "base" }); })
+      .forEach(function (w) { shelf.appendChild(makeBook(w)); });
+    list.appendChild(shelf);
   });
-}
-
-function render() {
-  const words = $q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const hits = WORKSHEETS.filter(function (w) { return matches(w, words); });
-  $list.innerHTML = "";
-
-  const grammar = hits.filter(function (w) { return w.type === "grammar"; });
-  const names = GRAMMAR_GROUPS.slice();
-  grammar.forEach(function (w) { const g = w.group || "Other"; if (names.indexOf(g) === -1) names.push(g); });
-  addSection("Grammar", names.map(function (n) {
-    return { name: n, items: grammar.filter(function (w) { return (w.group || "Other") === n; }) };
-  }));
-
-  const reading = hits.filter(function (w) { return w.type === "reading"; });
-  addSection("Reading", [1, 2, 3, 4, 5, 6].map(function (g) {
-    return { name: "Grade " + g, items: reading.filter(function (w) { return w.grade === g; }) };
-  }));
-
   if (!hits.length) {
     const p = document.createElement("p");
-    p.className = "empty";
-    p.textContent = "No worksheets found. Try a shorter word.";
-    $list.appendChild(p);
+    p.className = "none";
+    p.textContent = words.length ? "Nothing found. Try a shorter word." : "No quizzes here yet.";
+    list.appendChild(p);
   }
-  $count.textContent = hits.length + (hits.length === 1 ? " result" : " results");
 }
 
-$q.addEventListener("input", render);
-document.querySelectorAll(".tab").forEach(function (btn) {
-  btn.addEventListener("click", function () {
-    currentType = btn.dataset.type;
-    document.querySelectorAll(".tab").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(b === btn));
-    });
-    render();
+function openModal(w, nums) {
+  lastFocus = document.activeElement;
+  $("mTitle").textContent = w.name;
+  const box = $("mQuizzes");
+  box.innerHTML = "";
+  nums.forEach(function (n) {
+    const a = document.createElement("a");
+    a.href = w.quizzes[n];
+    a.textContent = "Quiz " + n;
+    box.appendChild(a);
   });
-});
-render();
+  $("modal").hidden = false;
+  box.firstChild.focus();
+}
+
+function closeModal() {
+  if ($("modal").hidden) return;
+  $("modal").hidden = true;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+function route() {
+  const r = location.hash.replace("#", "");
+  closeModal();
+  if (r === "reading" || r === "grammar") {
+    current = r;
+    $("home").hidden = true;
+    $("shelf").hidden = false;
+    $("title").textContent = r === "reading" ? "Reading" : "Grammar";
+    $("title").style.background = r === "reading" ? "#FF8FB8" : "#FF8A3D";
+    $("q").placeholder = r === "reading" ? "Search a story" : "Search a topic";
+    $("q").value = "";
+    document.title = (r === "reading" ? "Reading" : "Grammar") + " - Jamie's Library";
+    renderShelf();
+  } else {
+    $("shelf").hidden = true;
+    $("home").hidden = false;
+    document.title = "Jamie's Library";
+    fit();
+  }
+  window.scrollTo(0, 0);
+}
+
+/* 首頁的場景依螢幕大小縮放 */
+function fit() {
+  const s = Math.max(0.72, Math.min(window.innerWidth / 480, window.innerHeight / 780, 1.6));
+  $("stage").style.transform = "translateX(-50%) scale(" + s + ")";
+  $("stagewrap").style.height = Math.round(760 * s) + "px";
+}
+
+$("q").addEventListener("input", renderShelf);
+$("mClose").addEventListener("click", closeModal);
+$("modal").addEventListener("click", function (e) { if (e.target === $("modal")) closeModal(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+window.addEventListener("hashchange", route);
+window.addEventListener("resize", fit);
+route();
 </script>
 </body>
 </html>
