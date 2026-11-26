@@ -43,16 +43,24 @@ input.t{padding:6px 10px;border-radius:10px;border:3px solid var(--border);font-
 .tile.used{opacity:.3;text-decoration:line-through;pointer-events:none}
 .slot{display:inline-block;min-width:130px;padding:2px 10px;border-bottom:4px solid var(--primary);text-align:center;font-weight:bold;color:#075985;cursor:pointer;min-height:2rem}
 .slot.filled{background:var(--sel);border-radius:8px}
-.fb{flex-basis:100%;font-size:1rem;color:var(--bad);font-weight:bold;margin-left:40px}
+.fb{flex-basis:100%;font-size:1.05rem;color:var(--bad);font-weight:bold;margin-left:40px}
 .submit-area{text-align:center;margin:10px 0 40px}
 .progress-text{font-weight:bold;color:var(--muted);margin-bottom:10px}
-button.go,button.retry{padding:14px 40px;font-size:1.3rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
+button.go,button.retry{padding:12px 34px;font-size:1.2rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
 button.go{background:var(--primary)} button.go:disabled{background:#cbd5e1;cursor:not-allowed}
-button.retry{background:#0d9488;display:none;margin-top:14px}
-#result-banner{display:none;margin:20px auto 0;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
+button.retry{background:#0d9488;margin-top:10px}
+#result-banner{display:none;margin:0 auto 18px;text-align:center;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
 .score-display{font-size:3rem;font-weight:bold}
 .parts-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;font-size:.95rem}
 .parts-sum span{background:#fff;border-radius:999px;padding:3px 12px;border:2px solid #e2e8f0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;background:#fff;border:3px solid var(--primary);border-radius:14px;padding:8px 16px;margin-bottom:18px;box-shadow:0 4px 12px rgba(2,132,199,.18);font-weight:bold}
+.topbar .bar{flex:1 1 160px;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0d9488);transition:width .25s}
+#topScore{font-size:1.25rem;color:#075985}
+.why{flex-basis:100%;margin:2px 0 0 40px;padding:8px 12px;background:#fff;border-left:5px solid #f59e0b;border-radius:8px;font-size:1rem;color:#334155}
+.faller{position:fixed;top:-60px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.faller{display:none}}
 @media (max-width:600px){body{padding:10px}.section-card{padding:16px 12px}.q{font-size:1.1rem}input.t{width:150px}}
 </style>
 <script src="reporter.js"></script>
@@ -61,29 +69,30 @@ button.retry{background:#0d9488;display:none;margin-top:14px}
 <div class="container">
 <header>
   <a href="index.html" class="back-link">← Back to Library</a>
-  <h1>🏫 Grade 1 Grammar: Noun Basics 🏫</h1>
+  <h1>Grade 1 Grammar: Noun Basics</h1>
   <p>Nouns, Common &amp; Proper Nouns, Possessive Nouns &bull; Total Score: 100 Points</p>
   <div class="student-info">
     <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
     <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
   </div>
 </header>
+<div id="result-banner">
+  <div style="font-size:3rem" id="resultEmoji"></div>
+  <div class="score-display" id="scoreDisplay"></div>
+  <div class="parts-sum" id="partsSum"></div>
+  <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
+  <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
+  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+</div>
+<div class="topbar" id="topbar"><span id="topLabel">Progress</span><div class="bar"><i id="topFill"></i></div><span id="topScore"></span></div>
 <div id="parts"></div>
 <div class="submit-area">
   <div class="progress-text" id="progressText"></div>
   <button class="go" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
-  <div id="result-banner">
-    <div style="font-size:3rem" id="resultEmoji"></div>
-    <div class="score-display" id="scoreDisplay"></div>
-    <div class="parts-sum" id="partsSum"></div>
-    <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
-    <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
-  </div>
-  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
 </div>
 </div>
 <script>
-const SHEET = {"sheetTitle": "Noun Basics - Quiz 1", "category": "Grammar / Nouns", "parts": [{"title": "Person, Place, or Thing?", "type": "match", "pts": 3, "inst": "Look at each word. Choose <b>person</b>, <b>place</b>, or <b>thing</b> from the menu.", "options": ["person", "place", "thing"], "qs": [{"id": "a1_1", "emoji": "👧", "prompt": "girl", "answer": "person"}, {"id": "a1_2", "emoji": "🏫", "prompt": "school", "answer": "place"}, {"id": "a1_3", "emoji": "🚌", "prompt": "bus", "answer": "thing"}, {"id": "a1_4", "emoji": "🦁", "prompt": "zoo", "answer": "place"}, {"id": "a1_5", "emoji": "👩‍🏫", "prompt": "teacher", "answer": "person"}]}, {"title": "Tap the Noun", "type": "tap", "pts": 3, "inst": "A noun names a person, place, or thing. <b>Tap the noun</b> in each sentence.", "qs": [{"id": "a2_1", "text": "The van is big.", "answer": "van"}, {"id": "a2_2", "text": "A man helps us cross.", "answer": "man"}, {"id": "a2_3", "text": "We are at school.", "answer": "school"}, {"id": "a2_4", "text": "The hen sits and sits.", "answer": "hen"}, {"id": "a2_5", "text": "This bread is good.", "answer": "bread"}]}, {"title": "Common or Proper?", "type": "choice", "pts": 3, "inst": "A <b>proper noun</b> names an exact person, place, or thing and begins with a capital letter. Choose <b>common</b> or <b>proper</b>.", "qs": [{"id": "a3_1", "pre": "girl", "opts": ["common", "proper"], "answer": "common"}, {"id": "a3_2", "pre": "Kim", "opts": ["common", "proper"], "answer": "proper"}, {"id": "a3_3", "pre": "swing", "opts": ["common", "proper"], "answer": "common"}, {"id": "a3_4", "pre": "Pine Park", "opts": ["common", "proper"], "answer": "proper"}, {"id": "a3_5", "pre": "Miss Miller", "opts": ["common", "proper"], "answer": "proper"}]}, {"title": "Write It Correctly", "type": "type", "pts": 4, "inst": "Each proper noun needs <b>capital letters</b>. Type the proper noun correctly.", "qs": [{"id": "a4_1", "pre": "nick is up.  →", "answer": "Nick"}, {"id": "a4_2", "pre": "I go to camp playland.  →", "answer": "Camp Playland"}, {"id": "a4_3", "pre": "We have fun at frog pond.  →", "answer": "Frog Pond"}, {"id": "a4_4", "pre": "I will ask greg to help me.  →", "answer": "Greg"}, {"id": "a4_5", "pre": "My pet cat is called seth.  →", "answer": "Seth"}], "cs": true}, {"title": "Possessive or Plural?", "type": "choice", "pts": 3, "inst": "A <b>possessive noun</b> ends with <b>'s</b> and tells who has something. Choose the correct word.", "qs": [{"id": "a5_1", "pre": "The", "opts": ["dog's", "dogs"], "post": "hut is in the back.", "answer": "dog's"}, {"id": "a5_2", "pre": "My", "opts": ["mom's", "moms"], "post": "hat is red.", "answer": "mom's"}, {"id": "a5_3", "pre": "Two", "opts": ["cat's", "cats"], "post": "run fast.", "answer": "cats"}, {"id": "a5_4", "pre": "An", "opts": ["ant's", "ants"], "post": "hill is big.", "answer": "ant's"}, {"id": "a5_5", "pre": "The", "opts": ["pig's", "pigs"], "post": "pen is a mess.", "answer": "pig's"}]}, {"title": "Add 's", "type": "bank", "pts": 4, "inst": "Click a word from the box to fill each blank. Click a filled blank to take the word back.", "tiles": ["dog's", "pet's", "fox's", "bug's", "cub's"], "qs": [{"id": "a6_1", "pre": "The", "post": "bed is soft.", "answer": "dog's"}, {"id": "a6_2", "pre": "My", "post": "tank is big.", "answer": "pet's"}, {"id": "a6_3", "pre": "A", "post": "home is not a hut.", "answer": "fox's"}, {"id": "a6_4", "pre": "This", "post": "web is sticky.", "answer": "bug's"}, {"id": "a6_5", "pre": "The", "post": "den is full.", "answer": "cub's"}]}]};
+const SHEET = {"sheetTitle": "Noun Basics - Quiz 1", "category": "Grammar / Nouns", "parts": [{"title": "Person, Place, or Thing?", "type": "match", "pts": 3, "inst": "Choose <b>person</b>, <b>place</b>, or <b>thing</b> for each word.", "options": ["person", "place", "thing"], "qs": [{"id": "a1_1", "prompt": "baker", "answer": "person", "why": "A baker is a person who bakes bread."}, {"id": "a1_2", "prompt": "beach", "answer": "place", "why": "A beach is a place where we play in the sand."}, {"id": "a1_3", "prompt": "lamp", "answer": "thing", "why": "A lamp is a thing. We use it for light."}, {"id": "a1_4", "prompt": "library", "answer": "place", "why": "A library is a place where we read and borrow books."}, {"id": "a1_5", "prompt": "pilot", "answer": "person", "why": "A pilot is a person who flies a plane."}]}, {"title": "Tap the Noun", "type": "tap", "pts": 3, "inst": "A noun names a person, place, or thing. <b>Tap the noun</b> in each sentence.", "qs": [{"id": "a2_1", "text": "The red kite is high.", "answer": "kite", "why": "Kite is a thing, so it is a noun. Red and high tell about the kite."}, {"id": "a2_2", "text": "A nurse is kind.", "answer": "nurse", "why": "Nurse names a person, so it is a noun."}, {"id": "a2_3", "text": "We sit on the bench.", "answer": "bench", "why": "Bench is a thing, so it is a noun. Sit is an action word."}, {"id": "a2_4", "text": "My uncle is funny.", "answer": "uncle", "why": "Uncle names a person, so it is a noun."}, {"id": "a2_5", "text": "She eats a ripe plum.", "answer": "plum", "why": "Plum is a thing, so it is a noun. Eats is an action word."}]}, {"title": "Common or Proper?", "type": "choice", "pts": 3, "inst": "A <b>proper noun</b> names an exact person, place, or thing. It begins with a capital letter. Is each noun <b>common</b> or <b>proper</b>?", "qs": [{"id": "a3_1", "pre": "teacher", "opts": ["common", "proper"], "answer": "common", "why": "Teacher can name any teacher, so it is a common noun."}, {"id": "a3_2", "pre": "Taiwan", "opts": ["common", "proper"], "answer": "proper", "why": "Taiwan is the exact name of one place, so it is a proper noun."}, {"id": "a3_3", "pre": "river", "opts": ["common", "proper"], "answer": "common", "why": "River can name any river, so it is a common noun."}, {"id": "a3_4", "pre": "Rose Street", "opts": ["common", "proper"], "answer": "proper", "why": "Rose Street is the exact name of one street, so it is a proper noun."}, {"id": "a3_5", "pre": "market", "opts": ["common", "proper"], "answer": "common", "why": "Market can name any market, so it is a common noun."}]}, {"title": "Write It Correctly", "type": "type", "pts": 4, "inst": "Each sentence has a proper noun that needs <b>capital letters</b>. Type the proper noun correctly.", "cs": true, "qs": [{"id": "a4_1", "pre": "tom has a red bike.  →", "answer": "Tom", "why": "Tom is the exact name of a person. It begins with a capital letter."}, {"id": "a4_2", "pre": "We swim at pearl beach.  →", "answer": "Pearl Beach", "why": "Pearl Beach is the exact name of a place. Every word begins with a capital letter."}, {"id": "a4_3", "pre": "My cat is named coco.  →", "answer": "Coco", "why": "Coco is the exact name of a cat. It begins with a capital letter."}, {"id": "a4_4", "pre": "We fish at moon lake.  →", "answer": "Moon Lake", "why": "Moon Lake is the exact name of a place. Every word begins with a capital letter."}, {"id": "a4_5", "pre": "My friend lily likes jam.  →", "answer": "Lily", "why": "Lily is the exact name of a person. It begins with a capital letter."}]}, {"title": "Possessive or Plural?", "type": "choice", "pts": 3, "inst": "A <b>possessive noun</b> ends with <b>'s</b> and tells who has something. A <b>plural noun</b> names more than one. Choose the correct word.", "qs": [{"id": "a5_1", "pre": "The", "opts": ["bird's", "birds"], "post": "wing is hurt.", "answer": "bird's", "why": "The wing belongs to the bird, so add 's: bird's wing."}, {"id": "a5_2", "pre": "My", "opts": ["sister's", "sisters"], "post": "shoes are new.", "answer": "sister's", "why": "The shoes belong to my sister, so add 's: sister's shoes."}, {"id": "a5_3", "pre": "The", "opts": ["kid's", "kids"], "post": "run fast.", "answer": "kids", "why": "No one has anything here. It means more than one kid, so use the plural: kids."}, {"id": "a5_4", "pre": "The", "opts": ["rabbit's", "rabbits"], "post": "fur is soft.", "answer": "rabbit's", "why": "The fur belongs to the rabbit, so add 's: rabbit's fur."}, {"id": "a5_5", "pre": "The", "opts": ["goat's", "goats"], "post": "climb hills.", "answer": "goats", "why": "No one has anything here. It means more than one goat, so use the plural: goats."}]}, {"title": "Add 's", "type": "bank", "pts": 4, "inst": "Click a word from the box to fill each blank. Each word is used once. Click a filled blank to take the word back.", "tiles": ["baby's", "farmer's", "bee's", "teacher's", "chef's"], "qs": [{"id": "a6_1", "pre": "The", "post": "tractor is in the field.", "answer": "farmer's", "why": "A tractor works in a field. It belongs to the farmer, so use farmer's."}, {"id": "a6_2", "pre": "The", "post": "sting hurts a lot.", "answer": "bee's", "why": "A sting comes from a bee, so use bee's."}, {"id": "a6_3", "pre": "The", "post": "rattle makes a noise.", "answer": "baby's", "why": "A rattle is a toy that belongs to the baby, so use baby's."}, {"id": "a6_4", "pre": "The", "post": "chalk is on the desk.", "answer": "teacher's", "why": "A teacher uses chalk in class, so use teacher's."}, {"id": "a6_5", "pre": "The", "post": "apron has soup on it.", "answer": "chef's", "why": "A chef cooks soup and wears an apron, so use chef's."}]}]};
 const ROMAN = ["I","II","III","IV","V","VI","VII","VIII"];
 let ans = {}, graded = false;
 const $ = (s, r) => (r || document).querySelector(s);
@@ -151,7 +160,7 @@ function render() {
     });
     root.appendChild(card);
   });
-  $("#result-banner").style.display = "none"; $("#retryBtn").style.display = "none"; $("#sendStatus").textContent = "";
+  $("#result-banner").style.display = "none"; $("#sendStatus").textContent = ""; $("#topScore").textContent = ""; $("#topLabel").textContent = "Progress";
   update();
 }
 
@@ -181,6 +190,7 @@ function refreshBank(pi) {
 function update() {
   const done = allQs.filter(q => norm(ans[q.id] || "") !== "").length;
   $("#progressText").textContent = "Completed: " + done + " / " + allQs.length + " questions";
+  if (!graded) { $("#topFill").style.width = Math.round(done / allQs.length * 100) + "%"; $("#topLabel").textContent = "Progress: " + done + " / " + allQs.length; }
   $("#submitBtn").disabled = graded || done < allQs.length;
 }
 
@@ -191,7 +201,7 @@ function isRight(q, a) {
 }
 function plain(q) {
   const p = SHEET.parts[q.pi];
-  if (p.type === "match") return (q.emoji ? "" : "") + q.prompt + " → ?";
+  if (p.type === "match") return q.prompt + " → ?";
   if (p.type === "tap") return q.text;
   return ((q.pre || "") + " ____ " + (q.post || "")).trim();
 }
@@ -206,7 +216,7 @@ function gradeQuiz() {
     if (ok) { score += q.pts; per[q.pi] += q.pts; }
     const row = $("#row_" + q.id); row.classList.add(ok ? "ok" : "bad", "locked");
     row.querySelectorAll("input,select").forEach(i => i.disabled = true);
-    if (!ok) row.appendChild(el("div", "fb", "✔ Correct answer: " + q.answer));
+    if (!ok) { row.appendChild(el("div", "fb", "✔ Correct answer: " + q.answer)); if (q.why) row.appendChild(el("div", "why", "<b>Why?</b> " + q.why)); }
     items.push({ part: "Part " + ROMAN[q.pi] + ". " + p.title, q: plain(q), yours: ans[q.id] || "", correct: q.answer, ok: ok });
   });
   $("#scoreDisplay").textContent = score + " / 100";
@@ -214,10 +224,22 @@ function gradeQuiz() {
   const emoji = score >= 90 ? "🏆" : score >= 70 ? "🎉" : score >= 50 ? "💪" : "🌱";
   $("#resultEmoji").textContent = emoji;
   $("#resultMessage").textContent = score >= 90 ? "Excellent work!" : score >= 70 ? "Great job!" : score >= 50 ? "Good try! Keep practicing." : "Don't give up! Try again.";
-  $("#result-banner").style.display = "block"; $("#retryBtn").style.display = "inline-block";
+  $("#result-banner").style.display = "block";
   $("#submitBtn").disabled = true;
-  $("#result-banner").scrollIntoView({ behavior: "smooth", block: "center" });
+  $("#topLabel").textContent = "Your score"; $("#topFill").style.width = score + "%"; $("#topScore").textContent = score + " / 100";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  rain(score >= 90 ? ["🎉", "⭐", "🏆", "🌟"] : ["😭"]);
   if (typeof Library !== "undefined") Library.send({ title: SHEET.sheetTitle, category: SHEET.category, score: score, total: 100, items: items });
+}
+function rain(list) {
+  const n = 45;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement("span"); s.className = "faller";
+    s.textContent = list[Math.floor(Math.random() * list.length)];
+    s.style.left = Math.random() * 100 + "vw"; s.style.fontSize = (22 + Math.random() * 26) + "px";
+    s.style.animationDuration = (2.6 + Math.random() * 2.6) + "s"; s.style.animationDelay = (Math.random() * 1.8) + "s";
+    document.body.appendChild(s); setTimeout(() => s.remove(), 8000);
+  }
 }
 function resetQuiz() { render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
 render();
