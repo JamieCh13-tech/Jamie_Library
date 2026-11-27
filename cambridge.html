@@ -512,6 +512,7 @@
 
   /* ===== round 2 polish ===== */
   .msun{display:none}
+  @media (max-width:720px){ .scene .dsun{display:none} }
   @media (max-width:720px){
     .scene{margin-top:6px}
     .msun{display:block;position:absolute;right:12px;top:-46px;width:50px;height:auto;z-index:4;transition:all .4s ease}
@@ -563,7 +564,7 @@
       <g class="cloud" fill="#fff"><ellipse cx="120" cy="50" rx="46" ry="18"/><ellipse cx="150" cy="38" rx="30" ry="18"/><ellipse cx="95" cy="40" rx="24" ry="14"/></g>
       <g class="cloud" fill="#fff" style="animation-duration:12s"><ellipse cx="700" cy="40" rx="40" ry="15"/><ellipse cx="725" cy="30" rx="26" ry="15"/></g>
       <!-- sun -->
-      <g transform="translate(722 60)">
+      <g class="dsun" transform="translate(722 60)">
         <g stroke="#ffd34d" stroke-width="5" stroke-linecap="round"><path d="M0 34v9M-34 0h-9M34 0h9M-24 24l-6 6M24 24l6 6"/></g>
         <circle r="24" fill="#ffd34d"/>
         <rect x="-26" y="-25" width="52" height="6" rx="3" fill="#1d3557"/>
