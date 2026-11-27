@@ -119,7 +119,7 @@ if (document.readyState === "loading") {
 /* ==========================================================
    LEAVE GUARD: warns before a student leaves a quiz by accident
    (Back to Library link, browser back button / swipe back, refresh, close tab).
-   Active only after the student starts answering and before the quiz is submitted.
+   Active from the moment the quiz opens until it is submitted.
    ========================================================== */
 (function () {
   let dirty = false;    // student has started answering and has not submitted yet
@@ -168,7 +168,7 @@ if (document.readyState === "loading") {
 
   document.addEventListener("click", function (e) {
     const t = e.target; if (!t || !t.closest) return;
-    if (isRetry(t)) { locked = false; dirty = false; return; }
+    if (isRetry(t)) { locked = false; dirty = false; markDirty(); return; }
     if (box && box.contains(t)) return;
     const a = isBack(t);
     if (a) { if (dirty) { e.preventDefault(); ask(a.getAttribute("href")); } return; }
@@ -194,6 +194,9 @@ if (document.readyState === "loading") {
   window.addEventListener("beforeunload", function (e) {
     if (dirty) { e.preventDefault(); e.returnValue = ""; return ""; }
   });
+
+  // guard is on from the moment the quiz opens, until it is submitted
+  markDirty();
 
   // quiz submitted: no more warnings
   const origSend = Library.send;
