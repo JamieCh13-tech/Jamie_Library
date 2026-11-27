@@ -509,26 +509,70 @@
   .backbtn .bk-bus{width:28px;height:19px}
   .backbtn .bk-txt{padding:3px 6px 2px;border-radius:5px}
   @media (max-width:420px){ .backbtn{font-size:14px;padding:4px 9px 4px 6px} .backbtn .bk-bus{width:25px;height:17px} }
+
+  /* ===== round 2 polish ===== */
+  .msun{display:none}
+  @media (max-width:720px){
+    .scene{margin-top:6px}
+    .msun{display:block;position:absolute;right:12px;top:-46px;width:50px;height:auto;z-index:4;transition:all .4s ease}
+    body.inner .msun{right:calc(53% - 46px);top:-4px;width:46px}
+  }
+  .libbtn{display:inline-flex;align-items:center;gap:6px;background:#fff8ec;color:#1d3557;text-decoration:none;
+    border:2.5px solid #1d3557;border-radius:11px;padding:4px 11px 4px 7px;box-shadow:0 3px 0 #1d3557;
+    font-family:'Lilita One',sans-serif;font-size:15px;letter-spacing:.5px;line-height:1;transition:transform .12s,box-shadow .12s}
+  .libbtn .lb-ic{width:24px;height:21px}
+  .libbtn:hover{transform:translateY(-2px)}
+  .libbtn:active{transform:translateY(3px);box-shadow:0 0 0 #1d3557}
+  @media (max-width:720px){
+    body{background-size:100% 100%,170px 170px,26px 26px,26px 26px,100% 100%,100% 100%,100% 100%!important}
+    body::before{content:"";position:fixed;inset:0;background:rgba(251,243,228,.45);pointer-events:none;z-index:-1}
+  }
+  .paper{border-radius:4px;padding:34px 12px 22px;overflow:visible}
+  .paper .p-band{position:absolute;left:0;right:0;top:0;height:16px;background:var(--c);border-bottom:3px solid #1d3557}
+  .paper .p-stamp{position:absolute;top:24px;right:10px;width:34px;height:40px;background:#fff;border:2px dashed #1d3557;
+    display:flex;align-items:center;justify-content:center;font-size:18px;transform:rotate(6deg)}
+  .paper .p-fold{position:absolute;right:-3px;bottom:-3px;width:26px;height:26px;background:linear-gradient(135deg,#e9e2d3 50%,#fbf3e4 50%);
+    border-left:3px solid #1d3557;border-top:3px solid #1d3557;border-radius:0 0 4px 0}
+  @media (max-width:720px){
+    .paper{padding:28px 16px 18px}
+    .paper .p-stamp{top:auto;bottom:12px;right:34px;width:28px;height:32px;font-size:14px}
+  }
+  .quiz{padding:0 8px 14px;overflow:visible;border-radius:6px}
+  .quiz .q-top{position:relative;align-self:stretch;margin:0 -8px;height:46px}
+  .quiz .q-flap{position:absolute;inset:0;background:var(--c);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:3px 3px 0 0;transform-origin:50% 0;transition:transform .3s}
+  .quiz .q-seal{position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);width:32px;height:32px;border-radius:50%;
+    background:#b3202a;border:2px solid #1d3557;color:#fff;font-family:'Lilita One',sans-serif;font-size:16px;
+    display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 3px rgba(255,255,255,.25);transition:transform .3s}
+  .quiz .q-ic{margin-top:24px}
+  @media (hover:hover){ .quiz:hover .q-flap{transform:scaleY(.8)} .quiz:hover .q-seal{transform:translateX(-50%) translateY(-6px)} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="topbar">
-    <a class="pill" href="index.html" id="libBtn"><span class="ic">🏛️</span>Library</a>
+    <a class="libbtn" href="index.html" id="libBtn"><svg class="lb-ic" viewBox="0 0 30 26" aria-hidden="true"><path d="M2 10L15 2L28 10Z" fill="#5e3a56" stroke="#1d3557" stroke-width="2.5" stroke-linejoin="round"/><rect x="4" y="10" width="22" height="13" fill="#fff4d6" stroke="#1d3557" stroke-width="2.5"/><path d="M9 12v9M15 12v9M21 12v9" stroke="#1d3557" stroke-width="2.5"/><rect x="2" y="22" width="26" height="3" rx="1" fill="#1d3557"/></svg><span>Library</span></a>
     <button class="backbtn" id="homeBtn" style="display:none"><svg class="bk-bus" viewBox="0 0 60 40" aria-hidden="true"><g transform="translate(60 0) scale(-1 1)"><rect x="3" y="3" width="54" height="29" rx="6" fill="#fff" stroke="#1d3557" stroke-width="3"/><rect x="3" y="17" width="54" height="3" fill="#d62828"/><g fill="#cfeaff" stroke="#1d3557" stroke-width="1.5"><rect x="9" y="7" width="8" height="7" rx="1.5"/><rect x="20" y="7" width="8" height="7" rx="1.5"/><rect x="31" y="7" width="8" height="7" rx="1.5"/><rect x="43" y="7" width="9" height="7" rx="1.5"/><rect x="43" y="22" width="9" height="8" rx="1.5"/></g><g class="bk-w"><circle cx="15" cy="33" r="5" fill="#1d3557"/><circle cx="15" cy="33" r="1.8" fill="#fff"/></g><g class="bk-w"><circle cx="45" cy="33" r="5" fill="#1d3557"/><circle cx="45" cy="33" r="1.8" fill="#fff"/></g></g></svg><span class="bk-txt">Back</span></button>
   </div>
 
   <!-- London scene -->
   <!-- London scene -->
   <div class="scene" aria-hidden="true">
+    <svg class="msun" viewBox="-40 -52 80 92" aria-hidden="true"><g stroke="#ffd34d" stroke-width="5" stroke-linecap="round"><path d="M0 34v9M-34 0h-9M34 0h9M-24 24l-6 6M24 24l6 6"/></g><circle r="24" fill="#ffd34d"/><rect x="-26" y="-25" width="52" height="6" rx="3" fill="#1d3557"/><path d="M-17 -22 q0-24 17-24 q17 0 17 24z" fill="#1d3557"/><rect x="-17" y="-29" width="34" height="5" fill="#d62828"/><circle cx="-8" cy="0" r="3" fill="#7a5200"/><circle cx="8" cy="0" r="3" fill="#7a5200"/><path d="M-8 9 q8 7 16 0" fill="none" stroke="#7a5200" stroke-width="3" stroke-linecap="round"/><circle cx="-15" cy="7" r="3.5" fill="#ff9f7a" opacity=".6"/><circle cx="15" cy="7" r="3.5" fill="#ff9f7a" opacity=".6"/></svg>
     <svg class="bg" viewBox="0 0 900 190" preserveAspectRatio="xMidYMax slice">
       <g class="cloud" fill="#fff"><ellipse cx="120" cy="50" rx="46" ry="18"/><ellipse cx="150" cy="38" rx="30" ry="18"/><ellipse cx="95" cy="40" rx="24" ry="14"/></g>
       <g class="cloud" fill="#fff" style="animation-duration:12s"><ellipse cx="700" cy="40" rx="40" ry="15"/><ellipse cx="725" cy="30" rx="26" ry="15"/></g>
       <!-- sun -->
-      <circle cx="820" cy="48" r="26" fill="#ffd34d"/>
-      <circle cx="811" cy="44" r="3" fill="#7a5200"/><circle cx="829" cy="44" r="3" fill="#7a5200"/>
-      <path d="M810 54 q10 9 20 0" stroke="#7a5200" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g transform="translate(722 60)">
+        <g stroke="#ffd34d" stroke-width="5" stroke-linecap="round"><path d="M0 34v9M-34 0h-9M34 0h9M-24 24l-6 6M24 24l6 6"/></g>
+        <circle r="24" fill="#ffd34d"/>
+        <rect x="-26" y="-25" width="52" height="6" rx="3" fill="#1d3557"/>
+        <path d="M-17 -22 q0-24 17-24 q17 0 17 24z" fill="#1d3557"/>
+        <rect x="-17" y="-29" width="34" height="5" fill="#d62828"/>
+        <circle cx="-8" cy="0" r="3" fill="#7a5200"/><circle cx="8" cy="0" r="3" fill="#7a5200"/>
+        <path d="M-8 9 q8 7 16 0" fill="none" stroke="#7a5200" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="-15" cy="7" r="3.5" fill="#ff9f7a" opacity=".6"/><circle cx="15" cy="7" r="3.5" fill="#ff9f7a" opacity=".6"/>
+      </g>
       <!-- London Eye -->
       <g transform="translate(610 104)" fill="none" stroke="#9fb3c8" stroke-width="4">
         <circle r="62"/><circle r="6" fill="#9fb3c8"/>
@@ -665,10 +709,12 @@ function renderLevel(L){
       const n = list(L.id,P.id).length;
       return `<a class="paper" href="#${L.id}/${P.id}" style="--c:${L.color};--i:${i}">
         <span class="count">${n||""}</span>
-        <span class="clip"></span>
+        <span class="p-band"></span>
+        <span class="p-stamp">${L.emo}</span>
         <span class="p-ic">${P.ic}</span>
         <span class="p-name">${P.name}</span>
         <span class="p-lines"><i></i><i></i><i></i></span>
+        <span class="p-fold"></span>
       </a>`}).join("")}</div>`;
 }
 
@@ -679,7 +725,7 @@ function renderPaper(L,P){
     ? `<div class="quizzes">${files.map((f,k)=>{
         const demo = f.startsWith("demo:");
         return `<a class="quiz" href="${demo?"#":f}" ${demo?'data-demo="1"':""} style="--c:${L.color};--i:${k}">
-          <span class="q-flag"></span>
+          <span class="q-top"><span class="q-flap"></span><span class="q-seal">${k+1}</span></span>
           <span class="q-ic">${P.ic}</span>
           <span class="q-name">Quiz ${k+1}</span>
         </a>`}).join("")}</div>`
@@ -690,6 +736,7 @@ function renderPaper(L,P){
 function route(){
   const [l,p] = location.hash.replace("#","").split("/");
   const L = lv(l), P = pp(p);
+  document.body.classList.toggle("inner", !!L);
   if(!L){ renderHome(); return; }
   homeBtn.style.display="";
   homeBtn.dataset.up = P ? "#"+L.id : "";
