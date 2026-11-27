@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Present Simple vs. Past Simple - Quiz 1</title>
+<style>
+:root{--primary:#0284c7;--primary-light:#e0f2fe;--bg:#f0f9ff;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#cbd5e1;--ok:#16a34a;--ok-bg:#dcfce7;--bad:#dc2626;--bad-bg:#fee2e2;--sel:#fde68a}
+*{box-sizing:border-box;font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',Tahoma,Verdana,sans-serif}
+body{margin:0;padding:20px;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:900px;margin:0 auto}
+header{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;padding:24px 30px;border-radius:18px;box-shadow:0 8px 20px rgba(2,132,199,.2);margin-bottom:24px;text-align:center}
+header h1{margin:0 0 8px;font-size:1.9rem}
+header p{margin:0;font-size:1.05rem}
+.back-link{display:inline-block;margin-bottom:10px;color:#fff;font-weight:bold;text-decoration:none;opacity:.95}
+.back-link:hover{text-decoration:underline}
+.student-info{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.student-info label{font-weight:bold}
+.student-info input,.student-info select{padding:8px 12px;border-radius:10px;border:2px solid #bae6fd;font-size:1.05rem;min-width:220px}
+.section-card{background:var(--card);border-radius:16px;padding:22px 24px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.section-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-bottom:3px dashed var(--primary-light);padding-bottom:10px;margin-bottom:12px}
+.section-title{margin:0;font-size:1.35rem;color:#075985}
+.section-points{background:var(--primary-light);color:#075985;font-weight:bold;padding:4px 12px;border-radius:999px;font-size:.95rem}
+.instructions{margin:0 0 14px;color:var(--muted);font-size:1.05rem}
+.q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 10px;border-radius:12px;background:#f8fafc;margin-bottom:10px;font-size:1.25rem;border:2px solid transparent}
+.q.ok{background:var(--ok-bg);border-color:var(--ok)}
+.q.bad{background:var(--bad-bg);border-color:var(--bad)}
+.num{font-weight:bold;color:var(--primary);min-width:28px}
+.emoji{font-size:2rem;line-height:1}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{padding:8px 18px;border:3px solid var(--border);background:#fff;border-radius:12px;font-size:1.2rem;cursor:pointer}
+.opt:hover{border-color:var(--primary)}
+.opt.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+.q.locked .opt,.q.locked .tok,.q.locked .tile,.q.locked .slot{pointer-events:none}
+.sent{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.tok{padding:2px 8px;border-radius:10px;border:3px solid transparent;cursor:pointer}
+.tok:hover{background:#e0f2fe}
+.tok.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+select.m{padding:8px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.15rem;background:#fff}
+input.t{padding:6px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.25rem;width:210px}
+.bank{display:flex;flex-wrap:wrap;gap:10px;padding:12px;background:#fffbeb;border:3px dashed #fbbf24;border-radius:14px;margin-bottom:14px}
+.tile{padding:6px 16px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-size:1.2rem;cursor:pointer;font-weight:bold}
+.tile.used{opacity:.3;text-decoration:line-through;pointer-events:none}
+.slot{display:inline-block;min-width:130px;padding:2px 10px;border-bottom:4px solid var(--primary);text-align:center;font-weight:bold;color:#075985;cursor:pointer;min-height:2rem}
+.slot.filled{background:var(--sel);border-radius:8px}
+.fb{flex-basis:100%;font-size:1.05rem;color:var(--bad);font-weight:bold;margin-left:40px}
+.submit-area{text-align:center;margin:10px 0 40px}
+.progress-text{font-weight:bold;color:var(--muted);margin-bottom:10px}
+button.go,button.retry{padding:12px 34px;font-size:1.2rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
+button.go{background:var(--primary)} button.go:disabled{background:#cbd5e1;cursor:not-allowed}
+button.retry{background:#0d9488;margin-top:10px}
+#result-banner{display:none;margin:0 auto 18px;text-align:center;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
+.score-display{font-size:3rem;font-weight:bold}
+.parts-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;font-size:.95rem}
+.parts-sum span{background:#fff;border-radius:999px;padding:3px 12px;border:2px solid #e2e8f0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;background:#fff;border:3px solid var(--primary);border-radius:14px;padding:8px 16px;margin-bottom:18px;box-shadow:0 4px 12px rgba(2,132,199,.18);font-weight:bold}
+.topbar .bar{flex:1 1 160px;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0d9488);transition:width .25s}
+#topScore{font-size:1.25rem;color:#075985}
+.why{flex-basis:100%;margin:2px 0 0 40px;padding:8px 12px;background:#fff;border-left:5px solid #f59e0b;border-radius:8px;font-size:1rem;color:#334155}
+.faller{position:fixed;top:-60px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.faller{display:none}}
+@media (max-width:600px){body{padding:10px}.section-card{padding:16px 12px}.q{font-size:1.1rem}input.t{width:150px}}
+.tblwrap{overflow-x:auto}
+table.vt{width:100%;border-collapse:separate;border-spacing:0 8px}
+table.vt th{text-align:left;font-size:.9rem;color:#075985;background:var(--primary-light);padding:8px 12px}
+table.vt th:first-child{border-radius:10px 0 0 10px}table.vt th:last-child{border-radius:0 10px 10px 0}
+table.vt td{padding:10px 12px;background:#f8fafc;vertical-align:top;font-size:1.2rem}
+table.vt td:first-child{border-radius:12px 0 0 12px}table.vt td:last-child{border-radius:0 12px 12px 0}
+table.vt .given{display:inline-block;font-weight:bold;padding:6px 12px;background:#fff;border:3px solid #e2e8f0;border-radius:10px}
+table.vt input.t{width:100%;max-width:200px}
+table.vt .tag{font-size:.8rem;font-weight:bold;padding:3px 10px;border-radius:999px;background:#e2e8f0;color:#475569;white-space:nowrap}
+table.vt tr.ok td{background:var(--ok-bg)}table.vt tr.bad td{background:var(--bad-bg)}
+table.vt .fb,table.vt .why{margin-left:0;margin-top:6px;font-size:.95rem}
+@media (max-width:600px){table.vt td.hint,table.vt th.hint{display:none}table.vt td,table.vt th{padding:8px 6px}}
+</style>
+<script src="reporter.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <a href="index.html" class="back-link">← Back to Library</a>
+  <h1>Present Simple vs. Past Simple</h1>
+  <p>Spelling Rules, Irregular Verbs &amp; did / does Traps &bull; Total Score: 100 Points</p>
+  <div class="student-info">
+    <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
+    <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
+  </div>
+</header>
+<div id="result-banner">
+  <div style="font-size:3rem" id="resultEmoji"></div>
+  <div class="score-display" id="scoreDisplay"></div>
+  <div class="parts-sum" id="partsSum"></div>
+  <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
+  <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
+  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+</div>
+<div class="topbar" id="topbar"><span id="topLabel">Progress</span><div class="bar"><i id="topFill"></i></div><span id="topScore"></span></div>
+<div id="parts"></div>
+<div class="submit-area">
+  <div class="progress-text" id="progressText"></div>
+  <button class="go" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
+</div>
+</div>
+<script>
+const SHEET = {"sheetTitle": "Present Simple vs. Past Simple - Quiz 1", "category": "Grammar / Tenses", "parts": [{"title": "Base Form & Past Simple Table", "type": "table", "pts": 3, "inst": "Complete the <b>missing column</b> in each row. Watch for <b>-ied</b>, <b>vowel + y</b>, <b>doubled consonants</b>, and <b>irregular verbs</b>!", "qs": [{"id": "c1_1", "base": "hurry", "past": "hurried", "tag": "Consonant + y", "answer": "hurried", "why": "Consonant + y: the letter before y is a consonant, so change y to i and add -ed (hurry → hurried)."}, {"id": "c1_2", "base": "enjoy", "past": "enjoyed", "tag": "Vowel + y trap", "answer": "enjoyed", "why": "Vowel + y: the letter before y is a vowel, so keep the y and add -ed (enjoy → enjoyed)."}, {"id": "c1_3", "base": "plan", "past": "planned", "tag": "Double consonant", "answer": "planned", "why": "Short vowel + one consonant: double the last letter before -ed (plan → planned)."}, {"id": "c1_4", "base": "invite", "past": "invited", "tag": "Silent -e", "answer": "invited", "why": "Silent -e: the word already ends in e, so just add -d (invite → invited)."}, {"id": "c1_5", "base": "bring", "past": "brought", "tag": "Irregular", "answer": "brought", "why": "Irregular verb: bring changes to brought. Watch the -ought spelling!"}, {"id": "c1_6", "base": "copy", "past": "copied", "tag": "Consonant + y", "answer": "copied", "why": "Consonant + y: change y to i and add -ed (copy → copied)."}, {"id": "c1_7", "base": "break", "past": "broke", "tag": "Irregular", "answer": "broke", "why": "Irregular verb: break changes to broke."}, {"id": "c1_8", "base": "hop", "past": "hopped", "tag": "Double consonant", "answer": "hopped", "why": "Short vowel + one consonant: double the p before -ed (hop → hopped). Hoped comes from hope."}, {"id": "c1_9", "base": "build", "past": "built", "tag": "Irregular", "answer": "built", "why": "Irregular verb: build changes d to t → built."}, {"id": "c1_10", "base": "teach", "past": "taught", "tag": "Irregular", "answer": "taught", "why": "Irregular verb: teach changes to taught. It is spelled with -aught."}]}, {"title": "Click the Correct Verb", "type": "choice", "pts": 2, "inst": "Click the verb form that fits the time clue and the subject. Watch out for <b>did / didn’t / doesn’t</b>!", "qs": [{"id": "c2_1", "pre": "My sister always", "opts": ["worries", "worried"], "post": "before a big piano concert.", "answer": "worries", "why": "\"Always\" shows a regular habit (Present Simple). With \"My sister\" (she), change y to ies → worries."}, {"id": "c2_2", "pre": "Did your uncle", "opts": ["fly", "flew"], "post": "to Singapore for work last month?", "answer": "fly", "why": "Trap alert! After \"Did\" in a question, always use the base form (\"fly\"), never the past form."}, {"id": "c2_3", "pre": "The thirsty hikers", "opts": ["drank", "drink"], "post": "three bottles of water after climbing the hill.", "answer": "drank", "why": "Climbing the hill is a finished past action, so use the irregular Past Simple of drink → drank."}, {"id": "c2_4", "pre": "Our school library", "opts": ["opens", "opened"], "post": "at 8:00 a.m. every weekday morning.", "answer": "opens", "why": "\"Every weekday morning\" is a daily schedule (Present Simple). With \"library\" (it), add -s → opens."}, {"id": "c2_5", "pre": "Oliver didn’t", "opts": ["heard", "hear"], "post": "his alarm clock ring this morning.", "answer": "hear", "why": "Trap alert! After \"didn’t\", always use the base form (\"hear\"). \"Didn’t\" already puts the sentence in the past!"}, {"id": "c2_6", "pre": "The third-grade choir", "opts": ["sings", "sang"], "post": "two songs at the winter festival yesterday.", "answer": "sang", "why": "\"Yesterday\" signals a finished past event. The irregular Past Simple of sing is sang."}, {"id": "c2_7", "pre": "Mr. Chen", "opts": ["watched", "watches"], "post": "the evening news after dinner every night.", "answer": "watches", "why": "\"Every night\" is a Present Simple habit. Verbs ending in -ch add -es for he/she/it → watches."}, {"id": "c2_8", "pre": "Chloe", "opts": ["invites", "invited"], "post": "all of her classmates to her roller-skating party last Sunday.", "answer": "invited", "why": "\"Last Sunday\" is in the past. Add -d to invite → invited."}, {"id": "c2_9", "pre": "Why doesn’t your dog", "opts": ["likes", "like"], "post": "taking baths in cold water?", "answer": "like", "why": "After \"doesn’t\" in a Present Simple question, use the base form (\"like\") without -s."}, {"id": "c2_10", "pre": "We", "opts": ["visit", "visited"], "post": "the Ocean Park aquarium during our summer break.", "answer": "visited", "why": "\"During our summer break\" is a past vacation, so use the Past Simple → visited."}]}, {"title": "Spot the Mistake & Fix It!", "type": "type", "pts": 5, "inst": "Each sentence has <b>one underlined verb mistake</b>. Type the correct verb form.", "qs": [{"id": "c3_1", "pre": "Yesterday afternoon, Leo <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">buyed</u> a new set of colored pencils at the bookstore.  Fix →", "answer": "bought", "why": "Buy is an irregular verb! Its Past Simple form is bought (never \"buyed\")."}, {"id": "c3_2", "pre": "Does Sarah <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">goes</u> to swimming practice every Tuesday and Thursday?  Fix →", "answer": "go", "why": "After \"Does\" in a question, the main verb goes back to the base form (\"go\"), not \"goes\"."}, {"id": "c3_3", "pre": "We didn’t <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">saw</u> any shooting stars because the sky was too cloudy.  Fix →", "answer": "see", "why": "After \"didn’t\", always use the base form (\"see\") instead of the past tense \"saw\"."}, {"id": "c3_4", "pre": "My baby cousin always <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">crys</u> loudly when he drops his favorite rattle.  Fix →", "answer": "cries", "why": "With \"My baby cousin\" (he) in Present Simple, change y to ies in cry → cries."}, {"id": "c3_5", "pre": "Last winter, it <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">snows</u> heavily on Hehuanshan for three days.  Fix →", "answer": "snowed", "why": "\"Last winter\" tells us this happened in the past, so change snows to Past Simple snowed."}]}, {"title": "Story Word Box", "type": "bank", "pts": 5, "inst": "Click a word from the box to fill each blank. Use each word once. <b>4 words are extra!</b> Click a filled blank to take the word back.", "tiles": ["builds", "built", "tested", "tests", "clapped", "claps", "wins", "won", "stays"], "qs": [{"id": "c4_1", "pre": "Ethan is crazy about robotics! Every week, he", "post": "small solar-powered cars in his bedroom after finishing his homework.", "answer": "builds", "why": "\"Every week\" describes Ethan’s regular hobby (Present Simple). With \"Ethan\" (he), add -s → builds."}, {"id": "c4_2", "pre": "Last Friday was our school’s Science Fair. Ethan and his partner", "post": "a giant cardboard robot that could wave its arms!", "answer": "built", "why": "\"Last Friday\" is a past event! The irregular Past Simple of build is built."}, {"id": "c4_3", "pre": "During the morning show, they", "post": "the robot in front of the whole third grade.", "answer": "tested", "why": "This is still last Friday’s story (Past Simple) → tested."}, {"id": "c4_4", "pre": "When the robot waved at Principal Lin, everyone in the gym", "post": "loudly!", "answer": "clapped", "why": "Past Simple event at the science fair. Clap follows the doubling rule (double p + -ed) → clapped."}, {"id": "c4_5", "pre": "In the end, Ethan’s team", "post": "first prize for Best Invention!", "answer": "won", "why": "Still last Friday’s result (Past Simple). The irregular Past Simple of win is won."}]}]};
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII"];
+let ans = {}, graded = false;
+const $ = (s, r) => (r || document).querySelector(s);
+const norm = (s) => String(s).trim().replace(/\s+/g, " ");
+const allQs = [];
+SHEET.parts.forEach((p, pi) => p.qs.forEach(q => { q.pi = pi; q.pts = p.pts; allQs.push(q); }));
+
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+function render() {
+  ans = {}; graded = false;
+  const root = $("#parts"); root.innerHTML = "";
+  let n = 0;
+  SHEET.parts.forEach((p, pi) => {
+    const card = el("div", "section-card");
+    card.innerHTML = '<div class="section-header"><h2 class="section-title">Part ' + ROMAN[pi] + '. ' + p.title + '</h2><span class="section-points">' + (p.pts * p.qs.length) + ' Points (' + p.pts + ' pts each)</span></div><p class="instructions">' + p.inst + '</p>';
+    let bank = null;
+    if (p.type === "table") {
+      const sd = p.qs.map((_, i) => i % 2 ? "base" : "past");
+      for (let k = sd.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [sd[k], sd[j]] = [sd[j], sd[k]]; }
+      for (let k = p.qs.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [p.qs[k], p.qs[j]] = [p.qs[j], p.qs[k]]; }
+      const wrap = el("div", "tblwrap");
+      const tb = el("table", "vt");
+      tb.innerHTML = '<thead><tr><th>#</th><th>Base Form (Present)</th><th>Past Simple</th><th class="hint">Hint</th></tr></thead>';
+      const body = el("tbody");
+      p.qs.forEach((q, qi) => {
+        n++; q.n = n; q.side = sd[qi]; q.answer = q.side === "base" ? q.base : q.past;
+        const tr = el("tr", "vrow"); tr.id = "row_" + q.id;
+        const cell = (side) => {
+          const td = el("td");
+          if (q.side === side) {
+            td.className = "fbc";
+            const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+            i.placeholder = side === "base" ? "base form" : "past simple";
+            i.oninput = () => { ans[q.id] = i.value; update(); };
+            td.appendChild(i);
+          } else td.appendChild(el("span", "given", side === "base" ? q.base : q.past));
+          return td;
+        };
+        tr.appendChild(el("td", "num", n + "."));
+        tr.appendChild(cell("base")); tr.appendChild(cell("past"));
+        tr.appendChild(el("td", "hint", '<span class="tag">' + q.tag + '</span>'));
+        body.appendChild(tr);
+      });
+      tb.appendChild(body); wrap.appendChild(tb); card.appendChild(wrap); root.appendChild(card);
+      return;
+    }
+    if (p.type === "bank") {
+      const want = p.qs.map(q => q.answer).join("|");
+      let tl = p.tiles.slice(), tries = 0;
+      do { for (let k = tl.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [tl[k], tl[j]] = [tl[j], tl[k]]; } tries++; } while (tl.join("|") === want && tries < 50);
+      p._tiles = tl;
+      bank = el("div", "bank");
+      p._tiles.forEach((t, ti) => {
+        const b = el("button", "tile", t); b.type = "button"; b.dataset.pi = pi; b.dataset.ti = ti;
+        b.onclick = () => pickTile(pi, ti);
+        bank.appendChild(b);
+      });
+      card.appendChild(bank);
+    }
+    p.qs.forEach(q => {
+      n++; q.n = n;
+      const row = el("div", "q"); row.id = "row_" + q.id;
+      row.appendChild(el("span", "num", n + "."));
+      if (q.emoji) row.appendChild(el("span", "emoji", q.emoji));
+      if (p.type === "match") {
+        row.appendChild(el("b", "", q.prompt));
+        const s = el("select", "m"); s.innerHTML = '<option value="">-- choose --</option>' + p.options.map(o => '<option>' + o + '</option>').join("");
+        s.onchange = () => { ans[q.id] = s.value; update(); };
+        row.appendChild(s);
+      } else if (p.type === "choice") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const w = el("div", "opts");
+        q.opts.forEach(o => { const b = el("button", "opt", o); b.type = "button"; b.onclick = () => { ans[q.id] = o; w.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); update(); }; w.appendChild(b); });
+        row.appendChild(w);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "tap") {
+        const w = el("div", "sent");
+        q.text.split(" ").forEach(tok => {
+          const word = tok.replace(/[.,!?]/g, "");
+          const t = el("span", "tok", tok); t.dataset.w = word;
+          t.onclick = () => { ans[q.id] = word; w.querySelectorAll(".tok").forEach(x => x.classList.toggle("sel", x === t)); update(); };
+          w.appendChild(t);
+        });
+        row.appendChild(w);
+      } else if (p.type === "type") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+        i.oninput = () => { ans[q.id] = i.value; update(); };
+        row.appendChild(i);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "bank") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const sl = el("span", "slot", ""); sl.id = "slot_" + q.id; sl.onclick = () => clearSlot(pi, q.id);
+        row.appendChild(sl);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      }
+      card.appendChild(row);
+    });
+    root.appendChild(card);
+  });
+  $("#result-banner").style.display = "none"; $("#sendStatus").textContent = ""; $("#topScore").textContent = ""; $("#topLabel").textContent = "Progress";
+  update();
+}
+
+function pickTile(pi, ti) {
+  if (graded) return;
+  const p = SHEET.parts[pi];
+  const empty = p.qs.find(q => !ans[q.id]);
+  if (!empty) return;
+  ans[empty.id] = p._tiles[ti]; empty._tile = ti;
+  refreshBank(pi); update();
+}
+function clearSlot(pi, id) {
+  if (graded) return;
+  delete ans[id]; refreshBank(pi); update();
+}
+function refreshBank(pi) {
+  const p = SHEET.parts[pi];
+  const usedTiles = {};
+  p.qs.forEach(q => { const s = $("#slot_" + q.id); s.textContent = ans[q.id] || ""; s.classList.toggle("filled", !!ans[q.id]); });
+  const used = p.qs.map(q => ans[q.id]).filter(Boolean);
+  document.querySelectorAll('.tile[data-pi="' + pi + '"]').forEach(b => {
+    const k = used.indexOf(b.textContent);
+    b.classList.toggle("used", k > -1);
+  });
+}
+
+function update() {
+  const done = allQs.filter(q => norm(ans[q.id] || "") !== "").length;
+  $("#progressText").textContent = "Completed: " + done + " / " + allQs.length + " questions";
+  if (!graded) { $("#topFill").style.width = Math.round(done / allQs.length * 100) + "%"; $("#topLabel").textContent = "Progress: " + done + " / " + allQs.length; }
+  $("#submitBtn").disabled = graded || done < allQs.length;
+}
+
+function isRight(q, a) {
+  const p = SHEET.parts[q.pi];
+  const x = norm(a || ""), y = norm(q.answer);
+  return ((p.type === "type" || p.type === "table") && !p.cs) ? x.toLowerCase() === y.toLowerCase() : x === y;
+}
+function plain(q) {
+  const p = SHEET.parts[q.pi];
+  if (p.type === "table") return q.side === "base" ? "____ → " + q.past : q.base + " → ____";
+  if (p.type === "match") return q.prompt + " → ?";
+  if (p.type === "tap") return q.text;
+  return ((q.pre || "") + " ____ " + (q.post || "")).replace(/<[^>]+>/g, "").trim();
+}
+
+function gradeQuiz() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
+  graded = true;
+  let score = 0; const items = []; const per = SHEET.parts.map(() => 0);
+  allQs.forEach(q => {
+    const p = SHEET.parts[q.pi];
+    const ok = isRight(q, ans[q.id]);
+    if (ok) { score += q.pts; per[q.pi] += q.pts; }
+    const row = $("#row_" + q.id); row.classList.add(ok ? "ok" : "bad", "locked");
+    row.querySelectorAll("input,select").forEach(i => i.disabled = true);
+    if (!ok) { const host = row.querySelector(".fbc") || row; host.appendChild(el("div", "fb", "✔ Correct answer: " + q.answer)); if (q.why) host.appendChild(el("div", "why", "<b>Why?</b> " + q.why)); }
+    items.push({ part: "Part " + ROMAN[q.pi] + ". " + p.title, q: plain(q), yours: ans[q.id] || "", correct: q.answer, ok: ok });
+  });
+  $("#scoreDisplay").textContent = score + " / 100";
+  $("#partsSum").innerHTML = SHEET.parts.map((p, i) => "<span>Part " + ROMAN[i] + ": " + per[i] + "/" + (p.pts * p.qs.length) + "</span>").join("");
+  const emoji = score >= 90 ? "🏆" : score >= 70 ? "🎉" : score >= 50 ? "💪" : "🌱";
+  $("#resultEmoji").textContent = emoji;
+  $("#resultMessage").textContent = score >= 90 ? "Excellent work!" : score >= 70 ? "Great job!" : score >= 50 ? "Good try! Keep practicing." : "Don't give up! Try again.";
+  $("#result-banner").style.display = "block";
+  $("#submitBtn").disabled = true;
+  $("#topLabel").textContent = "Your score"; $("#topFill").style.width = score + "%"; $("#topScore").textContent = score + " / 100";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  rain(score >= 90 ? ["🎉", "⭐", "🏆", "🌟"] : ["😭"]);
+  if (typeof Library !== "undefined") Library.send({ title: SHEET.sheetTitle, category: SHEET.category, score: score, total: 100, items: items });
+}
+function rain(list) {
+  const n = 45;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement("span"); s.className = "faller";
+    s.textContent = list[Math.floor(Math.random() * list.length)];
+    s.style.left = Math.random() * 100 + "vw"; s.style.fontSize = (22 + Math.random() * 26) + "px";
+    s.style.animationDuration = (2.6 + Math.random() * 2.6) + "s"; s.style.animationDelay = (Math.random() * 1.8) + "s";
+    document.body.appendChild(s); setTimeout(() => s.remove(), 8000);
+  }
+}
+function resetQuiz() { render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+render();
+</script>
+</body>
+</html>
