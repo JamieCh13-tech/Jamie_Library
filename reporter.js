@@ -115,3 +115,87 @@ if (document.readyState === "loading") {
     }
   });
 });
+
+/* ==========================================================
+   LEAVE GUARD: warns before a student leaves a quiz by accident
+   (Back to Library link, browser back button / swipe back, refresh, close tab).
+   Active only after the student starts answering and before the quiz is submitted.
+   ========================================================== */
+(function () {
+  let dirty = false;    // student has started answering and has not submitted yet
+  let locked = false;   // quiz was submitted: ignore clicks until Try Again
+  let extra = 0;        // history entries added by this guard
+  let backHref = "";
+
+  function isSubmit(t) { return t.closest("#submitBtn, .btn-submit, [onclick*='gradeQuiz']"); }
+  function isRetry(t) { return t.closest("#retryBtn, .btn-retry, [onclick*='resetQuiz']"); }
+  function isBack(t) { return t.closest("a.back-link, a[href='index.html']"); }
+  function markDirty() {
+    if (locked || dirty) return;
+    dirty = true;
+    if (extra === 0) { try { history.pushState({ guard: 1 }, "", location.href); extra++; } catch (e) {} }
+  }
+
+  // --- confirmation window ---
+  let box = null;
+  function build() {
+    box = document.createElement("div");
+    box.style.cssText = "position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.55);font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',Tahoma,sans-serif";
+    box.innerHTML =
+      '<div style="background:#fff;max-width:420px;width:100%;border-radius:20px;padding:26px 22px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35);border:4px solid #f59e0b">' +
+      '<div style="font-size:3rem;line-height:1">✋</div>' +
+      '<h2 style="margin:8px 0 6px;font-size:1.5rem;color:#b45309">Wait! Leave this quiz?</h2>' +
+      '<p style="margin:0 0 18px;font-size:1.1rem;color:#334155">Your answers are not submitted yet. If you leave now, you will have to start again.</p>' +
+      '<button type="button" id="lgStay" style="display:block;width:100%;padding:15px 14px;margin-bottom:12px;font-size:1.3rem;font-weight:bold;border:none;border-radius:16px;background:#0284c7;color:#fff;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 #075985">Stay and keep working</button>' +
+      '<button type="button" id="lgLeave" style="display:inline-block;width:auto;padding:5px 14px;font-size:.85rem;font-weight:normal;border:2px solid #cbd5e1;border-radius:10px;background:#fff;color:#94a3b8;cursor:pointer;font-family:inherit">Leave quiz</button>' +
+      '</div>';
+    document.body.appendChild(box);
+    box.querySelector("#lgStay").onclick = function () {
+      box.style.display = "none";
+      if (extra === 0) { try { history.pushState({ guard: 1 }, "", location.href); extra++; } catch (e) {} }
+    };
+    box.querySelector("#lgLeave").onclick = function () {
+      dirty = false; box.style.display = "none";
+      if (backHref) { location.href = backHref; } else { history.back(); }
+    };
+  }
+  function ask(href) {
+    if (!box) build();
+    backHref = href || "";
+    box.style.display = "flex";
+    box.querySelector("#lgStay").focus();
+  }
+
+  document.addEventListener("click", function (e) {
+    const t = e.target; if (!t || !t.closest) return;
+    if (isRetry(t)) { locked = false; dirty = false; return; }
+    if (box && box.contains(t)) return;
+    const a = isBack(t);
+    if (a) { if (dirty) { e.preventDefault(); ask(a.getAttribute("href")); } return; }
+    if (isSubmit(t)) return;
+    if (t.closest("#studentName")) return;
+    markDirty();
+  }, true);
+  ["input", "change"].forEach(function (evt) {
+    document.addEventListener(evt, function (e) {
+      const t = e.target;
+      if (!t || t.id === "studentName" || (box && box.contains(t))) return;
+      markDirty();
+    }, true);
+  });
+
+  // browser back button / swipe back
+  window.addEventListener("popstate", function () {
+    if (extra > 0) extra--;
+    if (dirty) { ask(""); }
+    else if (extra === 0) { history.back(); }
+  });
+  // refresh / close tab (the browser shows its own message)
+  window.addEventListener("beforeunload", function (e) {
+    if (dirty) { e.preventDefault(); e.returnValue = ""; return ""; }
+  });
+
+  // quiz submitted: no more warnings
+  const origSend = Library.send;
+  Library.send = function (info) { dirty = false; locked = true; return origSend.call(this, info); };
+})();
