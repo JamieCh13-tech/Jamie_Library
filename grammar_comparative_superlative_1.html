@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Comparative & Superlative Adjectives - Quiz 1</title>
+<style>
+:root{--primary:#0284c7;--primary-light:#e0f2fe;--bg:#f0f9ff;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#cbd5e1;--ok:#16a34a;--ok-bg:#dcfce7;--bad:#dc2626;--bad-bg:#fee2e2;--sel:#fde68a}
+*{box-sizing:border-box;font-family:'Comic Sans MS','Chalkboard SE','Segoe UI',Tahoma,Verdana,sans-serif}
+body{margin:0;padding:20px;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:900px;margin:0 auto}
+header{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;padding:24px 30px;border-radius:18px;box-shadow:0 8px 20px rgba(2,132,199,.2);margin-bottom:24px;text-align:center}
+header h1{margin:0 0 8px;font-size:1.9rem}
+header p{margin:0;font-size:1.05rem}
+.back-link{display:inline-block;margin-bottom:10px;color:#fff;font-weight:bold;text-decoration:none;opacity:.95}
+.back-link:hover{text-decoration:underline}
+.student-info{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.student-info label{font-weight:bold}
+.student-info input,.student-info select{padding:8px 12px;border-radius:10px;border:2px solid #bae6fd;font-size:1.05rem;min-width:220px}
+.section-card{background:var(--card);border-radius:16px;padding:22px 24px;margin-bottom:22px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.section-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-bottom:3px dashed var(--primary-light);padding-bottom:10px;margin-bottom:12px}
+.section-title{margin:0;font-size:1.35rem;color:#075985}
+.section-points{background:var(--primary-light);color:#075985;font-weight:bold;padding:4px 12px;border-radius:999px;font-size:.95rem}
+.instructions{margin:0 0 14px;color:var(--muted);font-size:1.05rem}
+.q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 10px;border-radius:12px;background:#f8fafc;margin-bottom:10px;font-size:1.25rem;border:2px solid transparent}
+.q.ok{background:var(--ok-bg);border-color:var(--ok)}
+.q.bad{background:var(--bad-bg);border-color:var(--bad)}
+.num{font-weight:bold;color:var(--primary);min-width:28px}
+.emoji{font-size:2rem;line-height:1}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{padding:8px 18px;border:3px solid var(--border);background:#fff;border-radius:12px;font-size:1.2rem;cursor:pointer}
+.opt:hover{border-color:var(--primary)}
+.opt.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+.q.locked .opt,.q.locked .tok,.q.locked .tile,.q.locked .slot{pointer-events:none}
+.sent{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.tok{padding:2px 8px;border-radius:10px;border:3px solid transparent;cursor:pointer}
+.tok:hover{background:#e0f2fe}
+.tok.sel{background:var(--sel);border-color:#f59e0b;font-weight:bold}
+select.m{padding:8px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.15rem;background:#fff}
+input.t{padding:6px 10px;border-radius:10px;border:3px solid var(--border);font-size:1.25rem;width:210px}
+.bank{display:flex;flex-wrap:wrap;gap:10px;padding:12px;background:#fffbeb;border:3px dashed #fbbf24;border-radius:14px;margin-bottom:14px}
+.tile{padding:6px 16px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-size:1.2rem;cursor:pointer;font-weight:bold}
+.tile.used{opacity:.3;text-decoration:line-through;pointer-events:none}
+.slot{display:inline-block;min-width:130px;padding:2px 10px;border-bottom:4px solid var(--primary);text-align:center;font-weight:bold;color:#075985;cursor:pointer;min-height:2rem}
+.slot.filled{background:var(--sel);border-radius:8px}
+.fb{flex-basis:100%;font-size:1.05rem;color:var(--bad);font-weight:bold;margin-left:40px}
+.submit-area{text-align:center;margin:10px 0 40px}
+.progress-text{font-weight:bold;color:var(--muted);margin-bottom:10px}
+button.go,button.retry{padding:12px 34px;font-size:1.2rem;font-weight:bold;border:none;border-radius:14px;cursor:pointer;color:#fff}
+button.go{background:var(--primary)} button.go:disabled{background:#cbd5e1;cursor:not-allowed}
+button.retry{background:#0d9488;margin-top:10px}
+#result-banner{display:none;margin:0 auto 18px;text-align:center;padding:20px;border-radius:16px;max-width:560px;background:#fef9c3;border:3px solid #facc15}
+.score-display{font-size:3rem;font-weight:bold}
+.parts-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;font-size:.95rem}
+.parts-sum span{background:#fff;border-radius:999px;padding:3px 12px;border:2px solid #e2e8f0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;background:#fff;border:3px solid var(--primary);border-radius:14px;padding:8px 16px;margin-bottom:18px;box-shadow:0 4px 12px rgba(2,132,199,.18);font-weight:bold}
+.topbar .bar{flex:1 1 160px;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0d9488);transition:width .25s}
+#topScore{font-size:1.25rem;color:#075985}
+.why{flex-basis:100%;margin:2px 0 0 40px;padding:8px 12px;background:#fff;border-left:5px solid #f59e0b;border-radius:8px;font-size:1rem;color:#334155}
+.faller{position:fixed;top:-60px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.faller{display:none}}
+@media (max-width:600px){body{padding:10px}.section-card{padding:16px 12px}.q{font-size:1.1rem}input.t{width:150px}}
+.tblwrap{overflow-x:auto}
+table.vt{width:100%;border-collapse:separate;border-spacing:0 8px}
+table.vt th{text-align:left;font-size:.9rem;color:#075985;background:var(--primary-light);padding:8px 10px}
+table.vt th:first-child{border-radius:10px 0 0 10px}table.vt th:last-child{border-radius:0 10px 10px 0}
+table.vt td{padding:8px 10px;background:#f8fafc;vertical-align:top;font-size:1.15rem}
+table.vt td:first-child{border-radius:12px 0 0 12px}table.vt td:last-child{border-radius:0 12px 12px 0}
+table.vt .given{display:inline-block;font-weight:bold;padding:6px 12px;background:#fff;border:3px solid #e2e8f0;border-radius:10px}
+table.vt .cl{display:flex;align-items:center;gap:6px}
+table.vt .lab{font-weight:bold;color:#64748b;font-size:.95rem}
+table.vt input.t{width:100%;min-width:90px;max-width:180px;font-size:1.05rem}
+table.vt td.cellq.ok{background:var(--ok-bg)}table.vt td.cellq.bad{background:var(--bad-bg)}
+table.vt .fb,table.vt .why{margin-left:0;margin-top:6px;font-size:.9rem}
+.chip{display:inline-block;padding:6px 16px;border-radius:12px;background:#fff;border:3px solid #f59e0b;font-size:1.15rem;font-weight:bold}
+.chip.used{opacity:.3;text-decoration:line-through}
+.email{background:#fffbeb;border:3px solid #fde68a;border-radius:14px;padding:16px 18px;font-size:1.2rem;line-height:2.6;margin-bottom:12px}
+.cb{display:inline-flex;align-items:baseline;gap:4px;margin:0 4px;white-space:nowrap}
+.cb b{color:var(--primary);font-size:.95rem}
+.cb input{width:190px;max-width:100%;padding:3px 10px;font-size:1.1rem;border:3px solid var(--border);border-radius:10px}
+.cb.ok input{background:var(--ok-bg);border-color:var(--ok)}.cb.bad input{background:var(--bad-bg);border-color:var(--bad)}
+.clfb .fb,.clfb .why{margin-left:0;margin-top:6px}
+select.m{max-width:100%}
+@media (max-width:600px){table.vt td,table.vt th{padding:6px 4px}table.vt input.t{min-width:70px}.cb input{width:150px}}
+</style>
+<script src="reporter.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <a href="index.html" class="back-link">← Back to Library</a>
+  <h1>Comparative &amp; Superlative Adjectives</h1>
+  <p>Comparatives, Superlatives &amp; Irregular Forms &bull; Total Score: 100 Points</p>
+  <div class="student-info">
+    <label>Name: <input type="text" id="studentName" placeholder="Enter name" /></label>
+    <p id="nameError" hidden style="width:100%;margin:0;padding:6px 10px;background:#dc2626;color:#fff;border-radius:8px;font-weight:bold;">Please select your name first, then press Submit again.</p>
+  </div>
+</header>
+<div id="result-banner">
+  <div style="font-size:3rem" id="resultEmoji"></div>
+  <div class="score-display" id="scoreDisplay"></div>
+  <div class="parts-sum" id="partsSum"></div>
+  <p id="resultMessage" style="font-size:1.2rem;font-weight:bold;margin:6px 0"></p>
+  <p id="sendStatus" style="font-weight:bold;color:#0369a1;margin:0"></p>
+  <button class="retry" id="retryBtn" onclick="resetQuiz()">Try Again</button>
+</div>
+<div class="topbar" id="topbar"><span id="topLabel">Progress</span><div class="bar"><i id="topFill"></i></div><span id="topScore"></span></div>
+<div id="parts"></div>
+<div class="submit-area">
+  <div class="progress-text" id="progressText"></div>
+  <button class="go" id="submitBtn" disabled onclick="gradeQuiz()">Submit Quiz</button>
+</div>
+</div>
+<script>
+const SHEET = {"sheetTitle": "Comparative & Superlative Adjectives - Quiz 1", "category": "Grammar / Adjectives & Adverbs", "parts": [{"title": "Comparative & Superlative Table", "type": "table2", "pts": 1, "inst": "Write the <b>comparative</b> (before <b>than</b>) and the <b>superlative</b> (after <b>the</b>) for each word.", "qs": [{"id": "d1_1c", "base": "thin", "kind": "comp", "answer": "thinner", "acc": ["thinner"], "why": "One short vowel before the last letter: double the n, then add -er / -est."}, {"id": "d1_1s", "base": "thin", "kind": "sup", "answer": "thinnest", "acc": ["thinnest"], "why": "One short vowel before the last letter: double the n, then add -er / -est."}, {"id": "d1_2c", "base": "busy", "kind": "comp", "answer": "busier", "acc": ["busier"], "why": "Consonant + y: change y to i, then add -er / -est."}, {"id": "d1_2s", "base": "busy", "kind": "sup", "answer": "busiest", "acc": ["busiest"], "why": "Consonant + y: change y to i, then add -er / -est."}, {"id": "d1_3c", "base": "brave", "kind": "comp", "answer": "braver", "acc": ["braver"], "why": "The word ends with e: just add -r / -st."}, {"id": "d1_3s", "base": "brave", "kind": "sup", "answer": "bravest", "acc": ["bravest"], "why": "The word ends with e: just add -r / -st."}, {"id": "d1_4c", "base": "good", "kind": "comp", "answer": "better", "acc": ["better"], "why": "Irregular: good changes to better and best."}, {"id": "d1_4s", "base": "good", "kind": "sup", "answer": "best", "acc": ["best"], "why": "Irregular: good changes to better and best."}, {"id": "d1_5c", "base": "bad", "kind": "comp", "answer": "worse", "acc": ["worse"], "why": "Irregular: bad changes to worse and worst."}, {"id": "d1_5s", "base": "bad", "kind": "sup", "answer": "worst", "acc": ["worst"], "why": "Irregular: bad changes to worse and worst."}, {"id": "d1_6c", "base": "expensive", "kind": "comp", "answer": "more expensive", "acc": ["more expensive"], "why": "Long adjective: use more / most."}, {"id": "d1_6s", "base": "expensive", "kind": "sup", "answer": "most expensive", "acc": ["most expensive"], "why": "Long adjective: use more / most."}, {"id": "d1_7c", "base": "many", "kind": "comp", "answer": "more", "acc": ["more"], "why": "Irregular: many changes to more and most."}, {"id": "d1_7s", "base": "many", "kind": "sup", "answer": "most", "acc": ["most"], "why": "Irregular: many changes to more and most."}, {"id": "d1_8c", "base": "far", "kind": "comp", "answer": "farther (or further)", "acc": ["farther", "further"], "why": "Irregular: far changes to farther / further and farthest / furthest."}, {"id": "d1_8s", "base": "far", "kind": "sup", "answer": "farthest (or furthest)", "acc": ["farthest", "furthest"], "why": "Irregular: far changes to farther / further and farthest / furthest."}, {"id": "d1_9c", "base": "heavy", "kind": "comp", "answer": "heavier", "acc": ["heavier"], "why": "Consonant + y: change y to i, then add -er / -est."}, {"id": "d1_9s", "base": "heavy", "kind": "sup", "answer": "heaviest", "acc": ["heaviest"], "why": "Consonant + y: change y to i, then add -er / -est."}, {"id": "d1_10c", "base": "small", "kind": "comp", "answer": "smaller", "acc": ["smaller"], "why": "Short adjective: just add -er / -est."}, {"id": "d1_10s", "base": "small", "kind": "sup", "answer": "smallest", "acc": ["smallest"], "why": "Short adjective: just add -er / -est."}]}, {"title": "Two-Choice", "type": "choice", "pts": 3, "inst": "Click the phrase that best completes each sentence.", "qs": [{"id": "d2_1", "pre": "A rabbit runs", "opts": ["faster than", "the fastest"], "post": "a turtle in the race.", "answer": "faster than", "why": "We compare two animals, a rabbit and a turtle. Use the comparative: faster than."}, {"id": "d2_2", "pre": "This is", "opts": ["taller than", "the tallest"], "post": "tree in our park.", "answer": "the tallest", "why": "In our park means all the trees there. Use the superlative: the tallest."}, {"id": "d2_3", "pre": "Today's spelling quiz was", "opts": ["easier than", "the easiest"], "post": "yesterday's test.", "answer": "easier than", "why": "We compare two things, today's quiz and yesterday's test. Use easier than."}, {"id": "d2_4", "pre": "The elephant is", "opts": ["bigger than", "the biggest"], "post": "animal at the zoo.", "answer": "the biggest", "why": "At the zoo means all the animals there. Use the superlative: the biggest."}]}, {"title": "Word Box", "type": "bank", "pts": 4, "inst": "Click a phrase from the box to fill each blank. Each phrase is used once. Click a filled blank to take the phrase back.", "tiles": ["the politest", "more useful than", "noisier than", "the worst"], "qs": [{"id": "d3_1", "pre": "Leo always says please and thank you. He is", "post": "boy in our club.", "answer": "the politest", "why": "In our club means all the boys. Use the superlative: the politest."}, {"id": "d3_2", "pre": "On a hike, a water bottle is", "post": "a heavy book.", "answer": "more useful than", "why": "We compare two things. Use more useful than."}, {"id": "d3_3", "pre": "The playground is loud at lunch time. It is much", "post": "the quiet library.", "answer": "noisier than", "why": "Noisy ends with consonant + y, so it becomes noisier. We compare two places, so add than."}, {"id": "d3_4", "pre": "Last night's rain was bad. It was", "post": "rain of the whole year.", "answer": "the worst", "why": "Of the whole year means all the rain. Bad is irregular: the worst."}]}, {"title": "Match the Ending", "type": "match", "pts": 3, "inst": "Match each beginning with its ending. Each ending is used once.", "options": ["than a car for short trips.", "mountains in Japan.", "toy in my room.", "student in our class."], "shuf": true, "uniq": true, "qs": [{"id": "d4_1", "prompt": "A bike is usually cheaper", "answer": "than a car for short trips.", "why": "Cheaper is followed by than and the second thing (a car)."}, {"id": "d4_2", "prompt": "Mount Fuji is one of the most famous", "answer": "mountains in Japan.", "why": "One of the most famous is followed by a plural noun: mountains."}, {"id": "d4_3", "prompt": "My new robot is the funniest", "answer": "toy in my room.", "why": "The funniest points to one thing in a group: toy in my room."}, {"id": "d4_4", "prompt": "Amy is the kindest", "answer": "student in our class.", "why": "The kindest describes one person in a group: student in our class."}]}, {"title": "Fix the Mistake", "type": "choice", "pts": 4, "inst": "Each sentence has one mistake. Click the best correction.", "qs": [{"id": "d5_1", "pre": "This comic book is <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">more funnier</u> than the school magazine.", "opts": ["funnier", "the funniest", "funnyer", "most funny"], "post": "", "answer": "funnier", "why": "Never use more and -er together. Change funny to funnier."}, {"id": "d5_2", "pre": "Chloe is <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">the most tallest</u> girl on the basketball team.", "opts": ["the tallest", "taller than", "the taller", "most tall"], "post": "", "answer": "the tallest", "why": "Never use most and -est together. Use the tallest."}, {"id": "d5_3", "pre": "My soup is <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">hotter then</u> yours, so please be careful.", "opts": ["hotter than", "hoter than", "the hottest", "more hotter than"], "post": "", "answer": "hotter than", "why": "Use than (with an a) to compare. Also double the t in hotter."}, {"id": "d5_4", "pre": "That was <u style=\"color:#dc2626;font-weight:bold;text-decoration:underline wavy #dc2626\">the baddest</u> joke I have heard all week.", "opts": ["the worst", "the worse", "badder than", "most bad"], "post": "", "answer": "the worst", "why": "Bad is irregular. Its superlative is the worst, not the baddest."}]}, {"title": "Night Market Story", "type": "cloze", "pts": 4, "inst": "Change each word in the box into the correct form. Type it in the blank. Remember to add <b>than</b> or <b>the</b>.", "ref": [{"root": "early", "forms": ["early", "earlier", "earliest"]}, {"root": "crowded", "forms": ["crowded"]}, {"root": "delicious", "forms": ["delicious"]}, {"root": "heavy", "forms": ["heavy", "heavier", "heaviest"]}, {"root": "tall", "forms": ["tall", "taller", "tallest"]}, {"root": "quiet", "forms": ["quiet", "quieter", "quietest"]}], "text": "Last Saturday, my family visited the night market. We arrived {1} my aunt's family, so we found a parking spot right away. By seven o'clock, the street was much {2} it was in the afternoon! First, we bought a big grilled squid. It was {3} snack I had ever tasted. Next, my brother won a big bear at a ring-toss game. Carrying that huge bear was {4} carrying my school bag! On our way home, we walked past a new building. It is {5} building in our city. Finally, we got back to our street, which was {6} place after a busy night.", "qs": [{"id": "d6_1", "root": "early", "answer": "earlier than", "acc": ["earlier than"], "ctx": "We arrived earlier than my aunt's family.", "why": "Early ends with consonant + y: earlier. We compare two families, so add than."}, {"id": "d6_2", "root": "crowded", "answer": "more crowded than", "acc": ["more crowded than"], "ctx": "By seven o'clock, the street was much more crowded than it was in the afternoon.", "why": "Crowded is a long adjective: more crowded. We compare the street at two times, so add than."}, {"id": "d6_3", "root": "delicious", "answer": "the most delicious", "acc": ["the most delicious"], "ctx": "It was the most delicious snack I had ever tasted.", "why": "I had ever tasted shows the best of all. Delicious is long: the most delicious."}, {"id": "d6_4", "root": "heavy", "answer": "heavier than", "acc": ["heavier than"], "ctx": "Carrying that huge bear was heavier than carrying my school bag!", "why": "Heavy ends with consonant + y: heavier. We compare two things, so add than."}, {"id": "d6_5", "root": "tall", "answer": "the tallest", "acc": ["the tallest"], "ctx": "It is the tallest building in our city.", "why": "In our city means all the buildings. Use the superlative: the tallest."}, {"id": "d6_6", "root": "quiet", "answer": "the quietest", "acc": ["the quietest"], "ctx": "Our street was the quietest place after a busy night.", "why": "After a busy night, it was the most quiet of all. Use the superlative: the quietest."}]}]};
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII"];
+let ans = {}, graded = false;
+const $ = (s, r) => (r || document).querySelector(s);
+const norm = (s) => String(s).trim().replace(/\s+/g, " ");
+const allQs = [];
+SHEET.parts.forEach((p, pi) => p.qs.forEach(q => { q.pi = pi; q.pts = p.pts; allQs.push(q); }));
+
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+function shuf(a) { const c = a.slice(); for (let k = c.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [c[k], c[j]] = [c[j], c[k]]; } return c; }
+function shufNot(a, bad) { let c, t = 0; do { c = shuf(a); t++; } while (a.length > 1 && c.join("|") === bad.join("|") && t < 60); return c; }
+function uniq(pi) {
+  const sels = [...document.querySelectorAll('select[data-pi="' + pi + '"]')];
+  const used = sels.map(s => s.value).filter(Boolean);
+  sels.forEach(s => [...s.options].forEach(o => { if (o.value) o.disabled = used.indexOf(o.value) > -1 && s.value !== o.value; }));
+}
+function render() {
+  ans = {}; graded = false;
+  const root = $("#parts"); root.innerHTML = "";
+  let n = 0;
+  SHEET.parts.forEach((p, pi) => {
+    const card = el("div", "section-card");
+    card.innerHTML = '<div class="section-header"><h2 class="section-title">Part ' + ROMAN[pi] + '. ' + p.title + '</h2><span class="section-points">' + (p.pts * p.qs.length) + ' Points (' + p.pts + ' pts each)</span></div><p class="instructions">' + p.inst + '</p>';
+    let bank = null;
+    if (p.shuf) p._opts = shufNot(p.options, p.qs.map(q => q.answer));
+    if (p.type === "table2") {
+      const rows = []; for (let k = 0; k < p.qs.length; k += 2) rows.push([p.qs[k], p.qs[k + 1]]);
+      const rs = shuf(rows);
+      const wrap = el("div", "tblwrap"); const tb = el("table", "vt");
+      tb.innerHTML = '<thead><tr><th>#</th><th>Base Adjective</th><th>Comparative</th><th>Superlative</th></tr></thead>';
+      const body = el("tbody");
+      rs.forEach((pr, ri) => {
+        const tr = el("tr", "vrow");
+        tr.appendChild(el("td", "num", (ri + 1) + "."));
+        tr.appendChild(el("td", "", "<span class='given'>" + pr[0].base + "</span>"));
+        pr.forEach(q => {
+          n++; q.n = n;
+          const td = el("td", "cellq"); td.id = "row_" + q.id;
+          const inner = el("div", "fbc");
+          const line = el("div", "cl");
+          if (q.kind === "sup") line.appendChild(el("span", "lab", "the"));
+          const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+          i.placeholder = q.kind === "comp" ? "comparative" : "superlative";
+          i.oninput = () => { ans[q.id] = i.value; update(); };
+          line.appendChild(i);
+          if (q.kind === "comp") line.appendChild(el("span", "lab", "than"));
+          inner.appendChild(line); td.appendChild(inner); tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+      tb.appendChild(body); wrap.appendChild(tb); card.appendChild(wrap); root.appendChild(card);
+      return;
+    }
+    if (p.type === "cloze") {
+      const ref = el("div", "bank"); p._ref = shufNot(p.ref.map(r => r.root), p.qs.map(q => q.root));
+      p._ref.forEach(r => { ref.appendChild(el("span", "chip", r)).dataset.root = r; });
+      card.appendChild(ref);
+      const box = el("div", "email");
+      box.innerHTML = p.text.replace(/\{(\d+)\}/g, (m, k) => { const q = p.qs[k - 1]; return '<span class="cb" id="row_' + q.id + '"><b>(' + k + ')</b><input id="cl_' + q.id + '" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"></span>'; });
+      const refresh = () => {
+        const words = []; p.qs.forEach(q => norm(ans[q.id] || "").toLowerCase().split(" ").forEach(w => words.push(w)));
+        ref.querySelectorAll(".chip").forEach(c => { const r = p.ref.find(x => x.root === c.dataset.root); c.classList.toggle("used", r.forms.some(f => words.indexOf(f) > -1)); });
+      };
+      p.qs.forEach((q, qi) => { n++; q.n = n; q.num = qi + 1; const i = box.querySelector("#cl_" + q.id); i.oninput = () => { ans[q.id] = i.value; refresh(); update(); }; });
+      card.appendChild(box);
+      const fbs = el("div", "clfb"); fbs.id = "clfb" + pi; card.appendChild(fbs);
+      root.appendChild(card);
+      return;
+    }
+    if (p.type === "bank") {
+      const want = p.qs.map(q => q.answer).join("|");
+      let tl = p.tiles.slice(), tries = 0;
+      do { for (let k = tl.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [tl[k], tl[j]] = [tl[j], tl[k]]; } tries++; } while (tl.join("|") === want && tries < 50);
+      p._tiles = tl;
+      bank = el("div", "bank");
+      p._tiles.forEach((t, ti) => {
+        const b = el("button", "tile", t); b.type = "button"; b.dataset.pi = pi; b.dataset.ti = ti;
+        b.onclick = () => pickTile(pi, ti);
+        bank.appendChild(b);
+      });
+      card.appendChild(bank);
+    }
+    p.qs.forEach(q => {
+      n++; q.n = n;
+      const row = el("div", "q"); row.id = "row_" + q.id;
+      row.appendChild(el("span", "num", n + "."));
+      if (q.emoji) row.appendChild(el("span", "emoji", q.emoji));
+      if (p.type === "match") {
+        row.appendChild(el("b", "", q.prompt));
+        const s = el("select", "m"); s.dataset.pi = pi; s.innerHTML = '<option value="">-- choose --</option>' + (p._opts || p.options).map(o => '<option>' + o + '</option>').join("");
+        s.onchange = () => { ans[q.id] = s.value; if (p.uniq) uniq(pi); update(); };
+        row.appendChild(s);
+      } else if (p.type === "choice") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const w = el("div", "opts");
+        shuf(q.opts).forEach(o => { const b = el("button", "opt", o); b.type = "button"; b.onclick = () => { ans[q.id] = o; w.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b)); update(); }; w.appendChild(b); });
+        row.appendChild(w);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "tap") {
+        const w = el("div", "sent");
+        q.text.split(" ").forEach(tok => {
+          const word = tok.replace(/[.,!?]/g, "");
+          const t = el("span", "tok", tok); t.dataset.w = word;
+          t.onclick = () => { ans[q.id] = word; w.querySelectorAll(".tok").forEach(x => x.classList.toggle("sel", x === t)); update(); };
+          w.appendChild(t);
+        });
+        row.appendChild(w);
+      } else if (p.type === "type") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const i = el("input", "t"); i.type = "text"; i.autocomplete = "off"; i.autocapitalize = "off"; i.spellcheck = false;
+        i.oninput = () => { ans[q.id] = i.value; update(); };
+        row.appendChild(i);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      } else if (p.type === "bank") {
+        if (q.pre) row.appendChild(el("span", "", q.pre));
+        const sl = el("span", "slot", ""); sl.id = "slot_" + q.id; sl.onclick = () => clearSlot(pi, q.id);
+        row.appendChild(sl);
+        if (q.post) row.appendChild(el("span", "", q.post));
+      }
+      card.appendChild(row);
+    });
+    root.appendChild(card);
+  });
+  $("#result-banner").style.display = "none"; $("#sendStatus").textContent = ""; $("#topScore").textContent = ""; $("#topLabel").textContent = "Progress";
+  update();
+}
+
+function pickTile(pi, ti) {
+  if (graded) return;
+  const p = SHEET.parts[pi];
+  const empty = p.qs.find(q => !ans[q.id]);
+  if (!empty) return;
+  ans[empty.id] = p._tiles[ti]; empty._tile = ti;
+  refreshBank(pi); update();
+}
+function clearSlot(pi, id) {
+  if (graded) return;
+  delete ans[id]; refreshBank(pi); update();
+}
+function refreshBank(pi) {
+  const p = SHEET.parts[pi];
+  const usedTiles = {};
+  p.qs.forEach(q => { const s = $("#slot_" + q.id); s.textContent = ans[q.id] || ""; s.classList.toggle("filled", !!ans[q.id]); });
+  const used = p.qs.map(q => ans[q.id]).filter(Boolean);
+  document.querySelectorAll('.tile[data-pi="' + pi + '"]').forEach(b => {
+    const k = used.indexOf(b.textContent);
+    b.classList.toggle("used", k > -1);
+  });
+}
+
+function update() {
+  const done = allQs.filter(q => norm(ans[q.id] || "") !== "").length;
+  $("#progressText").textContent = "Completed: " + done + " / " + allQs.length + " questions";
+  if (!graded) { $("#topFill").style.width = Math.round(done / allQs.length * 100) + "%"; $("#topLabel").textContent = "Progress: " + done + " / " + allQs.length; }
+  $("#submitBtn").disabled = graded || done < allQs.length;
+}
+
+function isRight(q, a) {
+  const p = SHEET.parts[q.pi];
+  const x = norm(a || ""), y = norm(q.answer);
+  if (q.acc) return q.acc.some(z => norm(z).toLowerCase() === x.toLowerCase());
+  return (p.type === "type" && !p.cs) ? x.toLowerCase() === y.toLowerCase() : x === y;
+}
+function plain(q) {
+  const p = SHEET.parts[q.pi];
+  if (p.type === "table2") return q.base + " → " + (q.kind === "comp" ? "comparative (____ than)" : "superlative (the ____)");
+  if (p.type === "cloze") return q.ctx;
+  if (p.type === "match") return q.prompt + " → ?";
+  if (p.type === "tap") return q.text;
+  return ((q.pre || "") + " ____ " + (q.post || "")).replace(/<[^>]+>/g, "").trim();
+}
+
+function gradeQuiz() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
+  graded = true;
+  let score = 0; const items = []; const per = SHEET.parts.map(() => 0);
+  allQs.forEach(q => {
+    const p = SHEET.parts[q.pi];
+    const ok = isRight(q, ans[q.id]);
+    if (ok) { score += q.pts; per[q.pi] += q.pts; }
+    const row = $("#row_" + q.id); row.classList.add(ok ? "ok" : "bad", "locked");
+    row.querySelectorAll("input,select").forEach(i => i.disabled = true);
+    if (!ok) { const host = p.type === "cloze" ? $("#clfb" + q.pi) : (row.querySelector(".fbc") || row); host.appendChild(el("div", "fb", (p.type === "cloze" ? "Blank (" + q.num + ") " : "") + "✔ Correct answer: " + q.answer)); if (q.why) host.appendChild(el("div", "why", "<b>Why?</b> " + q.why)); }
+    items.push({ part: "Part " + ROMAN[q.pi] + ". " + p.title, q: plain(q), yours: ans[q.id] || "", correct: q.answer, ok: ok });
+  });
+  $("#scoreDisplay").textContent = score + " / 100";
+  $("#partsSum").innerHTML = SHEET.parts.map((p, i) => "<span>Part " + ROMAN[i] + ": " + per[i] + "/" + (p.pts * p.qs.length) + "</span>").join("");
+  const emoji = score >= 90 ? "🏆" : score >= 70 ? "🎉" : score >= 50 ? "💪" : "🌱";
+  $("#resultEmoji").textContent = emoji;
+  $("#resultMessage").textContent = score >= 90 ? "Excellent work!" : score >= 70 ? "Great job!" : score >= 50 ? "Good try! Keep practicing." : "Don't give up! Try again.";
+  $("#result-banner").style.display = "block";
+  $("#submitBtn").disabled = true;
+  $("#topLabel").textContent = "Your score"; $("#topFill").style.width = score + "%"; $("#topScore").textContent = score + " / 100";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  rain(score >= 90 ? ["🎉", "⭐", "🏆", "🌟"] : ["😭"]);
+  if (typeof Library !== "undefined") Library.send({ title: SHEET.sheetTitle, category: SHEET.category, score: score, total: 100, items: items });
+}
+function rain(list) {
+  const n = 45;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement("span"); s.className = "faller";
+    s.textContent = list[Math.floor(Math.random() * list.length)];
+    s.style.left = Math.random() * 100 + "vw"; s.style.fontSize = (22 + Math.random() * 26) + "px";
+    s.style.animationDuration = (2.6 + Math.random() * 2.6) + "s"; s.style.animationDelay = (Math.random() * 1.8) + "s";
+    document.body.appendChild(s); setTimeout(() => s.remove(), 8000);
+  }
+}
+function resetQuiz() { render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+render();
+</script>
+</body>
+</html>
