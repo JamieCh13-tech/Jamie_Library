@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sailing to America - Quiz 2</title>
+<style>
+  :root {
+    --primary: #1f6f8b;
+    --secondary: #2b4c7e;
+    --accent: #f39c12;
+    --bg: #f2f8f9;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --border: #dcdde1;
+    --success: #27ae60;
+    --danger: #e74c3c;
+  }
+
+  * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+  body { background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
+
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white; padding: 2rem 1rem; text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  header h1 { margin: 0 0 0.5rem 0; font-size: 2rem; letter-spacing: 0.5px; }
+  header p { margin: 0; opacity: 0.9; font-size: 1.05rem; }
+
+  .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem 4rem 1rem; }
+
+  .progress-bar-container {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
+    padding: 0.8rem 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--primary);
+  }
+  .progress-info { font-weight: bold; color: var(--primary); }
+  #topScoreTag.scored { font-size: 1.15rem; }
+  #topScoreTag.high { color: var(--success); }
+  #topScoreTag.low { color: var(--danger); }
+  .progress-track { flex: 1; height: 12px; background: #e0e0e0; border-radius: 6px; margin: 0 1.2rem; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #27ae60, #2ecc71); transition: width 0.3s ease; }
+
+  .section-card {
+    background: var(--card-bg); border-radius: 12px; padding: 1.8rem; margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-top: 5px solid var(--primary);
+  }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    border-bottom: 2px solid #f0f0f0; padding-bottom: 0.8rem; margin-bottom: 1.2rem;
+  }
+  .section-header h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+  .badge { background: var(--primary); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
+
+  .word-bank {
+    background: #eef5f9; border: 2px dashed #5d9cec; border-radius: 10px;
+    padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center;
+  }
+  .word-chip {
+    background: white; border: 1px solid #b8d4e8; padding: 0.4rem 0.9rem; border-radius: 20px;
+    font-weight: 600; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    user-select: none; transition: all 0.25s ease;
+  }
+  .word-chip.used {
+    background: #fdedec; border-color: #e74c3c; color: #e74c3c; font-weight: 700;
+    text-decoration: line-through; box-shadow: none;
+  }
+  .affix-chip { font-size: 1.1rem; }
+
+  .question-item {
+    padding: 1rem 1.2rem; margin-bottom: 1rem; border-radius: 8px;
+    background: #fafafa; border: 1px solid #eee; transition: all 0.2s ease;
+  }
+  .question-item:hover { border-color: #d0d7de; }
+  .question-text { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.7rem; }
+
+  input[type="text"].cloze-input,
+  input[type="text"].affix-input {
+    border: none; border-bottom: 2px solid var(--primary); background: #fff;
+    padding: 0.3rem 0.6rem; font-size: 1.05rem; font-weight: bold; color: #2c3e50;
+    text-align: center; border-radius: 4px 4px 0 0; outline: none;
+  }
+  input[type="text"].cloze-input { width: 170px; }
+  input[type="text"].affix-input { width: 70px; padding: 0.3rem 0.2rem; }
+  input[type="text"].cloze-input:focus,
+  input[type="text"].affix-input:focus { background: #eef7fc; border-bottom-color: var(--accent); }
+  .affix-word { white-space: nowrap; color: var(--secondary); }
+
+  select.tf-select {
+    padding: 0.45rem 1rem; font-size: 1rem; font-weight: bold; border: 2px solid var(--primary);
+    border-radius: 6px; background: white; color: var(--primary); cursor: pointer; min-width: 130px;
+  }
+
+  .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+  .option-label {
+    display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 0.9rem;
+    background: white; border: 1px solid #dcdde1; border-radius: 6px; cursor: pointer; transition: background 0.15s;
+  }
+  .option-label:hover { background: #f0f6fc; border-color: #7fb3d5; }
+  .option-label input[type="radio"] { margin-top: 0.3rem; transform: scale(1.15); cursor: pointer; }
+
+  .type-tag {
+    display: inline-block; background: #e8eef5; color: var(--secondary); font-size: 0.8rem;
+    padding: 2px 8px; border-radius: 4px; margin-bottom: 4px;
+  }
+
+  .feedback { margin-top: 0.8rem; padding: 0.7rem 1rem; border-radius: 6px; font-size: 0.95rem; display: none; }
+  .feedback.correct { display: block; background: #e8f8f5; border-left: 4px solid var(--success); color: #1e8449; }
+  .feedback.wrong { display: block; background: #fdedec; border-left: 4px solid var(--danger); color: #b03a2e; }
+  .why-box { margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px dashed rgba(0,0,0,0.15); color: #34495e; }
+  .why-box strong { color: #b03a2e; }
+
+  .controls { text-align: center; margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  button {
+    padding: 0.9rem 2.2rem; font-size: 1.15rem; font-weight: bold; border: none; border-radius: 30px;
+    cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+  #submitBtn { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+  #submitBtn:disabled { background: #bdc3c7; cursor: not-allowed; box-shadow: none; }
+  #submitBtn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(39, 174, 96, 0.35); }
+  #resetBtn { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; }
+  #resetBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(243, 156, 18, 0.35); }
+  #warningMsg { color: var(--danger); font-weight: bold; font-size: 1rem; }
+
+  #resultBanner {
+    display: none; background: white; border-radius: 16px; padding: 2rem; margin: 0 0 2rem 0;
+    text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.15); border: 3px solid var(--primary);
+    animation: popIn 0.4s ease;
+  }
+  @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .score-display { font-size: 3.2rem; font-weight: 900; margin: 0.5rem 0; }
+  .score-high { color: #27ae60; }
+  .score-low { color: #e74c3c; }
+
+  #emojiLayer {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 9999; overflow: hidden;
+  }
+  .falling-emoji { position: absolute; top: -50px; font-size: 2.2rem; animation: fall linear forwards; }
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+  }
+
+  .back-link { display: inline-block; margin-bottom: 0.6rem; color: #fff; opacity: 0.9; text-decoration: none; font-weight: 600; }
+  .back-link:hover { text-decoration: underline; }
+
+  .name-card {
+    background: var(--card-bg); border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-top: 5px solid var(--accent);
+  }
+  .name-card label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; }
+  .name-card input,
+  .name-card select {
+    width: 100%; max-width: 320px; padding: 0.5rem 0.8rem; font-size: 1.1rem; font-weight: bold;
+    border: 2px solid var(--border); border-radius: 8px; outline: none;
+  }
+  .name-card input:focus,
+  .name-card select:focus { border-color: var(--primary); }
+  .name-error { margin: 0.6rem 0 0; color: var(--danger); font-weight: bold; }
+
+  /* ---------- Quiz 2 extras ---------- */
+  .part-tip { font-size: 0.95rem; color: #555; }
+  .problem-text { margin-bottom: 0.5rem; }
+  select.match-select {
+    padding: 0.45rem 0.8rem; font-size: 1rem; font-weight: bold; border: 2px solid var(--primary);
+    border-radius: 6px; background: white; color: var(--primary); cursor: pointer; width: 100%; max-width: 560px;
+  }
+  .clue-word { cursor: pointer; padding: 0 1px; margin: 0 -1px; border: 2px solid transparent; border-radius: 14px; transition: background 0.15s; }
+  .clue-word:hover { background: #eef5f9; }
+  .clue-word.picked { border-color: #6c5ce7; background: #f1eefe; color: #4834d4; }
+  .locked .clue-word { cursor: default; }
+  .locked .clue-word:hover { background: transparent; }
+  .clue-word.picked:hover { background: #f1eefe; }
+  .clue-status { font-size: 0.9rem; color: #6c5ce7; font-weight: 600; }
+  .pair-text { font-weight: 600; margin-bottom: 0.5rem; }
+  .pair-text span { display: block; }
+  .tile-line {
+    min-height: 52px; background: #fff; border: 2px dashed var(--primary); border-radius: 8px;
+    display: flex; flex-wrap: wrap; gap: 0.45rem; padding: 0.5rem; margin-bottom: 0.6rem; align-items: center;
+  }
+  .tile-line:empty::before { content: "Tap the word cards to build your sentence here."; color: #999; font-size: 0.95rem; }
+  .tile-bank { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .tile {
+    display: inline-block; padding: 0.35rem 0.8rem; background: #eef5f9; border: 2px solid #b8d4e8; border-radius: 10px;
+    font-weight: 700; font-size: 1.05rem; color: var(--secondary); cursor: pointer; user-select: none;
+  }
+  .tile:hover { background: #dcecf7; }
+  .tile.conj { background: #fff4d6; border-color: #f39c12; color: #b9770e; }
+  .tile-line .tile { background: #fff; }
+  .locked .tile { cursor: default; }
+</style>
+<script src="reporter.js"></script>
+</head>
+<body>
+
+<div id="emojiLayer"></div>
+
+<header>
+  <a class="back-link" href="library.html#reading">← Back to Library</a>
+  <h1>Sailing to America — Quiz 2</h1>
+  <p>8 Parts • 38 Questions • Total: 100 Points</p>
+</header>
+
+<div class="progress-bar-container">
+  <div class="progress-info">Completed: <span id="answeredCount">0</span> / 38</div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-info" id="topScoreTag">Total: 100 pts</div>
+</div>
+
+<div class="container">
+  <div id="resultBanner">
+    <div id="resultEmoji" style="font-size: 3.5rem;"></div>
+    <h2 id="resultTitle" style="margin: 0.3rem 0;"></h2>
+    <div class="score-display" id="finalScoreText"></div>
+    <p id="resultSubtext" style="font-size: 1.1rem; color: #555;"></p>
+    <p id="sendStatus" style="font-weight: bold; color: #1f6f8b;"></p>
+  </div>
+
+  <div class="name-card">
+    <label for="studentName">Your name</label>
+    <input id="studentName" type="text" maxlength="30" autocomplete="off" placeholder="Type your name here">
+    <p id="nameError" class="name-error" hidden>Please select your name first, then press Submit again.</p>
+  </div>
+
+  <!-- Part A -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part A. Problem and Solution</h2>
+      <span class="badge">4 Questions × 2 pts = 8 pts</span>
+    </div>
+    <p>Read each <strong>Problem</strong> from <em>Sailing to America</em>. Choose the <strong>Solution</strong> that matches it.</p>
+    <div id="secAContainer"></div>
+  </div>
+
+  <!-- Part B -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part B. Vocabulary and Context Clues</h2>
+      <span class="badge">8 Questions × (2 + 2) pts = 32 pts</span>
+    </div>
+    <p>First, type the correct word from the <strong>Word Bank</strong> into the blank. Then, <strong>tap the context clue</strong> in the sentence (the word that helps you know the meaning). It will be circled in <span style="color:#6c5ce7; font-weight:bold;">purple</span>.</p>
+    <div class="word-bank" id="wordBankContainer"></div>
+    <div id="secBContainer"></div>
+  </div>
+
+  <!-- Part C -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part C. Simple or Compound?</h2>
+      <span class="badge">5 Questions × 2 pts = 10 pts</span>
+    </div>
+    <p>A <strong>simple</strong> sentence has one complete thought. A <strong>compound</strong> sentence joins two complete thoughts with <em>and</em>, <em>but</em>, <em>or</em>, or <em>so</em>.</p>
+    <div id="secCContainer"></div>
+  </div>
+
+  <!-- Part D -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part D. Choose the Joining Word</h2>
+      <span class="badge">4 Questions × 3 pts = 12 pts</span>
+    </div>
+    <p>Choose the best word to join the two parts of each sentence.</p>
+    <div id="secDContainer"></div>
+  </div>
+
+  <!-- Part E -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part E. Build a Compound Sentence</h2>
+      <span class="badge">4 Questions × 3 pts = 12 pts</span>
+    </div>
+    <p>Put the two sentences together. Tap the word cards in the correct order. Use <strong>all</strong> of the cards. Tap a card again to put it back.</p>
+    <div id="secEContainer"></div>
+  </div>
+
+  <!-- Part F -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part F. True or False: Story Elements</h2>
+      <span class="badge">5 Questions × 2 pts = 10 pts</span>
+    </div>
+    <p>Think about the setting, characters, and plot of <em>Sailing to America</em>. Select <strong>T</strong> (True) or <strong>F</strong> (False).</p>
+    <div id="secFContainer"></div>
+  </div>
+
+  <!-- Part G -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part G. Phonics: Long e</h2>
+      <span class="badge">4 Questions × 2 pts = 8 pts</span>
+    </div>
+    <p>Say each word out loud. Listen for the <strong>long e</strong> sound, like in <em>tree</em>.</p>
+    <div id="secGContainer"></div>
+  </div>
+
+  <!-- Part H -->
+  <div class="section-card">
+    <div class="section-header">
+      <h2>Part H. Kinds of Texts</h2>
+      <span class="badge">4 Questions × 2 pts = 8 pts</span>
+    </div>
+    <p>Read each meaning. Choose the kind of text that matches it. Use each one once.</p>
+    <div id="secHContainer"></div>
+  </div>
+
+  <div class="controls">
+    <div id="warningMsg">⚠️ Please complete all 38 questions across all 8 parts before clicking Submit!</div>
+    <div class="btn-group">
+      <button id="submitBtn" disabled onclick="gradeExam()">Submit Exam</button>
+      <button id="resetBtn" onclick="restartExam()">🔄 Shuffle &amp; Restart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Fisher-Yates Shuffle
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Shuffle until the new order differs from the original order
+function shuffleDifferent(array) {
+  if (array.length < 2) return [...array];
+  let arr;
+  do { arr = shuffle(array); } while (arr.every((v, i) => v === array[i]));
+  return arr;
+}
+
+// ==========================================
+// DATA BANKS (question order is fixed)
+// ==========================================
+
+// Part A: Problem and Solution (matching)
+const psData = [
+  { problem: "Da needed money to bring his family to America.",
+    solution: "He worked hard in America and saved his money.",
+    exp: "Da got a job in America. When he had saved enough money, he sent for his family." },
+  { problem: "Danny felt sad about leaving Ireland.",
+    solution: "Nora told him the family would have a better life in America.",
+    exp: "Nora cheered Danny up. She said there would be enough food and a better life in America." },
+  { problem: "Nora missed Da during the trip on the ship.",
+    solution: "She read his letters again and again.",
+    exp: "Every day on the ship, Nora read Da's letters and dreamed about seeing him." },
+  { problem: "The family was cold on the snowy deck of the ship.",
+    solution: "A kind traveler gave them a blanket.",
+    exp: "Another traveler saw that they were shivering and gave them a blanket." }
+];
+
+// Part B: Vocabulary and Context Clues
+const vocabData = [
+  { word: "arrived", before: "Grandpa", after: "at our house just in time for dinner, and we were glad he came.", clue: "came",
+    hint: "came to a place", clueWhy: "<em>Came</em> tells you that Grandpa got to the house." },
+  { word: "whispered", before: "Lucy", after: "the secret so softly that only her sister could hear.", clue: "softly",
+    hint: "said something in a very quiet voice", clueWhy: "<em>Softly</em> tells you that Lucy spoke in a quiet voice." },
+  { word: "photographs", before: "With his new camera, Dad took", after: "of the sunset.", clue: "camera",
+    hint: "pictures taken with a camera", clueWhy: "You use a <em>camera</em> to take photographs." },
+  { word: "valuable", before: "To Mia, her grandmother's old necklace is", after: "because it is so special to her.", clue: "special",
+    hint: "worth a lot; very important", clueWhy: "<em>Special</em> tells you the necklace means a lot to Mia." },
+  { word: "inspected", before: "Before buying the apple, Mom", after: "it carefully for brown spots.", clue: "carefully",
+    hint: "looked at something very carefully", clueWhy: "<em>Carefully</em> tells you how Mom looked at the apple." },
+  { word: "moment", before: "Please wait a", after: "because I will be back in a second.", clue: "second",
+    hint: "a very short time", clueWhy: "A <em>second</em> is a very short time, just like a moment." },
+  { word: "opportunity", before: "Our class had the", after: "to visit a farm, and we were happy to get this chance.", clue: "chance",
+    hint: "a chance to do something", clueWhy: "<em>Chance</em> means the same as opportunity." },
+  { word: "immigrated", before: "Long ago, Mr. Kim left Korea and", after: "to Canada to live in a new country.", clue: "country",
+    hint: "moved to a new country to live there", clueWhy: "To immigrate means to move to a new <em>country</em>." }
+];
+
+// Part C: Simple or Compound
+const scData = [
+  { q: "Nora waved at her dad.", ans: "Simple",
+    exp: "This sentence has only one complete thought." },
+  { q: "The ship rocked, and the waves crashed.", ans: "Compound",
+    exp: "Two complete thoughts are joined by <em>and</em>: \"The ship rocked\" and \"the waves crashed.\"" },
+  { q: "Danny wanted to stay, but he had to go.", ans: "Compound",
+    exp: "Two complete thoughts are joined by <em>but</em>: \"Danny wanted to stay\" and \"he had to go.\"" },
+  { q: "In the morning, the sea was calm.", ans: "Simple",
+    exp: "This sentence has a comma, but it has only one complete thought: \"the sea was calm.\"" },
+  { q: "We can play outside, or we can read a book.", ans: "Compound",
+    exp: "Two complete thoughts are joined by <em>or</em>: \"We can play outside\" and \"we can read a book.\"" }
+];
+
+// Part D: Joining words (first option is correct; options are shuffled on screen)
+const conjData = [
+  { q: "Kim was very hungry, ______ she ate a sandwich.",
+    options: ["so", "but", "or"], ansIndex: 0,
+    exp: "<em>So</em> shows a result. Kim was hungry, and that is why she ate." },
+  { q: "The water was cold, ______ Sam jumped in anyway.",
+    options: ["but", "so", "or"], ansIndex: 0,
+    exp: "<em>But</em> shows something surprising. The water was cold, yet Sam still jumped in." },
+  { q: "Do you want milk, ______ do you want juice?",
+    options: ["or", "so", "but"], ansIndex: 0,
+    exp: "<em>Or</em> gives a choice between milk and juice." },
+  { q: "Ana fed the cat, ______ she gave the dog a bath.",
+    options: ["and", "or", "so"], ansIndex: 0,
+    exp: "<em>And</em> adds one more thing that Ana did." }
+];
+
+// Part E: Build a compound sentence (word cards)
+const buildData = [
+  { s1: "It was raining.", s2: "We stayed inside.", conj: "so",
+    answer: "It was raining, so we stayed inside.",
+    exp: "Rain is the reason we stayed inside, so we use <em>so</em>." },
+  { s1: "Mia can sing.", s2: "She cannot dance.", conj: "but",
+    answer: "Mia can sing, but she cannot dance.",
+    exp: "Mia can do one thing but not the other, so we use <em>but</em>." },
+  { s1: "We can ride bikes.", s2: "We can go swimming.", conj: "or",
+    answer: "We can ride bikes, or we can go swimming.",
+    exp: "These are two choices, so we use <em>or</em>." },
+  { s1: "Dad made pancakes.", s2: "I made juice.", conj: "and",
+    answer: "Dad made pancakes, and I made juice.",
+    exp: "Both things happened, so we use <em>and</em>." }
+];
+
+// Part F: True or False - story elements
+const tfData = [
+  { q: "Most of the story takes place in a forest.", ans: "F",
+    exp: "The setting is Nora's home in Ireland, a steamship on the ocean, and Ellis Island." },
+  { q: "Nora is one of the main characters in the story.", ans: "T",
+    exp: "The story follows Nora and tells what she thinks, feels, and does." },
+  { q: "In this story, the characters can use magic.", ans: "F",
+    exp: "Nobody uses magic. Everything in the story could happen in real life." },
+  { q: "This story has dialogue, or words that the characters say.", ans: "T",
+    exp: "Nora, Danny, and Da talk to each other, and their words are in quotation marks." },
+  { q: "The story happens long ago.", ans: "T",
+    exp: "The family sails on a steamship and uses a lamp for light. These are clues that it was long ago." }
+];
+
+// Part G: Phonics - long e (first option is correct; options are shuffled on screen)
+const phonicsData = [
+  { q: "Which word has a long e sound?", options: ["dream", "bed", "ship"], ansIndex: 0,
+    exp: "In <em>dream</em>, the letters <strong>ea</strong> make the long e sound." },
+  { q: "Which word has a long e sound?", options: ["sleep", "sock", "hand"], ansIndex: 0,
+    exp: "In <em>sleep</em>, the letters <strong>ee</strong> make the long e sound." },
+  { q: "Which word does NOT have a long e sound?", options: ["help", "sea", "happy"], ansIndex: 0,
+    exp: "<em>Help</em> has a short e sound. <em>Sea</em> (ea) and <em>happy</em> (y) have a long e sound." },
+  { q: "Which word does NOT have a long e sound?", options: ["desk", "feel", "Danny"], ansIndex: 0,
+    exp: "<em>Desk</em> has a short e sound. <em>Feel</em> (ee) and <em>Danny</em> (y) have a long e sound." }
+];
+
+// Part H: Kinds of texts (matching)
+const genreData = [
+  { def: "A made-up story with things that cannot really happen, like a talking dragon.", ans: "fantasy",
+    exp: "Talking dragons are not real, so this is fantasy." },
+  { def: "A made-up story about people and events that could happen today.", ans: "realistic fiction",
+    exp: "Realistic fiction is made up, but it could really happen now." },
+  { def: "A text that gives true facts and information about a topic.", ans: "expository text",
+    exp: "Expository text teaches true facts, like a book about sharks." },
+  { def: "A made-up story set long ago, in a real time and place from the past.", ans: "historical fiction",
+    exp: "Historical fiction, like <em>Sailing to America</em>, is made up but set in a real time long ago." }
+];
+
+// ==========================================
+// RENDERING & STATE MANAGEMENT
+// ==========================================
+
+const TOTAL_Q = 38;
+const LETTERS = ["A", "B", "C", "D"];
+let isSubmitted = false;
+let answeredNow = 0;
+let psOrder = [];        // shuffled solution indexes for Part A
+let curD = [], curG = []; // shuffled options for Parts D and G
+let scOrder = [];        // shuffled Simple/Compound order
+let genreOrder = [];     // shuffled definition order for Part H
+let genreOpts = [];      // shuffled genre names
+let picked = [];         // Part B chosen clue word
+let buildState = [];     // Part E card state
+
+function prepareMC(rawList) {
+  return rawList.map(item => {
+    const indexed = item.options.map((text, idx) => ({ text, isCorrect: idx === item.ansIndex }));
+    return { ...item, shuffledOptions: shuffle(indexed) };
+  });
+}
+
+function cleanWord(w) {
+  return w.toLowerCase().replace(/[^a-z']/g, "");
+}
+
+function restartExam() {
+  if (!isSubmitted && answeredNow > 0 && !confirm("Restart now? All your answers will be cleared.")) return;
+  initExam();
+}
+
+function initExam() {
+  isSubmitted = false;
+  document.getElementById("resultBanner").style.display = "none";
+  document.getElementById("sendStatus").textContent = "";
+  document.getElementById("emojiLayer").innerHTML = "";
+  const tag = document.getElementById("topScoreTag");
+  tag.textContent = "Total: 100 pts";
+  tag.className = "progress-info";
+
+  // Word Bank: shuffled, never in the same order as the questions
+  const words = shuffleDifferent(vocabData.map(v => v.word));
+  document.getElementById("wordBankContainer").innerHTML =
+    words.map(w => `<span class="word-chip" data-word="${w.toLowerCase()}">${w}</span>`).join("");
+
+  psOrder = shuffleDifferent(psData.map((_, i) => i));
+  curD = prepareMC(conjData);
+  curG = prepareMC(phonicsData);
+  scOrder = shuffle(["Simple", "Compound"]);
+  genreOrder = shuffle(genreData.map((_, i) => i));
+  genreOpts = shuffle(genreData.map(g => g.ans));
+  picked = vocabData.map(() => null);
+  buildState = buildData.map(item => {
+    const cards = item.answer.split(" ");
+    let bank = shuffleDifferent(cards.map((_, i) => i));
+    return { cards, bank, line: [] };
+  });
+
+  renderA();
+  renderB();
+  renderC();
+  renderRadioSection("secDContainer", curD, "sD");
+  renderE();
+  renderF();
+  renderRadioSection("secGContainer", curG, "sG");
+  renderH();
+
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderA() {
+  document.getElementById("secAContainer").innerHTML = psData.map((item, i) => `
+    <div class="question-item">
+      <div class="question-text problem-text">${i + 1}. <strong>Problem:</strong> ${item.problem}</div>
+      <select class="match-select" id="sA-select-${i}" onchange="updateProgress()">
+        <option value="">-- Choose the solution --</option>
+        ${psOrder.map(k => `<option value="${k}">Solution: ${psData[k].solution}</option>`).join("")}
+      </select>
+      <div class="feedback" id="sA-fb-${i}"></div>
+    </div>
+  `).join("");
+}
+
+function tokens(text, qIdx) {
+  return text.split(" ").filter(Boolean).map(w =>
+    `<span class="clue-word" data-q="${qIdx}" data-w="${cleanWord(w)}" onclick="pickClue(this)">${w}</span>`
+  ).join(" ");
+}
+
+function renderB() {
+  document.getElementById("secBContainer").innerHTML = vocabData.map((item, i) => `
+    <div class="question-item" id="sB-item-${i}">
+      <div class="question-text">
+        ${i + 1}. ${tokens(item.before, i)}
+        <input type="text" class="cloze-input" id="sB-input-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type word..." oninput="updateProgress()">
+        ${tokens(item.after, i)}
+      </div>
+      <div class="clue-status" id="sB-status-${i}">🔍 Tap the context clue.</div>
+      <div class="feedback" id="sB-fb-${i}"></div>
+    </div>
+  `).join("");
+}
+
+function pickClue(el) {
+  if (isSubmitted) return;
+  const q = parseInt(el.getAttribute("data-q"), 10);
+  const box = document.getElementById(`sB-item-${q}`);
+  const already = el.classList.contains("picked");
+  box.querySelectorAll(".clue-word").forEach(s => s.classList.remove("picked"));
+  if (already) {
+    picked[q] = null;
+  } else {
+    el.classList.add("picked");
+    picked[q] = el.getAttribute("data-w");
+  }
+  document.getElementById(`sB-status-${q}`).textContent =
+    picked[q] ? `⭕ Your clue: ${el.textContent.replace(/[^A-Za-z']/g, "")}` : "🔍 Tap the context clue.";
+  updateProgress();
+}
+
+function renderC() {
+  document.getElementById("secCContainer").innerHTML = scData.map((item, i) => `
+    <div class="question-item">
+      <div class="question-text">${i + 1}. ${item.q}</div>
+      <div class="options-grid">
+        ${scOrder.map(opt => `
+          <label class="option-label">
+            <input type="radio" name="sC-q-${i}" value="${opt}" onchange="updateProgress()">
+            <span>${opt}</span>
+          </label>`).join("")}
+      </div>
+      <div class="feedback" id="sC-fb-${i}"></div>
+    </div>
+  `).join("");
+}
+
+function renderRadioSection(containerId, list, prefix) {
+  document.getElementById(containerId).innerHTML = list.map((item, i) => {
+    const optsHtml = item.shuffledOptions.map((opt, oIdx) => `
+      <label class="option-label">
+        <input type="radio" name="${prefix}-q-${i}" value="${oIdx}" onchange="updateProgress()">
+        <span><strong>(${LETTERS[oIdx]})</strong> ${opt.text}</span>
+      </label>
+    `).join("");
+    return `
+      <div class="question-item">
+        <div class="question-text">${i + 1}. ${item.q}</div>
+        <div class="options-grid">${optsHtml}</div>
+        <div class="feedback" id="${prefix}-fb-${i}"></div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderE() {
+  document.getElementById("secEContainer").innerHTML = buildData.map((item, i) => `
+    <div class="question-item" id="sE-item-${i}">
+      <div class="question-text pair-text">
+        <span>${i + 1}. ${item.s1}</span>
+        <span style="padding-left: 1.2em;">${item.s2}</span>
+      </div>
+      <div class="tile-line" id="sE-line-${i}"></div>
+      <div class="tile-bank" id="sE-bank-${i}"></div>
+      <div class="feedback" id="sE-fb-${i}"></div>
+    </div>
+  `).join("");
+  buildData.forEach((_, i) => drawCards(i));
+}
+
+function cardHtml(i, k, where) {
+  const st = buildState[i];
+  const word = st.cards[k];
+  const isConj = cleanWord(word) === buildData[i].conj;
+  return `<span class="tile${isConj ? " conj" : ""}" onclick="moveCard(${i}, ${k}, '${where}')">${word}</span>`;
+}
+
+function drawCards(i) {
+  const st = buildState[i];
+  document.getElementById(`sE-line-${i}`).innerHTML = st.line.map(k => cardHtml(i, k, "line")).join("");
+  document.getElementById(`sE-bank-${i}`).innerHTML = st.bank.map(k => cardHtml(i, k, "bank")).join("");
+}
+
+function moveCard(i, k, from) {
+  if (isSubmitted) return;
+  const st = buildState[i];
+  if (from === "bank") {
+    st.bank = st.bank.filter(x => x !== k);
+    st.line.push(k);
+  } else {
+    st.line = st.line.filter(x => x !== k);
+    st.bank.push(k);
+  }
+  drawCards(i);
+  updateProgress();
+}
+
+function builtSentence(i) {
+  const st = buildState[i];
+  return st.line.map(k => st.cards[k]).join(" ");
+}
+
+function renderF() {
+  document.getElementById("secFContainer").innerHTML = tfData.map((item, i) => `
+    <div class="question-item">
+      <div class="question-text">${i + 1}. ${item.q}</div>
+      <div>
+        <select class="tf-select" id="sF-select-${i}" onchange="updateProgress()">
+          <option value="">-- Select --</option>
+          <option value="T">T</option>
+          <option value="F">F</option>
+        </select>
+      </div>
+      <div class="feedback" id="sF-fb-${i}"></div>
+    </div>
+  `).join("");
+}
+
+function renderH() {
+  document.getElementById("secHContainer").innerHTML = genreOrder.map((g, i) => `
+    <div class="question-item">
+      <div class="question-text">${i + 1}. ${genreData[g].def}</div>
+      <select class="match-select" id="sH-select-${i}" onchange="updateProgress()" style="max-width: 300px;">
+        <option value="">-- Choose --</option>
+        ${genreOpts.map(name => `<option value="${name}">${name}</option>`).join("")}
+      </select>
+      <div class="feedback" id="sH-fb-${i}"></div>
+    </div>
+  `).join("");
+}
+
+function highlightUsedWordBank() {
+  const typed = new Set();
+  vocabData.forEach((_, i) => {
+    const val = document.getElementById(`sB-input-${i}`).value.trim().toLowerCase();
+    if (val) typed.add(val);
+  });
+  document.querySelectorAll("#wordBankContainer .word-chip").forEach(chip => {
+    chip.classList.toggle("used", typed.has(chip.getAttribute("data-word")));
+  });
+}
+
+function updateProgress() {
+  highlightUsedWordBank();
+  if (isSubmitted) return;
+  let answered = 0;
+  psData.forEach((_, i) => { if (document.getElementById(`sA-select-${i}`).value !== "") answered++; });
+  vocabData.forEach((_, i) => { if (document.getElementById(`sB-input-${i}`).value.trim() && picked[i]) answered++; });
+  scData.forEach((_, i) => { if (document.querySelector(`input[name="sC-q-${i}"]:checked`)) answered++; });
+  conjData.forEach((_, i) => { if (document.querySelector(`input[name="sD-q-${i}"]:checked`)) answered++; });
+  buildData.forEach((_, i) => { if (buildState[i].bank.length === 0) answered++; });
+  tfData.forEach((_, i) => { if (document.getElementById(`sF-select-${i}`).value) answered++; });
+  phonicsData.forEach((_, i) => { if (document.querySelector(`input[name="sG-q-${i}"]:checked`)) answered++; });
+  genreData.forEach((_, i) => { if (document.getElementById(`sH-select-${i}`).value) answered++; });
+
+  answeredNow = answered;
+  document.getElementById("answeredCount").textContent = answered;
+  document.getElementById("progressFill").style.width = Math.round((answered / TOTAL_Q) * 100) + "%";
+
+  const submitBtn = document.getElementById("submitBtn");
+  const warningMsg = document.getElementById("warningMsg");
+  if (answered === TOTAL_Q) {
+    submitBtn.disabled = false;
+    warningMsg.style.display = "none";
+  } else {
+    submitBtn.disabled = true;
+    warningMsg.style.display = "block";
+    warningMsg.textContent = `⚠️ You have completed ${answered} / ${TOTAL_Q} questions. Finish all 8 parts to unlock the Submit button!`;
+  }
+}
+
+function whyHtml(text) {
+  return `<div class="why-box"><strong>Why?</strong> ${text}</div>`;
+}
+
+function showFb(id, ok, pts, wrongHtml) {
+  const fbEl = document.getElementById(id);
+  if (ok) {
+    fbEl.className = "feedback correct";
+    fbEl.innerHTML = `✅ <strong>Correct! (+${pts} pts)</strong>`;
+  } else {
+    fbEl.className = "feedback wrong";
+    fbEl.innerHTML = wrongHtml;
+  }
+}
+
+function gradeExam() {
+  if (typeof Library !== "undefined" && !Library.requireName()) return;
+  isSubmitted = true;
+  document.getElementById("submitBtn").disabled = true;
+  document.querySelector(".container").classList.add("locked");
+  let totalScore = 0;
+  const report = [];
+
+  // Part A (2 pts each)
+  psData.forEach((item, i) => {
+    const sel = document.getElementById(`sA-select-${i}`);
+    const val = sel.value;
+    const ok = val !== "" && parseInt(val, 10) === i;
+    sel.disabled = true;
+    report.push({ part: "Part A. Problem and Solution", q: item.problem,
+      yours: val !== "" ? psData[parseInt(val, 10)].solution : "(no answer)", correct: item.solution, ok });
+    if (ok) totalScore += 2;
+    showFb(`sA-fb-${i}`, ok, 2,
+      `❌ <strong>Incorrect (0 pts).</strong> Correct solution: <strong>${item.solution}</strong>` + whyHtml(item.exp));
+  });
+
+  // Part B (2 pts word + 2 pts clue)
+  vocabData.forEach((item, i) => {
+    const inputEl = document.getElementById(`sB-input-${i}`);
+    const typed = inputEl.value.trim();
+    const wordOk = typed.toLowerCase() === item.word.toLowerCase();
+    const clueOk = picked[i] === item.clue;
+    inputEl.disabled = true;
+    const qText = (item.before + " ____ " + item.after).replace(/\s+/g, " ").trim();
+    report.push({ part: "Part B. Vocabulary (word)", q: qText, yours: typed || "(blank)", correct: item.word, ok: wordOk });
+    report.push({ part: "Part B. Vocabulary (context clue)", q: qText, yours: picked[i] || "(none)", correct: item.clue, ok: clueOk });
+    const pts = (wordOk ? 2 : 0) + (clueOk ? 2 : 0);
+    totalScore += pts;
+    const fbEl = document.getElementById(`sB-fb-${i}`);
+    if (wordOk && clueOk) {
+      fbEl.className = "feedback correct";
+      fbEl.innerHTML = `✅ <strong>Correct! (+4 pts)</strong> Word and clue are both right.`;
+    } else {
+      fbEl.className = "feedback wrong";
+      let html = `❌ <strong>(+${pts} pts)</strong><br>`;
+      html += wordOk ? `✅ Word: <strong>${item.word}</strong><br>` : `❌ Word: the correct spelling is <strong>${item.word}</strong>.<br>`;
+      html += clueOk ? `✅ Clue: <strong>${item.clue}</strong>` : `❌ Clue: the context clue is <strong>${item.clue}</strong>.`;
+      const why = [];
+      if (!wordOk) why.push(`<em>${item.word}</em> means ${item.hint}.`);
+      if (!clueOk) why.push(item.clueWhy);
+      fbEl.innerHTML = html + whyHtml(why.join(" "));
+    }
+  });
+
+  // Part C (2 pts each)
+  scData.forEach((item, i) => {
+    const radios = document.querySelectorAll(`input[name="sC-q-${i}"]`);
+    let chosen = "";
+    radios.forEach(r => { r.disabled = true; if (r.checked) chosen = r.value; });
+    const ok = chosen === item.ans;
+    report.push({ part: "Part C. Simple or Compound", q: item.q, yours: chosen || "(no answer)", correct: item.ans, ok });
+    if (ok) totalScore += 2;
+    showFb(`sC-fb-${i}`, ok, 2,
+      `❌ <strong>Incorrect (0 pts).</strong> Correct answer: <strong>${item.ans}</strong>` + whyHtml(item.exp));
+  });
+
+  // Parts D & G (radio)
+  function gradeRadio(list, prefix, ptsPerQ, partName) {
+    list.forEach((item, i) => {
+      const radios = document.querySelectorAll(`input[name="${prefix}-q-${i}"]`);
+      let chosenIdx = -1;
+      radios.forEach(r => { r.disabled = true; if (r.checked) chosenIdx = parseInt(r.value, 10); });
+      const correctIdx = item.shuffledOptions.findIndex(o => o.isCorrect);
+      const correctText = `(${LETTERS[correctIdx]}) ${item.shuffledOptions[correctIdx].text}`;
+      const ok = chosenIdx === correctIdx;
+      report.push({
+        part: partName,
+        q: item.q,
+        yours: chosenIdx >= 0 ? `(${LETTERS[chosenIdx]}) ${item.shuffledOptions[chosenIdx].text}` : "(no answer)",
+        correct: correctText,
+        ok
+      });
+      if (ok) totalScore += ptsPerQ;
+      showFb(`${prefix}-fb-${i}`, ok, ptsPerQ,
+        `❌ <strong>Incorrect (0 pts).</strong> Correct answer: <strong>${correctText}</strong>` + whyHtml(item.exp));
+    });
+  }
+  gradeRadio(curD, "sD", 3, "Part D. Joining Words");
+
+  // Part E (3 pts each)
+  buildData.forEach((item, i) => {
+    const built = builtSentence(i);
+    const ok = built === item.answer;
+    report.push({ part: "Part E. Build a Compound Sentence", q: `${item.s1} ${item.s2}`, yours: built || "(blank)", correct: item.answer, ok });
+    if (ok) totalScore += 3;
+    showFb(`sE-fb-${i}`, ok, 3,
+      `❌ <strong>Incorrect (0 pts).</strong> Correct sentence: <strong>${item.answer}</strong>` + whyHtml(item.exp));
+  });
+
+  // Part F (2 pts each)
+  tfData.forEach((item, i) => {
+    const selEl = document.getElementById(`sF-select-${i}`);
+    const userAns = selEl.value;
+    const ok = userAns === item.ans;
+    selEl.disabled = true;
+    report.push({ part: "Part F. True or False", q: item.q, yours: userAns || "(no answer)", correct: item.ans, ok });
+    if (ok) totalScore += 2;
+    showFb(`sF-fb-${i}`, ok, 2,
+      `❌ <strong>Incorrect (0 pts).</strong> Correct answer: <strong>${item.ans}</strong>` + whyHtml(item.exp));
+  });
+
+  gradeRadio(curG, "sG", 2, "Part G. Phonics: Long e");
+
+  // Part H (2 pts each)
+  genreOrder.forEach((g, i) => {
+    const item = genreData[g];
+    const sel = document.getElementById(`sH-select-${i}`);
+    const val = sel.value;
+    const ok = val === item.ans;
+    sel.disabled = true;
+    report.push({ part: "Part H. Kinds of Texts", q: item.def, yours: val || "(no answer)", correct: item.ans, ok });
+    if (ok) totalScore += 2;
+    showFb(`sH-fb-${i}`, ok, 2,
+      `❌ <strong>Incorrect (0 pts).</strong> Correct answer: <strong>${item.ans}</strong>` + whyHtml(item.exp));
+  });
+
+  // Score at the top + emoji rain
+  const banner = document.getElementById("resultBanner");
+  const scoreText = document.getElementById("finalScoreText");
+  const titleEl = document.getElementById("resultTitle");
+  const subEl = document.getElementById("resultSubtext");
+  const emojiEl = document.getElementById("resultEmoji");
+  const tag = document.getElementById("topScoreTag");
+  const high = totalScore >= 90;
+
+  banner.style.display = "block";
+  scoreText.textContent = `${totalScore} / 100`;
+  tag.textContent = `Score: ${totalScore} / 100`;
+  tag.className = "progress-info scored " + (high ? "high" : "low");
+
+  if (high) {
+    scoreText.className = "score-display score-high";
+    emojiEl.textContent = "🎉⭐🏆🌟";
+    titleEl.textContent = "AWESOME JOB! SUPERSTAR!";
+    subEl.textContent = "You scored 90 or above. Fantastic work!";
+    triggerEmojiRain(["🎉", "⭐", "🏆", "🌟"]);
+  } else {
+    scoreText.className = "score-display score-low";
+    emojiEl.textContent = "😭";
+    titleEl.textContent = "Oh no! Keep Practicing!";
+    subEl.textContent = "You scored below 90. Read the red \"Why?\" explanations below, then click 'Shuffle & Restart' to try again!";
+    triggerEmojiRain(["😭"]);
+  }
+
+  if (typeof Library !== "undefined") {
+    Library.send({ title: "Sailing to America - Quiz 2", category: "Reading / Wonders / Grade 3", score: totalScore, total: 100, items: report });
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function triggerEmojiRain(emojiList) {
+  const layer = document.getElementById("emojiLayer");
+  layer.innerHTML = "";
+  for (let i = 0; i < 65; i++) {
+    const span = document.createElement("span");
+    span.className = "falling-emoji";
+    span.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+    span.style.left = Math.random() * 96 + "vw";
+    span.style.fontSize = (1.6 + Math.random() * 1.6) + "rem";
+    span.style.animationDuration = (2.5 + Math.random() * 3) + "s";
+    span.style.animationDelay = (Math.random() * 2.2) + "s";
+    layer.appendChild(span);
+  }
+  setTimeout(() => { layer.innerHTML = ""; }, 8500);
+}
+
+// Leave-page warning: only while the exam is started but not yet submitted
+window.addEventListener("beforeunload", function (e) {
+  if (!isSubmitted && answeredNow > 0) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+window.addEventListener("load", initExam);
+</script>
+</body>
+</html>
