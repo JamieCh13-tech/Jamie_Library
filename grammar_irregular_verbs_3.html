@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irregular Verbs - Wagor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800&display=swap">
+<style>
+  :root { --ink: #1B2A57; --sun: #FFE14D; --cream: #FFF4D0; --teal: #35D0BA; --ok: #6BCB77; --no: #FF7B7B;
+          --A: #FFB84D; --B: #8EA2FF; --C: #FF7BA9; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; min-height: 100vh; background: #5CCBFF; color: var(--ink); font-family: "Lilita One", "Arial Rounded MT Bold", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+  button, input { font: inherit; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 4px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 7px var(--ink); }
+
+  .top { display: flex; align-items: center; gap: 14px; max-width: 680px; margin: 0 auto; padding: 14px 16px 0; }
+  .tohome { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 52px; height: 52px; background: var(--sun); border: 4px solid var(--ink); border-radius: 50%; box-shadow: 0 5px 0 var(--ink); }
+  .dots { flex: 1; display: flex; gap: 6px; }
+  .dots i { flex: 1; height: 14px; border: 3px solid var(--ink); border-radius: 8px; background: #fff; }
+  .dots i.done { background: var(--teal); }
+  .dots i.now { background: var(--sun); }
+
+  main { max-width: 680px; margin: 0 auto; padding: 18px 14px 60px; }
+  .card { position: relative; padding: 24px 20px 26px; background: var(--cream); border: 4px solid var(--ink); border-radius: 26px; box-shadow: 0 8px 0 var(--ink); animation: pop .35s cubic-bezier(.34,1.56,.64,1) both; }
+  h1 { margin: 0; font-weight: 400; font-size: 40px; line-height: 1.1; text-align: center; }
+  h2 { margin: 0; font-weight: 400; font-size: 30px; line-height: 1.1; text-align: center; }
+  .zh { margin: 6px 0 0; font: 800 16px "Nunito", "PingFang TC", "Microsoft JhengHei", sans-serif; text-align: center; color: #3B4673; }
+  .step { display: block; width: max-content; margin: 0 auto 10px; padding: 4px 14px 1px; font-size: 18px; background: var(--sun); border: 3px solid var(--ink); border-radius: 12px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 58px; padding: 6px 30px 2px; font-size: 26px; cursor: pointer; background: var(--teal); border: 4px solid var(--ink); border-radius: 18px; box-shadow: 0 6px 0 var(--ink); }
+  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--ink); }
+  .btn.alt { background: #fff; }
+  .row { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+  /* pattern dots */
+  .pat { display: inline-flex; gap: 4px; vertical-align: middle; }
+  .pat b { width: 18px; height: 18px; border: 3px solid var(--ink); border-radius: 50%; }
+
+  /* form chips */
+  .chip { display: inline-block; padding: 4px 12px 1px; font-size: 18px; border: 3px solid var(--ink); border-radius: 12px; white-space: nowrap; }
+  .f-b { background: var(--sun); } .f-ps { background: var(--B); } .f-pp { background: var(--C); }
+
+  /* start */
+  .name { display: flex; align-items: center; gap: 10px; max-width: 360px; height: 54px; margin: 22px auto 0; padding: 0 18px; background: #fff; border: 4px solid var(--ink); border-radius: 18px; }
+  .name input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 800 18px "Nunito", sans-serif; }
+  .name input:focus-visible { box-shadow: none; outline: 0; }
+  details { margin-top: 24px; }
+  summary { display: block; width: max-content; margin: 0 auto; padding: 6px 20px 2px; font-size: 22px; cursor: pointer; background: #fff; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .learn { margin-top: 18px; }
+  .lg { margin-top: 16px; }
+  .lg h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-weight: 400; font-size: 22px; }
+  table.vt { width: 100%; border-collapse: collapse; background: #fff; border: 4px solid var(--ink); border-radius: 14px; overflow: hidden; }
+  .vt th { padding: 6px 4px 3px; font-weight: 400; font-size: 16px; background: var(--ink); color: #fff; }
+  .vt td { padding: 7px 6px 4px; font-size: 20px; text-align: center; border-top: 2px solid #D8DCEB; }
+  .vt tr.say { cursor: pointer; }
+  .vt tr.say:hover td { background: #FFF8E0; }
+
+  /* choose / options */
+  .q { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 26px 0 6px; font-size: 44px; }
+  .arrow { font-size: 30px; opacity: .6; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 18px; }
+  .opt { min-height: 64px; padding: 4px 10px 0; font-size: 28px; cursor: pointer; background: #fff; border: 4px solid var(--ink); border-radius: 18px; box-shadow: 0 6px 0 var(--ink); }
+  .opt:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--ink); }
+  .opt:disabled { cursor: default; }
+  .good { background: var(--ok) !important; }
+  .bad { background: var(--no) !important; }
+  .sel { background: var(--sun) !important; transform: translateY(-3px); }
+  .count { margin-top: 14px; font: 800 15px "Nunito", sans-serif; text-align: center; opacity: .7; }
+  .shake { animation: shake .35s; }
+
+  /* match */
+  .match { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; margin-top: 22px; }
+  .match .col { display: flex; flex-direction: column; gap: 12px; }
+  .match .opt { font-size: 24px; }
+
+  /* sort */
+  .cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 60px; margin-top: 22px; }
+  .cards .opt { min-height: 54px; padding: 4px 18px 0; font-size: 24px; }
+  .bins { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 10px; margin-top: 22px; }
+  .bin { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 150px; padding: 12px 6px; cursor: pointer; background: #fff; border: 4px dashed var(--ink); border-radius: 18px; }
+  .bin.ready { border-style: solid; background: #FFF8E0; }
+  .bin .lab { font-size: 22px; }
+  .bin .got { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+  .bin .got span { padding: 3px 4px 0; font-size: 15px; text-align: center; border: 2px solid var(--ink); border-radius: 8px; }
+
+  /* spell */
+  .slots { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+  .slot { display: flex; align-items: center; justify-content: center; width: 46px; height: 54px; padding-top: 4px; font-size: 30px; cursor: pointer; background: #fff; border: 4px solid var(--ink); border-radius: 12px; }
+  .slot.empty { background: transparent; border-style: dashed; cursor: default; }
+  .tiles { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .tile { width: 52px; height: 56px; padding-top: 4px; font-size: 30px; cursor: pointer; background: var(--sun); border: 4px solid var(--ink); border-radius: 12px; box-shadow: 0 5px 0 var(--ink); }
+  .tile:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+  .tile.used { visibility: hidden; }
+
+  /* table fill */
+  .ft td { padding: 6px 4px; vertical-align: top; }
+  .ft input { width: 100%; min-width: 0; height: 46px; padding: 0 6px; text-align: center; font: 800 18px "Nunito", sans-serif; background: #FFFBEA; border: 3px solid var(--ink); border-radius: 10px; }
+  .ft .given { display: flex; align-items: center; justify-content: center; height: 46px; font-size: 22px; }
+  .fix { margin-top: 3px; font: 800 14px "Nunito", sans-serif; color: #B3261E; }
+
+  /* mistake */
+  .sent { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+  .w { padding: 6px 12px 2px; font-size: 26px; cursor: pointer; background: #fff; border: 3px solid var(--ink); border-radius: 12px; }
+  .w:disabled { cursor: default; }
+
+  /* sentence fill */
+  .sl { display: flex; flex-direction: column; gap: 14px; margin-top: 22px; }
+  .sline { padding: 12px 14px 10px; font: 800 19px/1.9 "Nunito", sans-serif; background: #fff; border: 3px solid var(--ink); border-radius: 14px; }
+  .sline input { width: 120px; height: 40px; margin: 0 4px; padding: 0 6px; text-align: center; font: 800 19px "Nunito", sans-serif; background: #FFFBEA; border: 3px solid var(--ink); border-radius: 10px; }
+  .sline .hint { color: #6B7395; }
+
+  /* results */
+  .medal { display: block; margin: 4px auto 8px; }
+  .big { margin: 6px 0 0; font-size: 56px; text-align: center; }
+  .who { margin: 4px 0 0; font: 800 16px "Nunito", sans-serif; text-align: center; color: #3B4673; }
+  .res { width: 100%; margin-top: 20px; border-collapse: collapse; background: #fff; border: 4px solid var(--ink); }
+  .res td { padding: 8px 12px 5px; font-size: 19px; border-top: 2px solid #D8DCEB; }
+  .res td:last-child { text-align: right; }
+  .miss { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+  .miss span { padding: 4px 12px 1px; font-size: 18px; background: #fff; border: 3px solid var(--ink); border-radius: 12px; }
+  .sub { margin: 24px 0 0; font-size: 22px; text-align: center; }
+
+  @keyframes pop { from { transform: scale(.9) translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+  @media (max-width: 480px) {
+    h1 { font-size: 32px; } .q { font-size: 36px; }
+    .bins { grid-template-columns: 1fr; } .bins.four { grid-template-columns: 1fr 1fr; } .bin { min-height: 0; }
+    .ft .given { font-size: 18px; } .ft input { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="tohome" href="library.html#grammar" aria-label="Back to Grammar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2A57" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+</div>
+<main id="main"></main>
+
+<script>
+/* ============================================================
+   不規則動詞 Quiz 1–5 共用同一份資料，五個檔案只差最上面的 QUIZ_NO
+   改字或加句子時，五個檔案要一起改（或改好一份再複製四份，只改 QUIZ_NO）
+
+   VERBS 每一行：[第幾份, 規則, 原形, 過去式, 過去分詞, 加-ed錯字, 陷阱字]
+   - 規則      : "AAA"、"ABA"、"ABB"、"ABC"
+   - 兩種都算對 : 用 / 隔開，例如 "learned / learnt"
+   - 加-ed錯字 : 選擇題的陷阱（例如 buyed）；如果加 -ed 也是對的就留空 ""
+   - 陷阱字    : 另一個長得像的錯誤選項
+   ============================================================ */
+const QUIZ_NO = 3;
+const VERBS = [
+  [1, "AAA", "cut",    "cut",     "cut",     "cutted",  "cutten"],
+  [1, "AAA", "hit",    "hit",     "hit",     "hitted",  "hitten"],
+  [1, "AAA", "hurt",   "hurt",    "hurt",    "hurted",  "hurten"],
+  [1, "AAA", "let",    "let",     "let",     "letted",  "letten"],
+  [1, "AAA", "put",    "put",     "put",     "putted",  "putten"],
+  [1, "AAA", "read",   "read",    "read",    "readed",  "readen"],
+  [1, "ABA", "become", "became",  "become",  "becomed", "becamed"],
+  [1, "ABA", "come",   "came",    "come",    "comed",   "camed"],
+  [1, "ABA", "run",    "ran",     "run",     "runned",  "rang"],
+  [1, "ABB", "bring",  "brought", "brought", "bringed", "brang"],
+  [1, "ABB", "buy",    "bought",  "bought",  "buyed",   "brought"],
+  [1, "ABB", "catch",  "caught",  "caught",  "catched", "cought"],
+  [1, "ABB", "fight",  "fought",  "fought",  "fighted", "faught"],
+  [1, "ABB", "teach",  "taught",  "taught",  "teached", "thought"],
+  [1, "ABB", "think",  "thought", "thought", "thinked", "taught"],
+
+  [2, "ABB", "build",  "built",   "built",   "builded", "bilt"],
+  [2, "ABB", "send",   "sent",    "sent",    "sended",  "sant"],
+  [2, "ABB", "spend",  "spent",   "spent",   "spended", "spand"],
+  [2, "ABB", "feel",   "felt",    "felt",    "feeled",  "fell"],
+  [2, "ABB", "sleep",  "slept",   "slept",   "sleeped", "slep"],
+  [2, "ABB", "meet",   "met",     "met",     "meeted",  "meat"],
+  [2, "ABB", "leave",  "left",    "left",    "leaved",  "lefted"],
+  [2, "ABB", "lose",   "lost",    "lost",    "losed",   "loose"],
+  [2, "ABB", "dream",  "dreamed / dreamt", "dreamed / dreamt", "", ""],
+  [2, "ABB", "learn",  "learned / learnt", "learned / learnt", "", ""],
+  [2, "ABB", "smell",  "smelled / smelt",  "smelled / smelt",  "", ""],
+  [2, "ABB", "make",   "made",    "made",    "maked",   "maded"],
+  [2, "ABB", "have",   "had",     "had",     "haved",   "has"],
+  [2, "ABB", "hear",   "heard",   "heard",   "heared",  "herd"],
+
+  [3, "ABB", "dig",    "dug",     "dug",     "digged",  "dag"],
+  [3, "ABB", "find",   "found",   "found",   "finded",  "fund"],
+  [3, "ABB", "get",    "got",     "got / gotten",       "getted",    "gat"],
+  [3, "ABB", "get up", "got up",  "got up / gotten up", "getted up", "gat up"],
+  [3, "ABB", "hang",   "hung",    "hung",    "hunged",  "hong"],
+  [3, "ABB", "hold",   "held",    "held",    "holded",  "helt"],
+  [3, "ABB", "lay",    "laid",    "laid",    "layed",   "lain"],
+  [3, "ABB", "say",    "said",    "said",    "sayed",   "sad"],
+  [3, "ABB", "shoot",  "shot",    "shot",    "shooted", "shut"],
+  [3, "ABB", "sit",    "sat",     "sat",     "sitted",  "set"],
+  [3, "ABB", "stand",  "stood",   "stood",   "standed", "stud"],
+  [3, "ABB", "tell",   "told",    "told",    "telled",  "tolled"],
+  [3, "ABB", "win",    "won",     "won",     "winned",  "wan"],
+  [3, "ABB", "shine",  "shone / shined", "shone / shined", "", ""],
+
+  [4, "ABC", "be",     "was / were", "been", "beed",    ""],
+  [4, "ABC", "do",     "did",     "done",    "doed",    ""],
+  [4, "ABC", "go",     "went",    "gone",    "goed",    ""],
+  [4, "ABC", "see",    "saw",     "seen",    "seed",    ""],
+  [4, "ABC", "eat",    "ate",     "eaten",   "eated",   ""],
+  [4, "ABC", "fall",   "fell",    "fallen",  "falled",  ""],
+  [4, "ABC", "give",   "gave",    "given",   "gived",   ""],
+  [4, "ABC", "take",   "took",    "taken",   "taked",   ""],
+  [4, "ABC", "shake",  "shook",   "shaken",  "shaked",  ""],
+  [4, "ABC", "know",   "knew",    "known",   "knowed",  ""],
+  [4, "ABC", "blow",   "blew",    "blown",   "blowed",  ""],
+  [4, "ABC", "fly",    "flew",    "flown",   "flyed",   ""],
+  [4, "ABC", "draw",   "drew",    "drawn",   "drawed",  ""],
+  [4, "ABC", "show",   "showed",  "shown / showed", "", ""],
+  [4, "ABC", "hide",   "hid",     "hidden",  "hided",   ""],
+
+  [5, "ABC", "begin",  "began",   "begun",   "beginned", ""],
+  [5, "ABC", "drink",  "drank",   "drunk",   "drinked",  ""],
+  [5, "ABC", "ring",   "rang",    "rung",    "ringed",   ""],
+  [5, "ABC", "sing",   "sang",    "sung",    "singed",   ""],
+  [5, "ABC", "sink",   "sank",    "sunk",    "sinked",   ""],
+  [5, "ABC", "swim",   "swam",    "swum",    "swimmed",  ""],
+  [5, "ABC", "break",  "broke",   "broken",  "breaked",  ""],
+  [5, "ABC", "choose", "chose",   "chosen",  "choosed",  ""],
+  [5, "ABC", "speak",  "spoke",   "spoken",  "speaked",  ""],
+  [5, "ABC", "steal",  "stole",   "stolen",  "stealed",  ""],
+  [5, "ABC", "wake",   "woke",    "woken",   "waked",    ""],
+  [5, "ABC", "forget", "forgot",  "forgotten", "forgetted", ""],
+  [5, "ABC", "drive",  "drove",   "driven",  "drived",   ""],
+  [5, "ABC", "ride",   "rode",    "ridden",  "rided",    ""],
+  [5, "ABC", "write",  "wrote",   "written", "writed",   ""],
+  [5, "ABC", "lie",    "lay",     "lain",    "",         ""]
+].map(function (r) {
+  const sp = function (s) { return s.split("/").map(function (x) { return x.trim(); }); };
+  return { q: r[0], p: r[1], b: r[2], ps: sp(r[3]), pp: sp(r[4]), ed: r[5] || null, trap: r[6] || null };
+});
+
+/* 找錯字：w = 句子裡錯的字，o = 選項（第一個是正確答案，畫面上會打亂），b = 哪個動詞 */
+const MISTAKES = [
+  { b: "buy",    s: "Yesterday I buyed a new ball.",          w: "buyed",   o: ["bought", "brought", "buy"] },
+  { b: "teach",  s: "Last night Mom teached me a song.",      w: "teached", o: ["taught", "thought", "teach"] },
+  { b: "run",    s: "We runned to the park after school.",    w: "runned",  o: ["ran", "run", "rang"] },
+  { b: "catch",  s: "He catched the bus this morning.",       w: "catched", o: ["caught", "cought", "catch"] },
+  { b: "think",  s: "I thinked about my dog all day.",        w: "thinked", o: ["thought", "taught", "think"] },
+  { b: "cut",    s: "She cutted the cake at the party.",      w: "cutted",  o: ["cut", "cuted", "cat"] },
+  { b: "come",   s: "Tom comed home late last night.",        w: "comed",   o: ["came", "come", "become"] },
+  { b: "bring",  s: "Sam bringed his dog to the park.",       w: "bringed", o: ["brought", "bought", "bring"] },
+  { b: "fight",  s: "The two cats fighted last night.",       w: "fighted", o: ["fought", "faught", "fight"] },
+  { b: "hurt",   s: "I hurted my knee yesterday.",            w: "hurted",  o: ["hurt", "hurten", "hurts"] },
+
+  { b: "sleep",  s: "I sleeped for ten hours on Sunday.",     w: "sleeped", o: ["slept", "slep", "sleep"] },
+  { b: "build",  s: "Dad builded a dog house last summer.",   w: "builded", o: ["built", "bilt", "build"] },
+  { b: "feel",   s: "I feeled tired after the game.",         w: "feeled",  o: ["felt", "fell", "feel"] },
+  { b: "lose",   s: "Tom losed his pencil again.",            w: "losed",   o: ["lost", "loose", "lose"] },
+  { b: "make",   s: "We maked a cake for Mom.",               w: "maked",   o: ["made", "maded", "make"] },
+  { b: "hear",   s: "I heared a strange noise last night.",   w: "heared",  o: ["heard", "herd", "hear"] },
+  { b: "leave",  s: "The bus leaved at seven.",               w: "leaved",  o: ["left", "lefted", "leave"] },
+  { b: "spend",  s: "She spended all her money on candy.",    w: "spended", o: ["spent", "spand", "spend"] },
+  { b: "meet",   s: "We meeted a famous singer!",             w: "meeted",  o: ["met", "meat", "meet"] },
+  { b: "have",   s: "We haved fun at the zoo.",               w: "haved",   o: ["had", "has", "have"] },
+  { b: "send",   s: "Grandma sended me a card.",              w: "sended",  o: ["sent", "sant", "send"] },
+
+  { b: "find",   s: "I finded my lost toy under the bed.",    w: "finded",  o: ["found", "fund", "find"] },
+  { b: "win",    s: "Our team winned the game!",              w: "winned",  o: ["won", "wan", "win"] },
+  { b: "tell",   s: "Mom telled me a funny story.",           w: "telled",  o: ["told", "tolled", "tell"] },
+  { b: "sit",    s: "We sitted on the grass.",                w: "sitted",  o: ["sat", "set", "sit"] },
+  { b: "stand",  s: "Everyone standed up and clapped.",       w: "standed", o: ["stood", "stud", "stand"] },
+  { b: "hold",   s: "She holded the baby carefully.",         w: "holded",  o: ["held", "helt", "hold"] },
+  { b: "say",    s: "He sayed hello to everyone.",            w: "sayed",   o: ["said", "sad", "say"] },
+  { b: "dig",    s: "The dog digged a hole in the garden.",   w: "digged",  o: ["dug", "dag", "dig"] },
+  { b: "get up", s: "I getted up at seven this morning.",     w: "getted",  o: ["got", "gat", "get"] },
+  { b: "shoot",  s: "He shooted the ball into the net.",      w: "shooted", o: ["shot", "shut", "shoot"] },
+
+  { b: "be",     s: "We was at school yesterday.",            w: "was",     o: ["were", "been", "be"] },
+  { b: "go",     s: "We goed to the zoo last Sunday.",        w: "goed",    o: ["went", "gone", "go"] },
+  { b: "eat",    s: "I eated a big sandwich for lunch.",      w: "eated",   o: ["ate", "eaten", "eat"] },
+  { b: "see",    s: "I seed a rainbow yesterday.",            w: "seed",    o: ["saw", "seen", "see"] },
+  { b: "do",     s: "She doed her homework after dinner.",    w: "doed",    o: ["did", "done", "do"] },
+  { b: "give",   s: "Grandpa gived me a present.",            w: "gived",   o: ["gave", "given", "give"] },
+  { b: "take",   s: "We taked a lot of photos.",              w: "taked",   o: ["took", "taken", "take"] },
+  { b: "fall",   s: "The apple falled from the tree.",        w: "falled",  o: ["fell", "fallen", "felt"] },
+  { b: "know",   s: "I knowed the answer!",                   w: "knowed",  o: ["knew", "known", "new"] },
+  { b: "fly",    s: "The bird flyed away.",                   w: "flyed",   o: ["flew", "flown", "flied"] },
+  { b: "draw",   s: "He drawed a cute cat.",                  w: "drawed",  o: ["drew", "drawn", "draw"] },
+  { b: "blow",   s: "The wind blowed hard last night.",       w: "blowed",  o: ["blew", "blown", "blue"] },
+  { b: "shake",  s: "The dog shaked its wet body.",           w: "shaked",  o: ["shook", "shaken", "shake"] },
+  { b: "hide",   s: "The cat hided under the bed.",           w: "hided",   o: ["hid", "hidden", "hide"] },
+
+  { b: "begin",  s: "The movie beginned at eight.",           w: "beginned", o: ["began", "begun", "begin"] },
+  { b: "drink",  s: "I drinked two glasses of milk.",         w: "drinked", o: ["drank", "drunk", "drink"] },
+  { b: "ring",   s: "The phone ringed three times.",          w: "ringed",  o: ["rang", "rung", "ring"] },
+  { b: "sing",   s: "We singed a song for Mom.",              w: "singed",  o: ["sang", "sung", "sing"] },
+  { b: "swim",   s: "I swum in the sea last summer.",         w: "swum",    o: ["swam", "swimmed", "swim"] },
+  { b: "sink",   s: "The little boat sinked in the storm.",   w: "sinked",  o: ["sank", "sunk", "sink"] },
+  { b: "break",  s: "Who breaked the window?",                w: "breaked", o: ["broke", "broken", "brake"] },
+  { b: "choose", s: "She choosed the red dress.",             w: "choosed", o: ["chose", "chosen", "choose"] },
+  { b: "speak",  s: "He speaked very loudly.",                w: "speaked", o: ["spoke", "spoken", "speak"] },
+  { b: "steal",  s: "Someone stealed my cookie!",             w: "stealed", o: ["stole", "stolen", "steel"] },
+  { b: "wake",   s: "I waked up late today.",                 w: "waked",   o: ["woke", "woken", "wake"] },
+  { b: "forget", s: "I forgetted my homework at home.",       w: "forgetted", o: ["forgot", "forgotten", "forget"] },
+  { b: "drive",  s: "Dad drived us to school.",               w: "drived",  o: ["drove", "driven", "drive"] },
+  { b: "ride",   s: "We rided our bikes to the park.",        w: "rided",   o: ["rode", "ridden", "road"] },
+  { b: "write",  s: "I writed a letter to Santa.",            w: "writed",  o: ["wrote", "written", "write"] },
+  { b: "lie",    s: "The cat lied on the sofa all day.",      w: "lied",    o: ["lay", "laid", "lain"] }
+];
+
+/* 句子填空：只考過去式，___ 是空格。a = 指定答案（沒寫就用過去式） */
+const SENTENCES = [
+  { b: "buy",    s: "Last week, Dad ___ me a kite." },
+  { b: "hurt",   s: "Amy ___ her leg last Friday." },
+  { b: "read",   s: "I ___ a funny book last night." },
+  { b: "become", s: "Ben ___ a big brother last year." },
+  { b: "bring",  s: "Yesterday I ___ my lunch to school." },
+  { b: "teach",  s: "Mr. Lee ___ us a new song last Monday." },
+  { b: "catch",  s: "The cat ___ a mouse this morning." },
+  { b: "come",   s: "Tom ___ home late yesterday." },
+  { b: "fight",  s: "The boys ___ over a toy car yesterday." },
+  { b: "think",  s: "I ___ it was a cat, but it was a dog." },
+  { b: "cut",    s: "Mom ___ the pizza into eight pieces." },
+  { b: "put",    s: "She ___ her bag on the table." },
+
+  { b: "meet",   s: "We ___ our new teacher yesterday." },
+  { b: "build",  s: "The kids ___ a sandcastle yesterday." },
+  { b: "send",   s: "Grandma ___ me a card last week." },
+  { b: "spend",  s: "She ___ all her money last weekend." },
+  { b: "sleep",  s: "I ___ for ten hours last night." },
+  { b: "feel",   s: "I ___ very happy at my party." },
+  { b: "lose",   s: "Ben ___ his key yesterday." },
+  { b: "make",   s: "Mom ___ pancakes this morning." },
+  { b: "have",   s: "We ___ a great time at the beach." },
+  { b: "hear",   s: "I ___ a bird singing outside." },
+  { b: "leave",  s: "The train ___ at nine o'clock." },
+  { b: "dream",  s: "Last night I ___ about a dragon." },
+  { b: "learn",  s: "We ___ a new song in class today." },
+  { b: "smell",  s: "The kitchen ___ like cookies." },
+
+  { b: "find",   s: "I ___ a coin on the street." },
+  { b: "win",    s: "Our class ___ the race last Friday." },
+  { b: "tell",   s: "Dad ___ us a story last night." },
+  { b: "sit",    s: "The cat ___ on my book." },
+  { b: "stand",  s: "We ___ in line for the bus." },
+  { b: "hold",   s: "She ___ my hand on the bridge." },
+  { b: "dig",    s: "The kids ___ a big hole in the sand." },
+  { b: "get",    s: "I ___ a new bike for my birthday." },
+  { b: "get up", s: "I ___ at six this morning." },
+  { b: "hang",   s: "We ___ our coats on the hooks." },
+  { b: "lay",    s: "Mom ___ the baby on the bed." },
+  { b: "shoot",  s: "He ___ the ball and scored!" },
+  { b: "shine",  s: "The sun ___ all day yesterday." },
+  { b: "say",    s: "The teacher ___ \"Good job!\" to me." },
+
+  { b: "be",     s: "I ___ sick yesterday.",          a: ["was"] },
+  { b: "be",     s: "They ___ at the park last night.", a: ["were"] },
+  { b: "go",     s: "We ___ to the beach last summer." },
+  { b: "eat",    s: "I ___ three cookies after school." },
+  { b: "see",    s: "I ___ a big dog at the park." },
+  { b: "do",     s: "She ___ her homework after dinner." },
+  { b: "give",   s: "Grandpa ___ me a red envelope." },
+  { b: "take",   s: "We ___ the bus to the zoo." },
+  { b: "fall",   s: "Tim ___ off his bike yesterday." },
+  { b: "know",   s: "I ___ all the answers on the test!" },
+  { b: "fly",    s: "The bird ___ over our house." },
+  { b: "draw",   s: "Amy ___ a picture of her cat." },
+  { b: "blow",   s: "I ___ out the candles on my cake." },
+  { b: "shake",  s: "She ___ hands with the new student." },
+  { b: "hide",   s: "My brother ___ behind the door." },
+  { b: "show",   s: "He ___ me his new game." },
+
+  { b: "begin",  s: "School ___ at eight this morning." },
+  { b: "drink",  s: "The baby ___ all her milk." },
+  { b: "ring",   s: "The bell ___ and we ran outside." },
+  { b: "sing",   s: "The birds ___ in the tree." },
+  { b: "swim",   s: "We ___ in the pool last weekend." },
+  { b: "sink",   s: "The toy boat ___ to the bottom." },
+  { b: "break",  s: "I ___ my pencil in class." },
+  { b: "choose", s: "Amy ___ a blue balloon." },
+  { b: "speak",  s: "The teacher ___ to my mom." },
+  { b: "steal",  s: "A monkey ___ my banana at the zoo!" },
+  { b: "wake",   s: "I ___ up at six today." },
+  { b: "forget", s: "Ben ___ his lunch box at home." },
+  { b: "drive",  s: "Mom ___ us to the beach." },
+  { b: "ride",   s: "I ___ a horse last summer." },
+  { b: "write",  s: "She ___ her name on the board." },
+  { b: "lie",    s: "The dog ___ in the sun all afternoon." }
+];
+
+/* 每一關出幾題 */
+const COUNT = { choose: 6, match: 6, sort: 9, spell: 5, table: 6, mistake: 4, sentence: 5 };
+
+/* ---------- 以下不用改 ---------- */
+const PAT = { AAA: ["A", "A", "A"], ABA: ["A", "B", "A"], ABB: ["A", "B", "B"], ABC: ["A", "B", "C"] };
+const FORM = { b: ["Base Form", "f-b"], ps: ["Past Simple", "f-ps"], pp: ["Past Participle", "f-pp"] };
+const $ = function (id) { return document.getElementById(id); };
+const V = {}; VERBS.forEach(function (v) { V[v.b] = v; });
+const MINE = VERBS.filter(function (v) { return v.q === QUIZ_NO; });
+const LAST = Math.max.apply(null, VERBS.map(function (v) { return v.q; }));
+const PATS = ["AAA", "ABA", "ABB", "ABC"];
+const missed = new Set();
+document.title = "Irregular Verbs · Quiz " + QUIZ_NO + " - Wagor";
+function J(list) { return list.join(" / "); }
+let who = "";
+
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function pick(a, n) { return shuffle(a).slice(0, n); }
+function norm(s) { return s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim(); }
+function ok(list, ans) { return list.some(function (x) { return norm(x) === norm(ans); }); }
+function h(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function speak(t) { try { const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {} }
+function shake(e) { e.classList.remove("shake"); void e.offsetWidth; e.classList.add("shake"); }
+function three(v) { return v.b + " · " + v.ps.join("/") + " · " + v.pp.join("/"); }
+function patDots(p) { const s = h("span", "pat"); PAT[p].forEach(function (k) { const b = h("b"); b.style.background = "var(--" + k + ")"; s.appendChild(b); }); return s; }
+function chip(f) { return h("span", "chip " + FORM[f][1], FORM[f][0]); }
+function nextBtn(label, fn) { const r = h("div", "row"); const b = h("button", "btn", label || "Next ➜"); b.type = "button"; b.addEventListener("click", fn); r.appendChild(b); return r; }
+
+/* ---------- stages ---------- */
+const STAGES = [
+  { title: "Pick the right word", zh: "選出正確的字", run: stageChoose },
+  { title: "Match the pairs", zh: "原形和過去式配成一對", run: stageMatch },
+  { title: "Sort the verbs", zh: "點一個字，再點它屬於哪一個盒子", run: stageSort },
+  { title: "Spell it", zh: "點字母，拼出正確的字", run: stageSpell },
+  { title: "Fill the table", zh: "把空格填完", run: stageTable },
+  { title: "Find the mistake", zh: "找出錯的字，再選出正確的", run: stageMistake },
+  { title: "Write the past simple", zh: "寫出過去式", run: stageSentence }
+];
+let si = 0;
+const results = [];
+
+function drawDots() {
+  const d = $("dots"); d.innerHTML = "";
+  STAGES.forEach(function (s, i) { d.appendChild(h("i", i < si ? "done" : i === si ? "now" : "")); });
+}
+
+function stageCard() {
+  const st = STAGES[si];
+  const main = $("main"); main.innerHTML = "";
+  const card = h("div", "card");
+  card.appendChild(h("span", "step", (si + 1) + " / " + STAGES.length));
+  card.appendChild(h("h2", "", st.title));
+  card.appendChild(h("p", "zh", st.zh));
+  const box = h("div"); card.appendChild(box);
+  main.appendChild(card);
+  drawDots();
+  window.scrollTo(0, 0);
+  return box;
+}
+
+function runStage() {
+  const box = stageCard();
+  STAGES[si].run(box, function (score, max) {
+    results.push({ title: STAGES[si].title, score: score, max: max });
+    box.appendChild(nextBtn(si === STAGES.length - 1 ? "See my score ➜" : "Next ➜", function () {
+      si++;
+      if (si < STAGES.length) runStage(); else showResults();
+    }));
+  });
+}
+
+/* 一題一題出的關卡共用 */
+function sequence(box, items, render, done) {
+  let i = 0, score = 0;
+  const area = h("div"); const cnt = h("p", "count");
+  box.appendChild(area); box.appendChild(cnt);
+  function go() {
+    if (i >= items.length) { area.innerHTML = ""; cnt.remove(); area.appendChild(h("p", "big", score + " / " + items.length)); done(score, items.length); return; }
+    area.innerHTML = ""; cnt.textContent = (i + 1) + " / " + items.length;
+    render(area, items[i], function (right, b) {
+      if (right) score++; else if (b) missed.add(b);
+      if (right) setTimeout(function () { i++; go(); }, 850);
+      else area.appendChild(nextBtn("Next ➜", function () { i++; go(); }));
+    });
+  }
+  go();
+}
+
+/* 1. 三選一 */
+function stageChoose(box, done) {
+  const pool = MINE.filter(function (v) { return v.ed; });
+  const items = pick(pool, COUNT.choose).map(function (v) {
+    const form = Math.random() < .5 ? "ps" : "pp";
+    const ans = J(v[form]);
+    const other = form === "ps" ? v.pp[0] : v.ps[0];
+    const trap = v[form].indexOf(other) === -1 ? other : v.trap;
+    return { v: v, form: form, ans: ans, opts: shuffle([ans, v.ed, trap]) };
+  });
+  sequence(box, items, function (area, q, answer) {
+    const line = h("div", "q");
+    line.appendChild(h("span", "", q.v.b));
+    line.appendChild(h("span", "arrow", "➜"));
+    line.appendChild(chip(q.form));
+    area.appendChild(line);
+    const grid = h("div", "opts");
+    q.opts.forEach(function (o) {
+      const b = h("button", "opt", o); b.type = "button";
+      b.addEventListener("click", function () {
+        const right = o === q.ans;
+        grid.querySelectorAll("button").forEach(function (x) { x.disabled = true; if (x.textContent === q.ans) x.classList.add("good"); });
+        if (!right) { b.classList.add("bad"); shake(b); }
+        speak(q.ans);
+        answer(right, q.v.b);
+      });
+      grid.appendChild(b);
+    });
+    area.appendChild(grid);
+  }, done);
+}
+
+/* 2. 配對 */
+function stageMatch(box, done) {
+  const vs = pick(MINE, COUNT.match);
+  const wrap = h("div", "match");
+  const L = h("div", "col"), R = h("div", "col");
+  wrap.appendChild(L); wrap.appendChild(R);
+  const hd = h("div", "row"); hd.style.marginTop = "18px";
+  hd.appendChild(chip("b")); hd.appendChild(h("span", "arrow", "➜")); hd.appendChild(chip("ps"));
+  box.appendChild(hd); box.appendChild(wrap);
+  let selL = null, selR = null, left = vs.length;
+  const miss = new Set();
+  function tryPair() {
+    if (!selL || !selR) return;
+    const a = selL, b = selR; selL = selR = null;
+    if (a.dataset.v === b.dataset.v) {
+      [a, b].forEach(function (x) { x.classList.remove("sel"); x.classList.add("good"); x.disabled = true; });
+      speak(J(V[a.dataset.v].ps));
+      if (--left === 0) { const sc = vs.length - miss.size; box.appendChild(h("p", "big", sc + " / " + vs.length)); done(sc, vs.length); }
+    } else {
+      miss.add(a.dataset.v); missed.add(a.dataset.v);
+      [a, b].forEach(function (x) { x.classList.remove("sel"); x.classList.add("bad"); shake(x); });
+      setTimeout(function () { a.classList.remove("bad"); b.classList.remove("bad"); }, 500);
+    }
+  }
+  shuffle(vs).forEach(function (v) {
+    const b = h("button", "opt", v.b); b.type = "button"; b.dataset.v = v.b;
+    b.addEventListener("click", function () { if (selL) selL.classList.remove("sel"); selL = b; b.classList.add("sel"); tryPair(); });
+    L.appendChild(b);
+  });
+  shuffle(vs).forEach(function (v) {
+    const b = h("button", "opt", J(v.ps)); b.type = "button"; b.dataset.v = v.b;
+    b.addEventListener("click", function () { if (selR) selR.classList.remove("sel"); selR = b; b.classList.add("sel"); tryPair(); });
+    R.appendChild(b);
+  });
+}
+
+/* 3. 分類 */
+function stageSort(box, done) {
+  /* 盒子 = 到這一份為止學過的規則；這一份的字優先，不夠再從前幾份複習 */
+  const seen = VERBS.filter(function (v) { return v.q <= QUIZ_NO; });
+  const pats = PATS.filter(function (p) { return seen.some(function (v) { return v.p === p; }); });
+  const per = Math.floor(COUNT.sort / pats.length);
+  let vs = [];
+  pats.forEach(function (p) {
+    const of = seen.filter(function (v) { return v.p === p; });
+    const cur = of.filter(function (v) { return v.q === QUIZ_NO; }), old = of.filter(function (v) { return v.q !== QUIZ_NO; });
+    vs = vs.concat(shuffle(cur).concat(shuffle(old)).slice(0, per));
+  });
+  vs = shuffle(vs);
+  const cards = h("div", "cards"), bins = h("div", "bins");
+  bins.style.setProperty("--n", pats.length); if (pats.length === 4) bins.classList.add("four");
+  box.appendChild(cards); box.appendChild(bins);
+  let sel = null, left = vs.length, score = 0;
+  const binEl = {};
+  pats.forEach(function (p) {
+    const b = h("div", "bin"); b.setAttribute("role", "button"); b.tabIndex = 0;
+    b.appendChild(patDots(p)); b.appendChild(h("span", "lab", p));
+    const got = h("div", "got"); b.appendChild(got); binEl[p] = got;
+    function drop() {
+      if (!sel) return;
+      const card = sel, v = V[card.dataset.v]; sel = null;
+      Object.values(binEl).forEach(function (g) { g.parentNode.classList.remove("ready"); });
+      const right = v.p === p;
+      if (right) score++; else missed.add(v.b);
+      card.classList.remove("sel"); card.classList.add(right ? "good" : "bad");
+      if (!right) shake(b);
+      setTimeout(function () {
+        card.remove();
+        const s = h("span", "", three(v)); s.style.background = right ? "var(--ok)" : "var(--no)";
+        binEl[v.p].appendChild(s);
+        speak(v.b + ", " + J(v.ps) + ", " + J(v.pp));
+        if (--left === 0) { box.appendChild(h("p", "big", score + " / " + vs.length)); done(score, vs.length); }
+      }, right ? 250 : 650);
+    }
+    b.addEventListener("click", drop);
+    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); drop(); } });
+    bins.appendChild(b);
+  });
+  vs.forEach(function (v) {
+    const c = h("button", "opt", v.b); c.type = "button"; c.dataset.v = v.b;
+    c.addEventListener("click", function () {
+      if (c.classList.contains("good") || c.classList.contains("bad")) return;
+      if (sel) sel.classList.remove("sel");
+      sel = c; c.classList.add("sel");
+      Object.values(binEl).forEach(function (g) { g.parentNode.classList.add("ready"); });
+    });
+    cards.appendChild(c);
+  });
+}
+
+/* 4. 拼字 */
+function stageSpell(box, done) {
+  /* 從這一份的過去式／過去分詞自動挑字（跟原形一樣的、有兩種寫法的不考） */
+  const pool = [], used = {};
+  MINE.forEach(function (v) {
+    if (v.ps.length > 1 || v.pp.length > 1) return;
+    [["ps", v.ps[0]], ["pp", v.pp[0]]].forEach(function (x) {
+      const w = x[1];
+      if (w === v.b || used[w] || !/^[a-z]{3,}$/.test(w)) return;
+      used[w] = 1; pool.push({ w: w, v: v, form: x[0] });
+    });
+  });
+  const words = pick(pool, COUNT.spell);
+  sequence(box, words, function (area, q, answer) {
+    const line = h("div", "q");
+    line.appendChild(h("span", "", q.v.b)); line.appendChild(h("span", "arrow", "➜")); line.appendChild(chip(q.form));
+    area.appendChild(line);
+    const slots = h("div", "slots"), tiles = h("div", "tiles");
+    area.appendChild(slots); area.appendChild(tiles);
+    let letters = q.w.split(""), mix = shuffle(letters);
+    while (mix.join("") === q.w && q.w.length > 1) mix = shuffle(letters);
+    const typed = []; let over = false;
+    function draw() {
+      slots.innerHTML = "";
+      for (let k = 0; k < q.w.length; k++) {
+        const t = typed[k];
+        const s = h("button", "slot" + (t ? "" : " empty"), t ? t.ch : ""); s.type = "button";
+        if (t) s.addEventListener("click", function () { if (over) return; typed.splice(k, 1); t.el.classList.remove("used"); draw(); });
+        slots.appendChild(s);
+      }
+    }
+    mix.forEach(function (ch) {
+      const t = h("button", "tile", ch); t.type = "button";
+      t.addEventListener("click", function () {
+        if (over || t.classList.contains("used")) return;
+        t.classList.add("used"); typed.push({ ch: ch, el: t }); draw();
+        if (typed.length === q.w.length) {
+          over = true;
+          const right = typed.map(function (x) { return x.ch; }).join("") === q.w;
+          slots.querySelectorAll(".slot").forEach(function (s) { s.classList.add(right ? "good" : "bad"); });
+          if (!right) { shake(slots); const fix = h("div", "q", q.w); fix.style.fontSize = "32px"; fix.style.color = "#1F7A3A"; area.insertBefore(fix, tiles); }
+          tiles.remove(); speak(q.w);
+          answer(right, q.v.b);
+        }
+      });
+      tiles.appendChild(t);
+    });
+    draw();
+  }, done);
+}
+
+/* 5. 填表格 */
+function stageTable(box, done) {
+  const vs = pick(MINE, COUNT.table);
+  const t = h("table", "vt ft");
+  const hr = h("tr"); ["b", "ps", "pp"].forEach(function (f) { hr.appendChild(h("th", "", FORM[f][0])); }); t.appendChild(hr);
+  const rows = vs.map(function (v) {
+    const give = ["b", "ps", "pp"][Math.floor(Math.random() * 3)];
+    const tr = h("tr"); const ins = {};
+    ["b", "ps", "pp"].forEach(function (f) {
+      const td = h("td");
+      if (f === give) td.appendChild(h("div", "given", f === "b" ? v.b : v[f].join(" / ")));
+      else { const i = h("input"); i.type = "text"; i.autocomplete = "off"; i.setAttribute("autocapitalize", "off"); i.setAttribute("autocorrect", "off"); i.spellcheck = false; i.setAttribute("aria-label", FORM[f][0]); td.appendChild(i); ins[f] = i; }
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+    return { v: v, ins: ins };
+  });
+  box.appendChild(t);
+  const r = nextBtn("Check ✓", function () {
+    let score = 0;
+    rows.forEach(function (row) {
+      let all = true;
+      Object.keys(row.ins).forEach(function (f) {
+        const i = row.ins[f]; const list = f === "b" ? [row.v.b] : row.v[f];
+        const right = ok(list, i.value);
+        i.readOnly = true; i.classList.add(right ? "good" : "bad");
+        if (!right) { all = false; i.parentNode.appendChild(h("div", "fix", list.join(" / "))); }
+      });
+      if (all) score++; else missed.add(row.v.b);
+    });
+    r.remove();
+    box.appendChild(h("p", "big", score + " / " + rows.length));
+    done(score, rows.length);
+  });
+  box.appendChild(r);
+}
+
+/* 6. 找錯字 */
+function stageMistake(box, done) {
+  sequence(box, pick(MISTAKES.filter(function (m) { return V[m.b].q === QUIZ_NO; }), COUNT.mistake), function (area, q, answer) {
+    const sent = h("div", "sent"); area.appendChild(sent);
+    let found = null;
+    q.s.split(" ").forEach(function (tok) {
+      const b = h("button", "w", tok); b.type = "button";
+      b.dataset.word = tok.replace(/[.,!?]/g, "");
+      b.addEventListener("click", function () {
+        if (found !== null) return;
+        found = b.dataset.word === q.w;
+        sent.querySelectorAll("button").forEach(function (x) { x.disabled = true; if (x.dataset.word === q.w) x.classList.add("bad"); });
+        if (!found) shake(b);
+        const grid = h("div", "opts");
+        shuffle(q.o).forEach(function (o) {
+          const c = h("button", "opt", o); c.type = "button";
+          c.addEventListener("click", function () {
+            const right = o === q.o[0];
+            grid.querySelectorAll("button").forEach(function (x) { x.disabled = true; if (x.textContent === q.o[0]) x.classList.add("good"); });
+            if (!right) { c.classList.add("bad"); shake(c); }
+            const wrong = sent.querySelector('[data-word="' + q.w + '"]');
+            wrong.textContent = wrong.textContent.replace(q.w, q.o[0]); wrong.classList.remove("bad"); wrong.classList.add("good");
+            speak(q.s.replace(q.w, q.o[0]));
+            answer(found && right, q.b);
+          });
+          grid.appendChild(c);
+        });
+        area.appendChild(grid);
+      });
+      sent.appendChild(b);
+    });
+  }, done);
+}
+
+/* 7. 句子填空 */
+function stageSentence(box, done) {
+  const qs = pick(SENTENCES.filter(function (x) { return V[x.b].q === QUIZ_NO; }), COUNT.sentence);
+  const list = h("div", "sl"); box.appendChild(list);
+  const ins = qs.map(function (q) {
+    const p = h("div", "sline"); const parts = q.s.split("___");
+    p.appendChild(document.createTextNode(parts[0]));
+    const i = h("input"); i.type = "text"; i.autocomplete = "off"; i.setAttribute("autocapitalize", "off"); i.setAttribute("autocorrect", "off"); i.spellcheck = false; i.setAttribute("aria-label", "past simple of " + q.b);
+    p.appendChild(i); p.appendChild(h("span", "hint", "(" + q.b + ")"));
+    p.appendChild(document.createTextNode(parts[1]));
+    list.appendChild(p);
+    return { q: q, i: i, p: p };
+  });
+  const r = nextBtn("Check ✓", function () {
+    let score = 0;
+    ins.forEach(function (x) {
+      const v = V[x.q.b]; const ans = x.q.a || v.ps; const right = ok(ans, x.i.value);
+      x.i.readOnly = true; x.i.classList.add(right ? "good" : "bad");
+      if (right) score++; else { missed.add(v.b); x.p.appendChild(h("div", "fix", "✓ " + J(ans))); }
+    });
+    r.remove();
+    box.appendChild(h("p", "big", score + " / " + ins.length));
+    done(score, ins.length);
+  });
+  box.appendChild(r);
+}
+
+/* ---------- start & results ---------- */
+function showStart() {
+  si = 0; drawDots();
+  const main = $("main"); main.innerHTML = "";
+  const card = h("div", "card");
+  card.appendChild(h("span", "step", "Quiz " + QUIZ_NO));
+  card.appendChild(h("h1", "", "Irregular Verbs"));
+  const mine = PATS.filter(function (p) { return MINE.some(function (v) { return v.p === p; }); });
+  const pr = h("div", "row"); mine.forEach(function (p) { const s = h("span", "chip"); s.style.background = "#fff"; s.appendChild(patDots(p)); s.appendChild(document.createTextNode(" " + p)); pr.appendChild(s); }); card.appendChild(pr);
+  const nm = h("label", "name"); const ni = h("input"); ni.placeholder = "Your name"; ni.autocomplete = "off"; ni.value = who; nm.appendChild(ni); card.appendChild(nm);
+
+  const det = h("details"); det.appendChild(h("summary", "", "📖 Learn first"));
+  const learn = h("div", "learn");
+  learn.appendChild(h("p", "zh", "點一下可以聽發音"));
+  mine.forEach(function (p) {
+    const g = h("div", "lg"); const h3 = h("h3"); h3.appendChild(patDots(p)); h3.appendChild(document.createTextNode(p)); g.appendChild(h3);
+    const t = h("table", "vt"); const hr = h("tr"); ["b", "ps", "pp"].forEach(function (f) { hr.appendChild(h("th", "", FORM[f][0])); }); t.appendChild(hr);
+    MINE.filter(function (v) { return v.p === p; }).forEach(function (v) {
+      const tr = h("tr", "say"); [v.b, v.ps.join(" / "), v.pp.join(" / ")].forEach(function (x) { tr.appendChild(h("td", "", x)); });
+      tr.addEventListener("click", function () { speak(v.b + ", " + J(v.ps) + ", " + J(v.pp)); });
+      t.appendChild(tr);
+    });
+    g.appendChild(t); learn.appendChild(g);
+  });
+  det.appendChild(learn); card.appendChild(det);
+
+  card.appendChild(nextBtn("Start ➜", function () { who = ni.value.trim(); runStage(); }));
+  main.appendChild(card);
+}
+
+function showResults() {
+  si = STAGES.length; drawDots();
+  const total = results.reduce(function (a, r) { return a + r.score; }, 0);
+  const max = results.reduce(function (a, r) { return a + r.max; }, 0);
+  const pct = Math.round(total / max * 100);
+  const col = pct >= 90 ? "#FFD23F" : pct >= 70 ? "#D8DEE9" : "#E8A878";
+  const main = $("main"); main.innerHTML = "";
+  const card = h("div", "card");
+  card.insertAdjacentHTML("beforeend", '<svg class="medal" width="110" height="130" viewBox="0 0 110 130" aria-hidden="true"><path d="M30 4h20l10 40H40zM60 4h20L70 44H50z" fill="#E63946" stroke="#1B2A57" stroke-width="4" stroke-linejoin="round"/><circle cx="55" cy="82" r="42" fill="' + col + '" stroke="#1B2A57" stroke-width="5"/><circle cx="55" cy="82" r="30" fill="none" stroke="#1B2A57" stroke-width="3" opacity=".35"/><path d="M55 62l6 13 14 2-10 10 2 14-12-7-12 7 2-14-10-10 14-2z" fill="#fff" stroke="#1B2A57" stroke-width="3" stroke-linejoin="round"/></svg>');
+  card.appendChild(h("h2", "", "Irregular Verbs · Quiz " + QUIZ_NO));
+  card.appendChild(h("p", "big", pct + "%"));
+  const d = new Date();
+  card.appendChild(h("p", "who", (who ? who + " · " : "") + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " · " + total + " / " + max));
+  const t = h("table", "res");
+  results.forEach(function (r, i) { const tr = h("tr"); tr.appendChild(h("td", "", (i + 1) + ". " + r.title)); tr.appendChild(h("td", "", r.score + " / " + r.max)); t.appendChild(tr); });
+  card.appendChild(t);
+  if (missed.size) {
+    card.appendChild(h("p", "sub", "Practice these again"));
+    card.appendChild(h("p", "zh", "這些字再多念幾次"));
+    const m = h("div", "miss"); missed.forEach(function (b) { m.appendChild(h("span", "", three(V[b]))); }); card.appendChild(m);
+  }
+  const row = h("div", "row");
+  const again = h("button", "btn", "Try again ↻"); again.type = "button";
+  again.addEventListener("click", function () { results.length = 0; missed.clear(); showStart(); });
+  const lib = h("a", "btn alt", "Library"); lib.href = "library.html#grammar";
+  row.appendChild(again);
+  if (QUIZ_NO < LAST) { const nx = h("a", "btn", "Quiz " + (QUIZ_NO + 1) + " ➜"); nx.href = "grammar_irregular_verbs_" + (QUIZ_NO + 1) + ".html"; row.appendChild(nx); }
+  row.appendChild(lib); card.appendChild(row);
+  main.appendChild(card);
+  window.scrollTo(0, 0);
+}
+
+showStart();
+</script>
+</body>
+</html>
